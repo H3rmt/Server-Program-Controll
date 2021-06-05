@@ -1,0 +1,44 @@
+#top {
+    grid-area: top;
+
+    display: flex;
+    align-items: center;
+    grid-gap: 25px;
+    justify-content: flex-start;
+
+    border-style: solid;
+    border-radius: 40px;
+    border-width: 6px;
+    border-color: rgb(20, 21, 22);
+}
+
+#top .boticon {
+    width: 128px;
+    height: 128px;
+
+    border-style: solid;
+    border-radius: 40px;
+    border-width: 6px;
+    border-color: transparent;
+}
+
+#top .description {
+    max-width: 30%;
+}
+
+
+#activity {
+    grid-area: activity;
+}
+
+#logs {
+    grid-area: logs;
+}
+
+#boxes {
+    margin: 10px;
+    display: grid;
+    grid-gap: 15px;
+    height: 100%;
+    grid-template: "top top" "activity logs";
+}

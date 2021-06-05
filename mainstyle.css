@@ -1,0 +1,148 @@
+body {
+    margin: 0;
+    background-color: black;
+    color: white;
+}
+
+#navbar {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    background: rgb(17, 17, 17);
+
+    border-style: solid;
+    border-width: 2px;
+    border-color: rgb(29, 29, 29);
+
+    position: fixed;
+    width: 240px;
+    height: 100%;
+    overflow: auto;
+}
+
+#navbar a {
+    text-decoration: none;
+    color: inherit;
+    font-size: 150%;
+    display: block;
+    padding: 10px 10px 5px 10px;
+
+    border-style: solid;
+    border-width: 2px;
+    border-color: transparent;
+}
+
+#navbar #Overview {
+    background-color: rgb(35, 67, 163);
+}
+
+#navbar #Overview:hover {
+    background-color: rgb(20, 50, 139);
+}
+
+#navbar a:hover:not(#Overview) {
+    background-color: rgb(32, 29, 29);
+}
+
+#navbar a:hover {
+    border-style: dashed;
+    border-width: 2px;
+    border-color: black;
+}
+
+#div1 {
+    margin-left: 245px;
+    padding-bottom: 2px;
+}
+
+#div1 .top {
+    height: 85px;
+    padding-right: 10px;
+    padding-left: 10px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 150%;
+
+    overflow: hidden;
+
+    background: rgb(13, 13, 13);
+}
+
+button {
+    border-style: solid;
+    border-radius: 25px;
+    border-width: 6px;
+    border-color: black;
+
+    padding: 13px 25px;
+    height: 70px;
+    margin-left: 10px;
+    margin-right: 10px;
+    transition-duration: 0.15s;
+
+    text-decoration: none;
+    font-size: inherit;
+    cursor: pointer;
+    outline: none;
+    overflow: hidden;
+
+    background-color: rgb(58, 58, 58);
+}
+
+button:hover:not(.disabled) {
+    background-color: rgb(37, 37, 37);
+}
+
+.disabled {
+    position: relative;
+}
+
+.disabled:after {
+    content: "";
+    position: absolute;
+    width: 13%;
+    height: 170%;
+    top: 50%;
+    left: 50%;
+    transform: translate(110%, -50%) rotateZ(40deg);
+    background: rgba(198, 0, 0, 0.6);
+}
+
+.disabled:before {
+    content: "";
+    position: absolute;
+    width: 13%;
+    height: 170%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-190%, -50%) rotateZ(40deg);
+    background: rgba(198, 0, 0, 0.6);
+}
+
+.disabled:hover:after {
+    content: "";
+    position: absolute;
+    width: 13%;
+    height: 170%;
+    top: 50%;
+    left: 50%;
+    transform: translate(110%, -50%) rotateZ(40deg);
+    background: rgba(141, 0, 0, 0.9);
+}
+
+.disabled:hover:before{
+    content: "";
+    position: absolute;
+    width: 13%;
+    height: 170%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-190%, -50%) rotateZ(40deg);
+    background: rgba(141, 0, 0, 0.9);
+}
+
+.disabled:hover {
+    color: rgb(35, 35, 35);
+}
