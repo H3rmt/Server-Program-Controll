@@ -121,7 +121,6 @@
     margin-bottom: 20px;
 }
 
-
 .modal {
     position: fixed;
     z-index: 1;
@@ -164,7 +163,7 @@
     position: absolute;
     top: 0;
     right: 10px;
- }
+}
 
 .modal .close:hover {
     color: rgb(104, 104, 104);

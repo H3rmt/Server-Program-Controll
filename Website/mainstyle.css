@@ -132,7 +132,7 @@ button:hover:not(.disabled) {
     background: rgba(141, 0, 0, 0.9);
 }
 
-.disabled:hover:before{
+.disabled:hover:before {
     content: "";
     position: absolute;
     width: 13%;
