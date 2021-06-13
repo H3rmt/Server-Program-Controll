@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Test</title>
+        <script>
+            window.onload = function () {
+                try {
+                    var ws = new WebSocket("ws://" + window.location.host + ":18769/ws");
+                } catch (err) {
+                    alert("Connection invalid");
+                    fail;
+                }
+
+                document.getElementById("bu").onclick = function () {
+                    ws.send(JSON.stringify({ test: "ff", test2: "ff" }));
+                };
+
+                ws.onopen = function () {
+                    ws.send("connection ready!");
+                };
+
+                ws.onerror = function (error) {
+                    console.log("WebSocket Error: " + error);
+                    alert("WebSocket Error");
+                };
+
+                ws.onclose = function () {
+                    console.log("Connection lost");
+                    alert("Connection lost");
+                };
+
+                ws.onmessage = function (evt) {
+                    var data = evt.data;
+                    console.log("Message is received: " + data);
+                };
+            };
+        </script>
+    </head>
+    <body>
+        <button id="bu">Send</button>
+    </body>
+</html>
