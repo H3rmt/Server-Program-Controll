@@ -39,13 +39,6 @@ func validateJSON(js *map[string]interface{}) bool {
 	return array_key_exists
 }
 
-// Exported
-func Checkadmin(js *map[string]interface{}) bool {
-	code, code_exists := (*js)["code"]
-	valid := code_exists && code == "test"
-	return valid
-}
-
 func recive(c *websocket.Conn) {
 	for {
 		_, message, err := c.ReadMessage()
@@ -102,6 +95,7 @@ func serve(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
+	SQL.Init()
 	flag.Parse()
 	http.HandleFunc("/ws", func(w http.ResponseWriter, r *http.Request) {
 		serve(w, r)
