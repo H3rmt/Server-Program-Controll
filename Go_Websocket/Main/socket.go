@@ -8,6 +8,9 @@ import (
 	"net/http"
 
 	"github.com/gorilla/websocket"
+
+	"Go_Websocket/PRCommunication"
+	"Go_Websocket/SQL"
 )
 
 var addr = flag.String("addr", ":18769", "")
@@ -31,14 +34,16 @@ Direct Programm communication (admin rights)
 	customaction
 */
 
-func validateJSON(js *map[string]interface{}) (array_key_exists bool) {
-	_, array_key_exists = (*js)["action"]
-	return
+func validateJSON(js *map[string]interface{}) bool {
+	_, array_key_exists := (*js)["action"]
+	return array_key_exists
 }
 
-func checkadmin(js *map[string]interface{}) (array_key_exists bool) {
-	_, array_key_exists = (*js)["code"]
-	return
+// Exported
+func Checkadmin(js *map[string]interface{}) bool {
+	code, code_exists := (*js)["code"]
+	valid := code_exists && code == "test"
+	return valid
 }
 
 func recive(c *websocket.Conn) {
@@ -64,6 +69,23 @@ func recive(c *websocket.Conn) {
 			continue
 		}
 		log.Print(recive)
+		switch recive["action"] {
+		case "getlogs":
+			log.Print("getLogs")
+			SQL.Getlogs()
+		case "getactivity":
+			log.Print("getactivity")
+			SQL.Getactivity()
+		case "start":
+			log.Print("start")
+			PRCommunication.Start()
+		case "stop":
+			log.Print("stop")
+			PRCommunication.Stop()
+		case "customaction":
+			log.Print("customaction")
+			PRCommunication.Customaction()
+		}
 	}
 }
 
