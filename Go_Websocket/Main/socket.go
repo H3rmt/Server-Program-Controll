@@ -8,6 +8,9 @@ import (
 	"net/http"
 
 	"github.com/gorilla/websocket"
+
+	"Go_Websocket/PRCommunication"
+	"Go_Websocket/SQL"
 )
 
 var addr = flag.String("addr", ":18769", "")
@@ -16,6 +19,31 @@ var up = websocket.Upgrader{
 	CheckOrigin: func(*http.Request) bool {
 		return true
 	},
+}
+
+/*
+actions:
+
+SQL:
+	getlogs
+	getactivity
+
+Direct Programm communication (admin rights)
+	start
+	stop
+	customaction
+*/
+
+func validateJSON(js *map[string]interface{}) bool {
+	_, array_key_exists := (*js)["action"]
+	return array_key_exists
+}
+
+// Exported
+func Checkadmin(js *map[string]interface{}) bool {
+	code, code_exists := (*js)["code"]
+	valid := code_exists && code == "test"
+	return valid
 }
 
 func recive(c *websocket.Conn) {
@@ -36,8 +64,28 @@ func recive(c *websocket.Conn) {
 		} else if len(recive) == 0 {
 			log.Print("empty JSON")
 			continue
+		} else if validateJSON(&recive) {
+			log.Print("invalid JSON", recive)
+			continue
 		}
 		log.Print(recive)
+		switch recive["action"] {
+		case "getlogs":
+			log.Print("getLogs")
+			SQL.Getlogs()
+		case "getactivity":
+			log.Print("getactivity")
+			SQL.Getactivity()
+		case "start":
+			log.Print("start")
+			PRCommunication.Start()
+		case "stop":
+			log.Print("stop")
+			PRCommunication.Stop()
+		case "customaction":
+			log.Print("customaction")
+			PRCommunication.Customaction()
+		}
 	}
 }
 
