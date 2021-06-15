@@ -18,6 +18,29 @@ var up = websocket.Upgrader{
 	},
 }
 
+/*
+actions:
+
+SQL:
+	getlogs
+	getactivity
+
+Direct Programm communication (admin rights)
+	start
+	stop
+	customaction
+*/
+
+func validateJSON(js *map[string]interface{}) (array_key_exists bool) {
+	_, array_key_exists = (*js)["action"]
+	return
+}
+
+func checkadmin(js *map[string]interface{}) (array_key_exists bool) {
+	_, array_key_exists = (*js)["code"]
+	return
+}
+
 func recive(c *websocket.Conn) {
 	for {
 		_, message, err := c.ReadMessage()
@@ -35,6 +58,9 @@ func recive(c *websocket.Conn) {
 			continue
 		} else if len(recive) == 0 {
 			log.Print("empty JSON")
+			continue
+		} else if validateJSON(&recive) {
+			log.Print("invalid JSON", recive)
 			continue
 		}
 		log.Print(recive)
