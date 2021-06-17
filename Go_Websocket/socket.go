@@ -36,7 +36,7 @@ Direct Programm communication (admin rights)
 
 func validateJSON(js *map[string]interface{}) bool {
 	_, array_key_exists := (*js)["action"]
-	return array_key_exists
+	return !array_key_exists
 }
 
 func recive(c *websocket.Conn) {
@@ -62,22 +62,29 @@ func recive(c *websocket.Conn) {
 			continue
 		}
 		log.Print(recive)
+		var returnlist []interface{}
 		switch recive["action"] {
 		case "getlogs":
-			log.Print("getLogs")
-			SQL.Getlogs()
+			returnlist, err = SQL.Getlogs(&recive)
 		case "getactivity":
-			log.Print("getactivity")
-			SQL.Getactivity()
+			returnlist, err = SQL.Getactivity(&recive)
 		case "start":
-			log.Print("start")
-			PRCommunication.Start()
+			returnlist, err = PRCommunication.Start(&recive)
 		case "stop":
-			log.Print("stop")
-			PRCommunication.Stop()
+			returnlist, err = PRCommunication.Stop(&recive)
 		case "customaction":
-			log.Print("customaction")
-			PRCommunication.Customaction()
+			returnlist, err = PRCommunication.Customaction(&recive)
+		}
+		if err != nil {
+			log.Println(err)
+		} else {
+			rec, err := json.Marshal(returnlist)
+			if err != nil {
+				log.Println(err)
+			} else {
+				log.Println("sending: ", string(rec))
+				c.WriteMessage(1, rec)
+			}
 		}
 	}
 }

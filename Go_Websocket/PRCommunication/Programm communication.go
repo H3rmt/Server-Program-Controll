@@ -1,7 +1,5 @@
 package PRCommunication
 
-import ()
-
 // Exported
 func checkadmin(js *map[string]interface{}) bool {
 	code, code_exists := (*js)["code"]
@@ -10,16 +8,19 @@ func checkadmin(js *map[string]interface{}) bool {
 }
 
 // Exported
-func Start(recive *map[string]interface{}) {
+func Start(recive *map[string]interface{}) ([]interface{}, error) {
 	checkadmin(recive)
+	return nil, nil
 }
 
 // Exported
-func Stop(recive *map[string]interface{}) {
+func Stop(recive *map[string]interface{}) ([]interface{}, error) {
 	checkadmin(recive)
+	return nil, nil
 }
 
 // Exported
-func Customaction(recive *map[string]interface{}) {
+func Customaction(recive *map[string]interface{}) ([]interface{}, error) {
 	checkadmin(recive)
+	return nil, nil
 }

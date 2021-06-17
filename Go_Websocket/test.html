@@ -6,17 +6,22 @@
             window.onload = function () {
                 try {
                     var ws = new WebSocket("ws://" + window.location.host + ":18769/ws");
+                    console.log("Connection built")
                 } catch (err) {
                     alert("Connection invalid");
                     fail;
                 }
 
-                document.getElementById("bu").onclick = function () {
-                    ws.send(JSON.stringify({ test: "ff", test2: "ff" }));
+                document.getElementById("act").onclick = function () {
+                    ws.send(JSON.stringify({ action: "getactivity", id: "60babca782168"}));
+                };
+
+                document.getElementById("log").onclick = function () {
+                    ws.send(JSON.stringify({ action: "getlogs", id: "60babca782168"}));
                 };
 
                 ws.onopen = function () {
-                    ws.send("connection ready!");
+                    ws.send("connection opened!");
                 };
 
                 ws.onerror = function (error) {
@@ -37,6 +42,7 @@
         </script>
     </head>
     <body>
-        <button id="bu">Send</button>
+        <button id="log">logs</button>
+        <button id="act">activity</button>
     </body>
 </html>
