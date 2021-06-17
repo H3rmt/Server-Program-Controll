@@ -1,20 +1,26 @@
 package PRCommunication
 
-import (
-	"Go_Websocket/Main"
-)
-
 // Exported
-func Start(recive *map[string]interface{}) {
-	main.Checkadmin(recive)
+func checkadmin(js *map[string]interface{}) bool {
+	code, code_exists := (*js)["code"]
+	valid := code_exists && code == "test"
+	return valid
 }
 
 // Exported
-func Stop(recive *map[string]interface{}) {
-	main.Checkadmin(recive)
+func Start(recive *map[string]interface{}) ([]interface{}, error) {
+	checkadmin(recive)
+	return nil, nil
 }
 
 // Exported
-func Customaction(recive *map[string]interface{}) {
-	main.Checkadmin(recive)
+func Stop(recive *map[string]interface{}) ([]interface{}, error) {
+	checkadmin(recive)
+	return nil, nil
+}
+
+// Exported
+func Customaction(recive *map[string]interface{}) ([]interface{}, error) {
+	checkadmin(recive)
+	return nil, nil
 }
