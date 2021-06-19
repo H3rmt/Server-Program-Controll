@@ -56,6 +56,23 @@
                     </li>
                 </ul>
             </div>
+            <div class="settingsbox">
+                <div class="topsetting">
+                    <h1>Other settings</h1>
+                    <button class="reset" onclick="reset('Other settings')"><b>Reset to Default</b></button>
+                </div>
+                <ul class="settings">
+                    <li class="setting">
+                        <b>Other 1</b>
+                    </li>
+                    <li class="setting">
+                        <b>Other 2</b>
+                    </li>
+                    <li class="setting">
+                        <b>Other 3</b>
+                    </li>
+                </ul>
+            </div>
         </div>
     </div>
     <script src="fade.js"></script>
