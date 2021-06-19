@@ -34,7 +34,7 @@ $info = getprogramm(htmlspecialchars(stripslashes(trim($_GET['id']))));
             </div>
         </div>
         <div id="boxes">
-            <div id="top">
+            <div id="topbar">
                 <img src=<?= $info["Imagesource"]; ?> class="boticon"
                     onerror="this.onerror=null; this.src='Images/imgnotfound.png'" alt="" />
                 <h2 class="description"><?= $info["Description"]; ?></h2>
