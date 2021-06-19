@@ -1,13 +1,13 @@
 package SQL
 
 import (
+	"fmt"
+	"log"
+
 	"context"
 	"database/sql"
 
 	_ "github.com/go-sql-driver/mysql"
-
-	f "fmt"
-	"log"
 )
 
 var db *sql.DB
@@ -19,7 +19,7 @@ var database = "programs"
 // Exported
 func Init() {
 	var err error
-	db, err = sql.Open("mysql", f.Sprintf("%s:%s@/%s", user, password, database))
+	db, err = sql.Open("mysql", fmt.Sprintf("%s:%s@/%s", user, password, database))
 	if err != nil {
 		log.Fatal("Error creating connection: ", err.Error())
 	}
@@ -34,7 +34,7 @@ func Init() {
 func getRowcount(database string) int {
 	ctx := context.Background()
 
-	sql := f.Sprintf("SELECT COUNT(*) FROM %s;", database)
+	sql := fmt.Sprintf("SELECT COUNT(*) FROM %s;", database)
 
 	// Execute query
 	query, err := db.QueryContext(ctx, sql)
