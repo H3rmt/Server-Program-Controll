@@ -12,7 +12,7 @@ $build = array('
                     <button class="start disabled"><b>Start</b></button>
                     <button class="stop disabled"><b>Stop</b></button>
                 </div>
-                <button class="opensite" onclick="window.location.href=\'bot.php?id={_ID_}\';">
+                <button class="opensite" onclick="window.location.href=\'program.php?id={_ID_}\';">
                     <b>Open website</b>
                 </button>
             </div>

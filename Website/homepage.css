@@ -35,6 +35,10 @@
     transform: rotateY(180deg);
 }
 
+.front {
+    backface-visibility: hidden;
+}
+
 .back {
     transform: rotateY(180deg);
 }

@@ -1,4 +1,4 @@
-let modal = document.getElementById("closablemodal");
+var modal = document.getElementById("closablemodal");
 
 async function opennewprogramm() {
     if (modal == null) return;
