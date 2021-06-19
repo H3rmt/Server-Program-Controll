@@ -1,7 +1,7 @@
 <?php
 
 $build = array('
-<div class="flipboxsensor" onmouseenter="flipback(\'{_ID_}\')" onmouseleave="flipfront(\'{_ID_}\')">
+<div class="flipboxsensor">
     <div class="flipbox" id="{_ID_}">
         <div class="back">
             <div class="outerbox">
