@@ -6,7 +6,6 @@
     <title>Overview</title>
     <link rel="stylesheet" href="homepage.css"/>
     <link rel="stylesheet" href="mainstyle.css"/>
-    <script src="flippages.js"></script>
 </head>
 
 <body>

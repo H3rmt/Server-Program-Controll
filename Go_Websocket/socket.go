@@ -2,14 +2,14 @@ package main
 
 import (
 	"encoding/json"
-	"flag"
 	"log"
 
+	"flag"
 	"net/http"
 
 	"github.com/gorilla/websocket"
 
-	"Go_Websocket/PRCommunication"
+	"Go_Websocket/ExternalCommunication"
 	"Go_Websocket/SQL"
 )
 
@@ -43,9 +43,7 @@ func recive(c *websocket.Conn) {
 	for {
 		_, message, err := c.ReadMessage()
 		if err != nil {
-			if websocket.IsUnexpectedCloseError(err, websocket.CloseGoingAway, websocket.CloseAbnormalClosure) {
-				log.Print("error: ", err)
-			}
+			log.Print("error in reciving: ", err)
 			return
 		}
 		var recive map[string]interface{}
@@ -69,11 +67,11 @@ func recive(c *websocket.Conn) {
 		case "getactivity":
 			returnlist, err = SQL.Getactivity(&recive)
 		case "start":
-			returnlist, err = PRCommunication.Start(&recive)
+			returnlist, err = ExternalCommunication.Start(&recive)
 		case "stop":
-			returnlist, err = PRCommunication.Stop(&recive)
+			returnlist, err = ExternalCommunication.Stop(&recive)
 		case "customaction":
-			returnlist, err = PRCommunication.Customaction(&recive)
+			returnlist, err = ExternalCommunication.Customaction(&recive)
 		}
 		if err != nil {
 			log.Println(err)
@@ -93,8 +91,7 @@ func serve(w http.ResponseWriter, r *http.Request) {
 	conn, err := up.Upgrade(w, r, nil)
 	if err != nil {
 		log.Println(err)
-		log.Println(r.RemoteAddr)
-		log.Println(conn)
+		log.Println("error while upgrading conncetion to websocket: ", r.RemoteAddr)
 		return
 	}
 	log.Print("upgraded conncetion to websocket: ", r.RemoteAddr)
@@ -109,5 +106,5 @@ func main() {
 	})
 	log.Println("Started")
 	err := http.ListenAndServe(*addr, nil)
-	log.Print("ListenAndServe: ", err)
+	log.Print("Err: ", err)
 }

@@ -1,7 +1,7 @@
 <?php
 
 $build = array('
-<div class="flipboxsensor" onmouseenter="flipback(\'{_ID_}\')" onmouseleave="flipfront(\'{_ID_}\')">
+<div class="flipboxsensor">
     <div class="flipbox" id="{_ID_}">
         <div class="back">
             <div class="outerbox">
@@ -12,7 +12,7 @@ $build = array('
                     <button class="start disabled"><b>Start</b></button>
                     <button class="stop disabled"><b>Stop</b></button>
                 </div>
-                <button class="opensite" onclick="window.location.href=\'bot.php?id={_ID_}\';">
+                <button class="opensite" onclick="window.location.href=\'program.php?id={_ID_}\';">
                     <b>Open website</b>
                 </button>
             </div>
