@@ -16,7 +16,7 @@ body {
 
     position: fixed;
     width: 240px;
-    height: 100%;
+    height: calc(100% - 4px);
     overflow: auto;
 }
 
@@ -30,6 +30,14 @@ body {
     border-style: solid;
     border-width: 2px;
     border-color: transparent;
+}
+
+#navbar div {
+    text-decoration: none;
+    color: inherit;
+    font-size: 150%;
+    display: block;
+    padding: 10px 10px 10px 10px;
 }
 
 #navbar #Overview {
