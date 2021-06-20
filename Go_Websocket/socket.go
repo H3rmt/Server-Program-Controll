@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"fmt"
 	"log"
 
 	"flag"
@@ -42,10 +43,13 @@ func validateJSON(js *map[string]interface{}) bool {
 func recive(c *websocket.Conn) {
 	for {
 		_, message, err := c.ReadMessage()
+		fmt.Println()
 		if err != nil {
 			log.Print("error in reciving: ", err)
+			fmt.Println()
 			return
 		}
+
 		var recive map[string]interface{}
 		log.Print(c.RemoteAddr().String() + "|" + string(message))
 		json.Unmarshal(message, &recive)
@@ -59,26 +63,35 @@ func recive(c *websocket.Conn) {
 			log.Print("invalid JSON", recive)
 			continue
 		}
-		log.Print(recive)
-		var returnlist []interface{}
+		log.Print("recived: ", recive)
+
+		var returnval interface{}
+
 		switch recive["action"] {
 		case "getlogs":
-			returnlist, err = SQL.Getlogs(&recive)
+			returnval, err = SQL.Getlogs(&recive)
 		case "getactivity":
-			returnlist, err = SQL.Getactivity(&recive)
+			returnval, err = SQL.Getactivity(&recive)
 		case "start":
-			returnlist, err = ExternalCommunication.Start(&recive)
+			returnval, err = ExternalCommunication.Start(&recive)
 		case "stop":
-			returnlist, err = ExternalCommunication.Stop(&recive)
+			returnval, err = ExternalCommunication.Stop(&recive)
 		case "customaction":
-			returnlist, err = ExternalCommunication.Customaction(&recive)
+			returnval, err = ExternalCommunication.Customaction(&recive)
 		}
 		if err != nil {
 			log.Println(err)
+			_, ok := err.(*ExternalCommunication.Permissionerror)
+			if ok {
+				rec, _ := json.Marshal(map[string]interface{}{"action": recive["action"], "error": "Permissionerror"})
+				c.WriteMessage(1, rec)
+			}
 		} else {
-			rec, err := json.Marshal(returnlist)
+			rec, err := json.Marshal(map[string]interface{}{"action": recive["action"], "data": returnval})
 			if err != nil {
 				log.Println(err)
+				rec, _ := json.Marshal(map[string]interface{}{"action": recive["action"], "error": "JSONerror"})
+				c.WriteMessage(1, rec)
 			} else {
 				log.Println("sending: ", string(rec))
 				c.WriteMessage(1, rec)

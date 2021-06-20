@@ -170,28 +170,6 @@ button:hover:not(.disabled) {
     background: rgba(198, 0, 0, 0.6);
 }
 
-.disabled:hover:after {
-    content: "";
-    position: absolute;
-    width: 13%;
-    height: 170%;
-    top: 50%;
-    left: 50%;
-    transform: translate(110%, -50%) rotateZ(40deg);
-    background: rgb(90, 0, 0);
-}
-
-.disabled:hover:before {
-    content: "";
-    position: absolute;
-    width: 13%;
-    height: 170%;
-    top: 50%;
-    left: 50%;
-    transform: translate(-190%, -50%) rotateZ(40deg);
-    background: rgb(90, 0, 0);
-}
-
 .disabled:hover {
-    color: rgb(20, 20, 20);
+    color: rgb(44, 44, 44);
 }

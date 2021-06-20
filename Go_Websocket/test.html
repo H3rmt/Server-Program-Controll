@@ -2,47 +2,139 @@
 <html lang="en">
     <head>
         <title>Test</title>
+        <script src="sha256.js"></script>
         <script>
-            window.onload = function () {
+            let websocket;
+
+            function send(_action ,_id, extra = null) {
+                websocket.send(JSON.stringify({...{ action: _action, id: _id, code: getcode()},...extra}));
+            }
+
+            function getcode() {
+                return SHA256("test")
+            }
+
+            function recivelogs(data) {
+                data.forEach((log) => {
+                    console.log("log: ", log);
+                });
+            }
+
+            function reciveactivity(data) {
+                data.forEach((activity) => {
+                    console.log("activity: ", activity);
+                });
+            }
+
+            function recivestart(data) {
+                if (data == true) {
+                    alert("success")
+                } else {
+                    alert("not successfull")
+                }
+            }
+
+            function recivestop(data) {
+                
+            }
+
+            function recivecustomaction(data) {
+                
+            }
+
+            const Action = {
+                getactivity: "getactivity",
+                getlogs: "getlogs",
+                start: "start",
+                stop: "stop",
+                customaction: "customaction",
+            };
+            
+            function processreceived(evt) {
+                console.log("Message received: " + evt.data);
+                var data = JSON.parse(evt.data);
+                switch (data["action"]) {
+                    case Action.getlogs:
+                        recivelogs(data["data"]);
+                        break;
+                    case Action.getactivity:
+                        reciveactivity(data["data"]);
+                        break;
+
+                    case Action.start:
+                        recivestart(data["data"]);
+                        break;
+
+                    case Action.stop:
+                        recivestop(data["data"]);
+                        break;
+
+                    case Action.customaction:
+                        recivecustomaction(data["data"]);
+                        break;
+
+                    default:
+                        console.log("invalid action: " + data["action"]);
+                        break;
+                }
+            };
+
+            function builtWebSocket() {
                 try {
-                    var ws = new WebSocket("ws://" + window.location.host + ":18769/ws");
-                    console.log("Connection built")
+                    websocket = new WebSocket("ws://" + window.location.host + ":18769/ws");
+                    console.log("Connection built");
                 } catch (err) {
                     alert("Connection invalid");
                     fail;
                 }
 
-                document.getElementById("act").onclick = function () {
-                    ws.send(JSON.stringify({ action: "getactivity", id: "60babca782168"}));
+                websocket.onopen = function () {
+                    websocket.send("connection opened!");
+                    console.log("connection opened!");
                 };
 
-                document.getElementById("log").onclick = function () {
-                    ws.send(JSON.stringify({ action: "getlogs", id: "60babca782168"}));
-                };
-
-                ws.onopen = function () {
-                    ws.send("connection opened!");
-                };
-
-                ws.onerror = function (error) {
+                websocket.onerror = function (error) {
                     console.log("WebSocket Error: " + error);
                     alert("WebSocket Error");
                 };
 
-                ws.onclose = function () {
+                websocket.onclose = function () {
                     console.log("Connection lost");
                     alert("Connection lost");
-                };
+                };  
 
-                ws.onmessage = function (evt) {
-                    var data = evt.data;
-                    console.log("Message is received: " + data);
-                };
-            };
+                websocket.onmessage = processreceived
+            }
+            builtWebSocket();
         </script>
     </head>
     <body>
         <button id="log">logs</button>
         <button id="act">activity</button>
+        <button id="str">start</button>
+        <button id="stp">stop</button>
+        <button id="cst">customaction</button>
+        <input id="csi" type="text"></input>
+        <script>
+            document.getElementById("act").onclick = function () {
+                send(Action.getactivity,"60babca782168")            
+            };
+
+            document.getElementById("log").onclick = function () {
+                send(Action.getlogs,"60babca782168")            
+            };
+
+            document.getElementById("str").onclick = function () {
+                send(Action.start,"60babca782168")
+            };
+
+            document.getElementById("stp").onclick = function () {
+                send(Action.stop,"60babca782168")
+            };
+
+            document.getElementById("cst").onclick = function () {
+                send(Action.customaction,"60babca782168",{customaction: document.getElementById("csi").value}) 
+            };
+        </script>
     </body>
 </html>
