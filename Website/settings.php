@@ -76,6 +76,7 @@
         </div>
     </div>
     <script src="fade.js"></script>
+    <script src="disable buttons.js"></script>
 </body>
 
 </html>

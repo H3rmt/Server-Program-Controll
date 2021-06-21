@@ -22,19 +22,6 @@ var up = websocket.Upgrader{
 	},
 }
 
-/*
-actions:
-
-SQL:
-	getlogs
-	getactivity
-
-Direct Programm communication (admin rights)
-	start
-	stop
-	customaction
-*/
-
 func validateJSON(js *map[string]interface{}) bool {
 	_, array_key_exists := (*js)["action"]
 	return !array_key_exists
@@ -51,7 +38,7 @@ func recive(c *websocket.Conn) {
 		}
 
 		var recive map[string]interface{}
-		log.Print(c.RemoteAddr().String() + "|" + string(message))
+		log.Print(c.RemoteAddr().String() + " | " + string(message))
 		json.Unmarshal(message, &recive)
 		if err != nil {
 			log.Print("error: ", err)

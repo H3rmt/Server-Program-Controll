@@ -20,7 +20,7 @@ func checkadmin(js *map[string]interface{}) bool {
 type Permissionerror struct{}
 
 func (m *Permissionerror) Error() string {
-	return "boom"
+	return "no admin permissions"
 }
 
 // Exported

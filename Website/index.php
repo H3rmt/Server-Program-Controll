@@ -33,6 +33,7 @@
 include_once "newprogram.php";
 ?>
 <script src="fade.js"></script>
+<script src="disable buttons.js"></script>
 </body>
 
 </html>

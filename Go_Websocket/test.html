@@ -8,10 +8,13 @@
 
             function send(_action ,_id, extra = null) {
                 websocket.send(JSON.stringify({...{ action: _action, id: _id, code: getcode()},...extra}));
+                console.log("Message send: " + JSON.stringify({...{ action: _action, id: _id, code: getcode()},...extra}));
             }
 
+            let code = "test"
+
             function getcode() {
-                return SHA256("test")
+                return SHA256(code)
             }
 
             function recivelogs(data) {
@@ -26,20 +29,52 @@
                 });
             }
 
-            function recivestart(data) {
+            function recivestart(data,error) {
+                if (error != null) {
+                    if (error == "Permissionerror") {
+                        console.log("PermissionError")
+                    } else {
+                        console.log("unexpected Error")
+                    }
+                    return
+                }
                 if (data == true) {
-                    alert("success")
+                    console.log("success")
                 } else {
-                    alert("not successfull")
+                    console.log("not successfull")
                 }
             }
 
-            function recivestop(data) {
-                
+            function recivestop(data,error) {
+                if (error != null) {
+                    if (error == "Permissionerror") {
+                        console.log("PermissionError")
+                    } else {
+                        console.log("unexpected Error")
+                    }
+                    return
+                }
+                if (data == true) {
+                    console.log("success")
+                } else {
+                    console.log("not successfull")
+                }
             }
 
-            function recivecustomaction(data) {
-                
+            function recivecustomaction(data,error) {
+                if (error != null) {
+                    if (error == "Permissionerror") {
+                        console.log("PermissionError")
+                    } else {
+                        console.log("unexpected Error")
+                    }
+                    return
+                }
+                if (data == true) {
+                    console.log("success")
+                } else {
+                    console.log("not successfull")
+                }
             }
 
             const Action = {
@@ -62,15 +97,15 @@
                         break;
 
                     case Action.start:
-                        recivestart(data["data"]);
+                        recivestart(data["data"],data["error"]);
                         break;
 
                     case Action.stop:
-                        recivestop(data["data"]);
+                        recivestop(data["data"],data["error"]);
                         break;
 
                     case Action.customaction:
-                        recivecustomaction(data["data"]);
+                        recivecustomaction(data["data"],data["error"]);
                         break;
 
                     default:

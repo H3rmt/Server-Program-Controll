@@ -171,5 +171,5 @@ button:hover:not(.disabled) {
 }
 
 .disabled:hover {
-    color: rgb(44, 44, 44);
+    color: rgb(29, 29, 29);
 }
