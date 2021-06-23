@@ -16,14 +16,14 @@ func checkadmin(js *map[string]interface{}) bool {
 	return valid
 }
 
-// Exported
+// Permissionerror Exported
 type Permissionerror struct{}
 
 func (m *Permissionerror) Error() string {
 	return "no admin permissions"
 }
 
-// Exported
+// Start Exported
 func Start(recive *map[string]interface{}) (bool, error) {
 	if !checkadmin(recive) {
 		return false, &Permissionerror{}
@@ -31,7 +31,7 @@ func Start(recive *map[string]interface{}) (bool, error) {
 	return false, nil
 }
 
-// Exported
+// Stop Exported
 func Stop(recive *map[string]interface{}) (bool, error) {
 	if !checkadmin(recive) {
 		return false, &Permissionerror{}
@@ -39,7 +39,7 @@ func Stop(recive *map[string]interface{}) (bool, error) {
 	return false, nil
 }
 
-// Exported
+// Customaction Exported
 func Customaction(recive *map[string]interface{}) (map[string]interface{}, error) {
 	if !checkadmin(recive) {
 		return nil, &Permissionerror{}

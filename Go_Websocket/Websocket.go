@@ -5,16 +5,15 @@ import (
 	"fmt"
 	"log"
 
-	"flag"
 	"net/http"
-
-	"github.com/gorilla/websocket"
 
 	"Go_Websocket/ExternalCommunication"
 	"Go_Websocket/SQL"
+
+	"github.com/gorilla/websocket"
 )
 
-var addr = flag.String("addr", ":18769", "")
+var Port = "18769"
 
 var up = websocket.Upgrader{
 	CheckOrigin: func(*http.Request) bool {
@@ -39,7 +38,7 @@ func recive(c *websocket.Conn) {
 
 		var recive map[string]interface{}
 		log.Print(c.RemoteAddr().String() + " | " + string(message))
-		json.Unmarshal(message, &recive)
+		err = json.Unmarshal(message, &recive)
 		if err != nil {
 			log.Print("error: ", err)
 			continue
@@ -87,24 +86,24 @@ func recive(c *websocket.Conn) {
 	}
 }
 
-func serve(w http.ResponseWriter, r *http.Request) {
-	conn, err := up.Upgrade(w, r, nil)
-	if err != nil {
-		log.Println(err)
-		log.Println("error while upgrading conncetion to websocket: ", r.RemoteAddr)
-		return
-	}
-	log.Print("upgraded conncetion to websocket: ", r.RemoteAddr)
-	go recive(conn)
+func createwebsocket() {
+	http.HandleFunc("/ws", func(w http.ResponseWriter, r *http.Request) {
+		conn, err := up.Upgrade(w, r, nil)
+		if err != nil {
+			log.Println(err)
+			log.Println("error while upgrading conncetion to websocket: ", r.RemoteAddr)
+			return
+		}
+		log.Print("upgraded conncetion to websocket: ", r.RemoteAddr)
+		go recive(conn)
+	})
 }
 
 func main() {
 	SQL.Init()
-	flag.Parse()
-	http.HandleFunc("/ws", func(w http.ResponseWriter, r *http.Request) {
-		serve(w, r)
-	})
+	createwebsocket()
+	router := createAPI()
 	log.Println("Started")
-	err := http.ListenAndServe(*addr, nil)
+	err := http.ListenAndServe(":"+Port, router)
 	log.Print("Err: ", err)
 }

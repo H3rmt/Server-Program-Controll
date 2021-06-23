@@ -16,7 +16,7 @@ var user = "Go"
 var password = "e73EG6dP2f8F2dAx"
 var database = "programs"
 
-// Exported
+// Init Exported
 func Init() {
 	var err error
 	db, err = sql.Open("mysql", fmt.Sprintf("%s:%s@/%s", user, password, database))
@@ -49,7 +49,7 @@ func getRowcount(database string) int {
 	return count
 }
 
-// Exported
+// Getlogs Exported
 func Getlogs(recive *map[string]interface{}) ([]interface{}, error) {
 	ctx := context.Background()
 
@@ -100,7 +100,7 @@ const (
 	Error     Logtype = "Error"
 )
 
-// Exported
+// Getactivity Exported
 func Getactivity(recive *map[string]interface{}) ([]interface{}, error) {
 	ctx := context.Background()
 
