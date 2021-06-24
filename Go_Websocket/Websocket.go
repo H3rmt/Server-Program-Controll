@@ -7,9 +7,6 @@ import (
 
 	"net/http"
 
-	"Go_Websocket/ExternalCommunication"
-	"Go_Websocket/SQL"
-
 	"github.com/gorilla/websocket"
 )
 
@@ -55,19 +52,19 @@ func recive(c *websocket.Conn) {
 
 		switch recive["action"] {
 		case "getlogs":
-			returnval, err = SQL.Getlogs(&recive)
+			returnval, err = Getlogs(&recive)
 		case "getactivity":
-			returnval, err = SQL.Getactivity(&recive)
+			returnval, err = Getactivity(&recive)
 		case "start":
-			returnval, err = ExternalCommunication.Start(&recive)
+			returnval, err = Start(&recive)
 		case "stop":
-			returnval, err = ExternalCommunication.Stop(&recive)
+			returnval, err = Stop(&recive)
 		case "customaction":
-			returnval, err = ExternalCommunication.Customaction(&recive)
+			returnval, err = Customaction(&recive)
 		}
 		if err != nil {
 			log.Println(err)
-			_, ok := err.(*ExternalCommunication.Permissionerror)
+			_, ok := err.(*Permissionerror)
 			if ok {
 				rec, _ := json.Marshal(map[string]interface{}{"action": recive["action"], "error": "Permissionerror"})
 				c.WriteMessage(1, rec)
@@ -100,7 +97,7 @@ func createwebsocket() {
 }
 
 func main() {
-	SQL.Init()
+	Init()
 	createwebsocket()
 	router := createAPI()
 	log.Println("Started")
