@@ -13,16 +13,25 @@ import (
 var Port = "18769"
 
 var up = websocket.Upgrader{
+	// allow connections from outside
 	CheckOrigin: func(*http.Request) bool {
 		return true
 	},
 }
 
+/*
+checkt if recived JSON has action als key
+*/
 func validateJSON(js *map[string]interface{}) bool {
 	_, array_key_exists := (*js)["action"]
 	return !array_key_exists
 }
 
+/*
+upgrades Connection and listens to incomming request
+
+called as a go routine
+*/
 func recive(c *websocket.Conn) {
 	for {
 		_, message, err := c.ReadMessage()
@@ -83,6 +92,9 @@ func recive(c *websocket.Conn) {
 	}
 }
 
+/*
+Registers /ws handle to http to create websocket and send and recive JSON
+*/
 func createwebsocket() {
 	http.HandleFunc("/ws", func(w http.ResponseWriter, r *http.Request) {
 		conn, err := up.Upgrade(w, r, nil)
@@ -96,8 +108,15 @@ func createwebsocket() {
 	})
 }
 
+/*
+Program start
+
+starts SQL;
+creates WS and API;
+starts listening and serving
+*/
 func main() {
-	Init()
+	SQLInit()
 	createwebsocket()
 	router := createAPI()
 	log.Println("Started")
