@@ -1,4 +1,4 @@
-package main
+package ws
 
 import (
 	"encoding/json"
@@ -11,8 +11,6 @@ import (
 	"github.com/gorilla/websocket"
 )
 
-var Port = "18769"
-
 var up = websocket.Upgrader{
 	// allow connections from outside
 	CheckOrigin: func(*http.Request) bool {
@@ -21,11 +19,11 @@ var up = websocket.Upgrader{
 }
 
 /*
-checkt if recived JSON has action als key
+checks if recived JSON has action as key
 */
-func validateJSON(js *map[string]interface{}) bool {
+func validateWSJSON(js *map[string]interface{}) bool {
 	_, array_key_exists := (*js)["action"]
-	return !array_key_exists
+	return array_key_exists
 }
 
 /*
@@ -33,7 +31,7 @@ upgrades Connection and listens to incomming request
 
 called as a go routine
 */
-func reciveWS(c *websocket.Conn, w *http.ResponseWriter) {
+func reciveWS(c *websocket.Conn) {
 	for {
 		_, message, err := c.ReadMessage()
 		fmt.Println()
@@ -46,14 +44,17 @@ func reciveWS(c *websocket.Conn, w *http.ResponseWriter) {
 		var recive map[string]interface{}
 		log.Println("WS|", c.RemoteAddr().String()+" | "+string(message))
 		err = json.Unmarshal(message, &recive)
+
 		if err != nil {
 			log.Println("WS|", "JSON decoding error: ", err)
 			continue
-		} else if len(recive) == 0 {
+		}
+		if len(recive) == 0 {
 			log.Println("WS|", "empty JSON")
 			continue
-		} else if validateJSON(&recive) {
-			log.Println("WS|", "invalid JSON request", recive)
+		}
+		if !validateWSJSON(&recive) {
+			log.Println("WS|", "invalid JSON WS request", recive)
 			continue
 		}
 		log.Println("WS|", "recived: ", recive)
@@ -71,19 +72,26 @@ func reciveWS(c *websocket.Conn, w *http.ResponseWriter) {
 			returnval, err = Stop(&recive)
 		case "customaction":
 			returnval, err = Customaction(&recive)
+		default:
+			err = fmt.Errorf("unknown Action")
 		}
+
 		if err != nil {
-			log.Println("WS|", err)
-			_, ok := err.(*Permissionerror)
+			log.Println("WS|", "err:", err)
+			WSerror, ok := err.(*Permissionerror)
 			if ok {
-				json.NewEncoder(*w).Encode(map[string]interface{}{"action": recive["action"], "error": "Permissionerror"})
+				msg, _ := json.Marshal(map[string]interface{}{"action": recive["action"], "error": WSerror})
+				c.WriteMessage(1, msg)
 			}
 		} else {
-			err = json.NewEncoder(*w).Encode(map[string]interface{}{"action": recive["action"], "data": returnval})
+			msg, err := json.Marshal(map[string]interface{}{"action": recive["action"], "data": returnval})
 			if err != nil {
-				log.Println("WS|", err)
-				json.NewEncoder(*w).Encode(map[string]interface{}{"action": recive["action"], "error": "JSONerror"})
+				msg, _ := json.Marshal(map[string]interface{}{"action": recive["action"], "error": "JSONerror"})
+				c.WriteMessage(1, msg)
+				return
 			}
+			c.WriteMessage(1, msg)
+			log.Println("WS|", "send:", string(msg))
 		}
 	}
 }
@@ -91,8 +99,8 @@ func reciveWS(c *websocket.Conn, w *http.ResponseWriter) {
 /*
 Registers /ws handle to http to create websocket and send and recive JSON
 */
-func createwebsocket(r *mux.Router) {
-	r.HandleFunc("/ws", func(w http.ResponseWriter, r *http.Request) {
+func Createwebsocket(rout *mux.Router) {
+	rout.HandleFunc("/ws", func(w http.ResponseWriter, r *http.Request) {
 		conn, err := up.Upgrade(w, r, nil)
 		if err != nil {
 			log.Println("WS|", err)
@@ -100,22 +108,6 @@ func createwebsocket(r *mux.Router) {
 			return
 		}
 		log.Println("WS|", "upgraded conncetion to websocket: ", r.RemoteAddr)
-		go reciveWS(conn, &w)
+		go reciveWS(conn)
 	})
-}
-
-/*
-Program start
-
-starts SQL;
-creates WS and API;
-starts listening and serving
-*/
-func main() {
-	SQLInit()
-	router := createAPI()
-	createwebsocket(router)
-	log.Println("MAIN|", "Started")
-	err := http.ListenAndServe(":"+Port, router)
-	log.Println("MAIN|", "Err: ", err)
 }

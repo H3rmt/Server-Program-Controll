@@ -1,37 +1,15 @@
-package main
+package ws
 
 import (
-	"fmt"
-	"log"
-
 	"context"
 	"database/sql"
-
-	// used at sql.Open(->"mysql"<-, fmt.Sprintf
-	_ "github.com/go-sql-driver/mysql"
+	"fmt"
 )
 
-var db *sql.DB
+var DB *sql.DB
 
-var user = "Go"
-var password = "e73EG6dP2f8F2dAx"
-var database = "programs"
-
-/*
-Create and open SQL Connection
-*/
-func SQLInit() {
-	var err error
-	db, err = sql.Open("mysql", fmt.Sprintf("%s:%s@/%s", user, password, database))
-	if err != nil {
-		log.Println("SQL|", "Error creating connection: ", err.Error())
-	}
-	ctx := context.Background()
-	err = db.PingContext(ctx)
-	if err != nil {
-		log.Println("SQL|", err.Error())
-	}
-	log.Println("SQL|", "Connected!")
+func SetDB(db *sql.DB) {
+	DB = db
 }
 
 /*
@@ -43,7 +21,7 @@ func getRowcount(table string) int {
 	sql := fmt.Sprintf("SELECT COUNT(*) FROM %s;", table)
 
 	// Execute query
-	query, err := db.QueryContext(ctx, sql)
+	query, err := DB.QueryContext(ctx, sql)
 	if err != nil {
 		return 0
 	}
@@ -68,7 +46,7 @@ func Getlogs(recive *map[string]interface{}) ([]interface{}, error) {
 	sql := "SELECT programm_ID,Date,Number,Message,Type FROM logs;"
 
 	// Execute query
-	query, err := db.QueryContext(ctx, sql)
+	query, err := DB.QueryContext(ctx, sql)
 	if err != nil {
 		return nil, err
 	}
@@ -93,7 +71,8 @@ func Getlogs(recive *map[string]interface{}) ([]interface{}, error) {
 
 /*
 Struct to represent a row in the Log table
-*/type Log struct {
+*/
+type Log struct {
 	Programm_ID string
 	Date        string
 	Number      int
@@ -123,7 +102,7 @@ func Getactivity(recive *map[string]interface{}) ([]interface{}, error) {
 	sql := "SELECT programm_ID,Date,Type FROM activity;"
 
 	// execute query
-	query, err := db.QueryContext(ctx, sql)
+	query, err := DB.QueryContext(ctx, sql)
 	if err != nil {
 		return nil, err
 	}
