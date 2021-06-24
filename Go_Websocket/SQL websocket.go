@@ -24,14 +24,14 @@ func SQLInit() {
 	var err error
 	db, err = sql.Open("mysql", fmt.Sprintf("%s:%s@/%s", user, password, database))
 	if err != nil {
-		log.Fatal("Error creating connection: ", err.Error())
+		log.Println("SQL|", "Error creating connection: ", err.Error())
 	}
 	ctx := context.Background()
 	err = db.PingContext(ctx)
 	if err != nil {
-		log.Fatal(err.Error())
+		log.Println("SQL|", err.Error())
 	}
-	log.Print("Connected!\n")
+	log.Println("SQL|", "Connected!")
 }
 
 /*

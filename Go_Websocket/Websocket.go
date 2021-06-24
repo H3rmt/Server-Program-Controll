@@ -7,6 +7,7 @@ import (
 
 	"net/http"
 
+	"github.com/gorilla/mux"
 	"github.com/gorilla/websocket"
 )
 
@@ -37,25 +38,25 @@ func recive(c *websocket.Conn) {
 		_, message, err := c.ReadMessage()
 		fmt.Println()
 		if err != nil {
-			log.Print("error in reciving: ", err)
+			log.Println("WS|", "error in reciving: ", err)
 			fmt.Println()
 			return
 		}
 
 		var recive map[string]interface{}
-		log.Print(c.RemoteAddr().String() + " | " + string(message))
+		log.Println("WS|", c.RemoteAddr().String()+" | "+string(message))
 		err = json.Unmarshal(message, &recive)
 		if err != nil {
-			log.Print("error: ", err)
+			log.Println("WS|", "JSON decoding error: ", err)
 			continue
 		} else if len(recive) == 0 {
-			log.Print("empty JSON")
+			log.Println("WS|", "empty JSON")
 			continue
 		} else if validateJSON(&recive) {
-			log.Print("invalid JSON", recive)
+			log.Println("WS|", "invalid JSON request", recive)
 			continue
 		}
-		log.Print("recived: ", recive)
+		log.Println("WS|", "recived: ", recive)
 
 		var returnval interface{}
 
@@ -72,7 +73,7 @@ func recive(c *websocket.Conn) {
 			returnval, err = Customaction(&recive)
 		}
 		if err != nil {
-			log.Println(err)
+			log.Println("WS|", err)
 			_, ok := err.(*Permissionerror)
 			if ok {
 				rec, _ := json.Marshal(map[string]interface{}{"action": recive["action"], "error": "Permissionerror"})
@@ -81,11 +82,11 @@ func recive(c *websocket.Conn) {
 		} else {
 			rec, err := json.Marshal(map[string]interface{}{"action": recive["action"], "data": returnval})
 			if err != nil {
-				log.Println(err)
+				log.Println("WS|", err)
 				rec, _ := json.Marshal(map[string]interface{}{"action": recive["action"], "error": "JSONerror"})
 				c.WriteMessage(1, rec)
 			} else {
-				log.Println("sending: ", string(rec))
+				log.Println("WS|", "sending: ", string(rec))
 				c.WriteMessage(1, rec)
 			}
 		}
@@ -95,15 +96,15 @@ func recive(c *websocket.Conn) {
 /*
 Registers /ws handle to http to create websocket and send and recive JSON
 */
-func createwebsocket() {
-	http.HandleFunc("/ws", func(w http.ResponseWriter, r *http.Request) {
+func createwebsocket(r *mux.Router) {
+	r.HandleFunc("/ws", func(w http.ResponseWriter, r *http.Request) {
 		conn, err := up.Upgrade(w, r, nil)
 		if err != nil {
-			log.Println(err)
-			log.Println("error while upgrading conncetion to websocket: ", r.RemoteAddr)
+			log.Println("WS|", err)
+			log.Println("WS|", "error while upgrading conncetion to websocket: ", r.RemoteAddr)
 			return
 		}
-		log.Print("upgraded conncetion to websocket: ", r.RemoteAddr)
+		log.Println("WS|", "upgraded conncetion to websocket: ", r.RemoteAddr)
 		go recive(conn)
 	})
 }
@@ -117,9 +118,9 @@ starts listening and serving
 */
 func main() {
 	SQLInit()
-	createwebsocket()
 	router := createAPI()
-	log.Println("Started")
+	createwebsocket(router)
+	log.Println("MAIN|", "Started")
 	err := http.ListenAndServe(":"+Port, router)
-	log.Print("Err: ", err)
+	log.Println("MAIN|", "Err: ", err)
 }

@@ -69,7 +69,7 @@ function builtWebSocket() {
     loading = false;
 
     websocket.onopen = function () {
-        websocket.send("connection opened!");
+        websocket.send('{"connection":"opened!"}');
         console.log("connection opened!");
     };
 
