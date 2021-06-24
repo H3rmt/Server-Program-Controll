@@ -54,6 +54,10 @@ Api request:
 			"Type":"Send",
 		}
 }
+\
+
+test:
+curl -d {\"id\":\"25253\"} http://localhost:18769/api
 */
 
 /*
