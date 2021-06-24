@@ -33,7 +33,7 @@ upgrades Connection and listens to incomming request
 
 called as a go routine
 */
-func recive(c *websocket.Conn) {
+func reciveWS(c *websocket.Conn, w *http.ResponseWriter) {
 	for {
 		_, message, err := c.ReadMessage()
 		fmt.Println()
@@ -76,18 +76,13 @@ func recive(c *websocket.Conn) {
 			log.Println("WS|", err)
 			_, ok := err.(*Permissionerror)
 			if ok {
-				rec, _ := json.Marshal(map[string]interface{}{"action": recive["action"], "error": "Permissionerror"})
-				c.WriteMessage(1, rec)
+				json.NewEncoder(*w).Encode(map[string]interface{}{"action": recive["action"], "error": "Permissionerror"})
 			}
 		} else {
-			rec, err := json.Marshal(map[string]interface{}{"action": recive["action"], "data": returnval})
+			err = json.NewEncoder(*w).Encode(map[string]interface{}{"action": recive["action"], "data": returnval})
 			if err != nil {
 				log.Println("WS|", err)
-				rec, _ := json.Marshal(map[string]interface{}{"action": recive["action"], "error": "JSONerror"})
-				c.WriteMessage(1, rec)
-			} else {
-				log.Println("WS|", "sending: ", string(rec))
-				c.WriteMessage(1, rec)
+				json.NewEncoder(*w).Encode(map[string]interface{}{"action": recive["action"], "error": "JSONerror"})
 			}
 		}
 	}
@@ -105,7 +100,7 @@ func createwebsocket(r *mux.Router) {
 			return
 		}
 		log.Println("WS|", "upgraded conncetion to websocket: ", r.RemoteAddr)
-		go recive(conn)
+		go reciveWS(conn, &w)
 	})
 }
 
