@@ -121,7 +121,7 @@ Api request:
 \
 
 test:
-curl -d {\"id\":\"25253\"} http://localhost:18769/api
+curl -d {\"APIkey\":\"25253\", \"LogRequest\":\"12\"} http://localhost:18769/api
 */
 
 /*
