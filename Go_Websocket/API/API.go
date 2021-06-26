@@ -40,24 +40,24 @@ func (m *InvalidAPIkeyerror) Error() string {
 	return "Invalid API key"
 }
 
-func reciveAPI(raw []byte, w *http.ResponseWriter) {
+func reciveAPI(raw *[]byte) []byte {
 	fmt.Println()
 
 	var recive map[string]interface{}
-	err := json.Unmarshal(raw, &recive)
+	err := json.Unmarshal(*raw, &recive)
 
 	if err != nil {
 		log.Println("API|", "JSON decoding error: ", err)
-		return
+		return nil
 	}
 	if len(recive) == 0 {
 		log.Println("API|", "empty JSON")
-		return
+		return nil
 	}
 	jsonvalidate := validateAPIJSON(&recive)
 	if jsonvalidate == "" {
 		log.Println("API|", "invalid JSON API request", recive)
-		return
+		return nil
 	}
 	log.Println("API|", "recived: ", recive)
 
@@ -74,32 +74,43 @@ func reciveAPI(raw []byte, w *http.ResponseWriter) {
 		log.Println("API|", "err:", err)
 		APIerror, ok := err.(*InvalidAPIkeyerror)
 		if ok {
-			json.NewEncoder(*w).Encode(map[string]interface{}{"type": jsonvalidate, "error": APIerror})
+			msg, _ := json.Marshal(map[string]interface{}{"type": jsonvalidate, "error": APIerror})
+			return msg
 		}
+		return nil
 	} else {
 		msg, _ := json.Marshal(map[string]interface{}{"type": jsonvalidate, "success": success})
 		if err != nil {
 			log.Println("API|", "err:", err)
-			json.NewEncoder(*w).Encode(map[string]interface{}{"type": jsonvalidate, "error": "JSONerror"})
-			return
+			msg, _ := json.Marshal(map[string]interface{}{"type": jsonvalidate, "error": "JSONerror"})
+			return msg
 		}
-		(*w).Write(msg)
-		log.Println("API|", "send:", string(msg))
+		return msg
 	}
 }
 
 /*
 Registers /api handle to mux.Router with json return and POST get
 */
-func CreateAPI() *mux.Router {
-	router := mux.NewRouter().StrictSlash(true)
-	router.HandleFunc("/api", func(w http.ResponseWriter, r *http.Request) {
+func CreateAPI(rout *mux.Router) {
+	rout.HandleFunc("/api", func(w http.ResponseWriter, r *http.Request) {
 		raw, _ := ioutil.ReadAll(r.Body)
 		w.Header().Set("Content-Type", "application/json")
-		w.Header().Set("Content-Length", r.Header.Get("Content-Length"))
-		go reciveAPI(raw, &w)
+
+		msg := reciveAPI(&raw)
+
+		if msg == nil {
+			w.WriteHeader(http.StatusBadRequest)
+			log.Println("API|", "send: bad request")
+			return
+		}
+		_, err := w.Write(msg)
+		if err != nil {
+			log.Println("API|", "err in sending:", err)
+		}
+
+		log.Println("API|", "send:", string(msg))
 	}).Methods("POST")
-	return router
 }
 
 /*
@@ -121,7 +132,7 @@ Api request:
 \
 
 test:
-curl -d {\"APIkey\":\"25253\", \"LogRequest\":\"12\"} http://localhost:18769/api
+curl -d {\"APIkey\":\"25253\", \"LogRequest\":1} http://localhost:18769/api
 */
 
 /*
