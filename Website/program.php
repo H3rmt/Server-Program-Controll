@@ -107,7 +107,7 @@ $info = getprogramm(htmlspecialchars(stripslashes(trim($_GET['id']))));
             </div>
             <div id="logs">
                 <canvas id="myChart" width="100" height="100"></canvas>
-                <script src="chart.js"></script>
+                <script src="../.idea/chart.js"></script>
                 <script>
                 var ctx = document.getElementById('myChart').getContext('2d');
 
