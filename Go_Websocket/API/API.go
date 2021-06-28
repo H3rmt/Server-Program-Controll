@@ -8,31 +8,33 @@ import (
 
 	"net/http"
 
-	ws "Go_Websocket/WS"
-
 	"github.com/gorilla/mux"
+
+	// create struct from map out of JSON
+	"github.com/mitchellh/mapstructure"
 )
 
 /*
 checks if recived JSON has APIkey and ActivityRequest or LogRequest as keys
+returns the API key and REquesttype
 */
-func validateAPIJSON(js *map[string]interface{}) string {
-	_, array_key_exists := (*js)["APIkey"]
+func validateAPIJSON(js *map[string]interface{}) (string, string) {
+	APIKey, array_key_exists := (*js)["APIkey"]
 	if array_key_exists {
 		_, ActivityRequest_exists := (*js)["ActivityRequest"]
 		_, LogRequest_exists := (*js)["LogRequest"]
 		if ActivityRequest_exists && !LogRequest_exists {
-			return "ActivityRequest"
+			return APIKey.(string), "ActivityRequest"
 		}
 		if LogRequest_exists && !ActivityRequest_exists {
-			return "LogRequest"
+			return APIKey.(string), "LogRequest"
 		}
 	}
-	return ""
+	return APIKey.(string), ""
 }
 
 /*
-Error thrown/returned when no admin priv are present
+Error thrown/returned when no admin priviges are present
 */
 type InvalidAPIkeyerror struct{}
 
@@ -40,6 +42,11 @@ func (m *InvalidAPIkeyerror) Error() string {
 	return "Invalid API key"
 }
 
+/*
+called when Connection send data;
+gets byte array out of JSON
+returns byte array out of JSON to write
+*/
 func reciveAPI(raw *[]byte) []byte {
 	fmt.Println()
 
@@ -54,35 +61,37 @@ func reciveAPI(raw *[]byte) []byte {
 		log.Println("API|", "empty JSON")
 		return nil
 	}
-	jsonvalidate := validateAPIJSON(&recive)
-	if jsonvalidate == "" {
+	APIKey, request := validateAPIJSON(&recive)
+	if request == "" {
 		log.Println("API|", "invalid JSON API request", recive)
 		return nil
 	}
 	log.Println("API|", "recived: ", recive)
 
-	var success = false
-
-	switch jsonvalidate {
+	switch request {
 	case "ActivityRequest":
-		success, err = ProcessActivityRequest(&recive)
+		var activityrequest ActivityRequest
+		mapstructure.Decode(recive["ActivityRequest"], &activityrequest)
+		err = ProcessActivityRequest(APIKey, &activityrequest)
 	case "LogRequest":
-		success, err = ProcessLogRequest(&recive)
+		var logrequest LogRequest
+		mapstructure.Decode(recive["LogRequest"], &logrequest)
+		err = ProcessLogRequest(APIKey, &logrequest)
 	}
 
 	if err != nil {
 		log.Println("API|", "err:", err)
 		APIerror, ok := err.(*InvalidAPIkeyerror)
 		if ok {
-			msg, _ := json.Marshal(map[string]interface{}{"type": jsonvalidate, "error": APIerror})
+			msg, _ := json.Marshal(map[string]interface{}{"type": request, "error": APIerror})
 			return msg
 		}
 		return nil
 	} else {
-		msg, _ := json.Marshal(map[string]interface{}{"type": jsonvalidate, "success": success})
+		msg, _ := json.Marshal(map[string]interface{}{"type": request, "success": true})
 		if err != nil {
 			log.Println("API|", "err:", err)
-			msg, _ := json.Marshal(map[string]interface{}{"type": jsonvalidate, "error": "JSONerror"})
+			msg, _ := json.Marshal(map[string]interface{}{"type": request, "error": "JSONerror"})
 			return msg
 		}
 		return msg
@@ -134,21 +143,3 @@ Api request:
 test:
 curl -d {\"APIkey\":\"25253\", \"LogRequest\":1} http://localhost:18769/api
 */
-
-/*
-Struct to represent a Request asking to add a log in the Log table in DB
-*/
-type LogRequest struct {
-	Date    string
-	Number  int
-	Message string
-	Type    ws.Logtype
-}
-
-/*
-Struct to represent a Request asking to add a activity in the Acitivity table in DB
-*/
-type ActivityRequest struct {
-	Date string
-	Type ws.Activitytype
-}
