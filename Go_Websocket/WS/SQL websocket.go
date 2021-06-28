@@ -1,7 +1,6 @@
 package ws
 
 import (
-	"context"
 	"database/sql"
 	"fmt"
 )
@@ -16,12 +15,10 @@ func SetDB(db *sql.DB) {
 returns how many rows will be returned from table
 */
 func getRowcount(table string) int {
-	ctx := context.Background()
-
 	sql := fmt.Sprintf("SELECT COUNT(*) FROM %s;", table)
 
 	// Execute query
-	query, err := DB.QueryContext(ctx, sql)
+	query, err := DB.Query(sql)
 	if err != nil {
 		return 0
 	}
@@ -37,30 +34,25 @@ func getRowcount(table string) int {
 returns logs as array of Log-structs from DB (logs)
 */
 func Getlogs(recive *map[string]interface{}) ([]interface{}, error) {
-	ctx := context.Background()
-
 	count := getRowcount("logs")
 
 	var entries = make([]interface{}, count)
 
 	sql := "SELECT programm_ID,Date,Number,Message,Type FROM logs;"
-
-	// Execute query
-	query, err := DB.QueryContext(ctx, sql)
+	res, err := DB.Query(sql)
 	if err != nil {
 		return nil, err
 	}
-	defer query.Close()
 
 	// iterate through query
-	for query.Next() {
+	for res.Next() {
 		var Programm_ID string
 		var Date, Message string
-		var Number int
+		var Number float64
 		var Type Logtype
 
 		// Get values from row
-		err := query.Scan(&Programm_ID, &Date, &Number, &Message, &Type)
+		err := res.Scan(&Programm_ID, &Date, &Number, &Message, &Type)
 		if err != nil {
 			return nil, err
 		}
@@ -75,7 +67,7 @@ Struct to represent a row in the Log table
 type Log struct {
 	Programm_ID string
 	Date        string
-	Number      int
+	Number      float64
 	Message     string
 	Type        Logtype
 }
@@ -93,29 +85,24 @@ const (
 returns activity as array of Activity-structs from DB (activity)
 */
 func Getactivity(recive *map[string]interface{}) ([]interface{}, error) {
-	ctx := context.Background()
-
 	count := getRowcount("activity")
 
 	var entries = make([]interface{}, count)
 
 	sql := "SELECT programm_ID,Date,Type FROM activity;"
-
-	// execute query
-	query, err := DB.QueryContext(ctx, sql)
+	res, err := DB.Query(sql)
 	if err != nil {
 		return nil, err
 	}
-	defer query.Close()
 
 	// iterate through query
-	for query.Next() {
+	for res.Next() {
 		var Programm_ID string
 		var Date string
 		var Type Activitytype
 
 		// get values from row
-		err := query.Scan(&Programm_ID, &Date, &Type)
+		err := res.Scan(&Programm_ID, &Date, &Type)
 		if err != nil {
 			return nil, err
 		}

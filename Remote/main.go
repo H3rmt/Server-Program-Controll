@@ -15,7 +15,7 @@ var Port = "18769"
  */
 func main() {
 	log.Println("Performing Http Post...")
-	req := map[string]interface{}{"APIkey": 12332, "LogRequest": LogRequest{Date: "12.12.2020", Number: 12, Message: "hitext", Type: Important}}
+	req := map[string]interface{}{"APIkey": "5rrtg3u564uiqr43fadf", "LogRequest": LogRequest{Date: "2021-06-17 22:26:43", Number: 12, Message: "hitext", Type: Important}}
 	jsonReq, err := json.Marshal(req)
 	if err != nil {
 		log.Fatalln(err)
@@ -26,7 +26,6 @@ func main() {
 		log.Fatalln(err)
 	}
 
-	defer resp.Body.Close()
 	bodyBytes, _ := ioutil.ReadAll(resp.Body)
 
 	// Convert response body to string
@@ -48,4 +47,18 @@ const (
 	Normal    Logtype = "Normal"
 	Important Logtype = "Important"
 	Error     Logtype = "Error"
+)
+
+type Activity struct {
+	Date string
+	Type Activitytype
+}
+
+type Activitytype string
+
+const (
+	Send              Activitytype = "Send"
+	Recive            Activitytype = "Recive"
+	Process           Activitytype = "Process"
+	Backgroundprocess Activitytype = "Backgroundprocess"
 )

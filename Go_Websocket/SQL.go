@@ -1,6 +1,7 @@
 package main
 
 import (
+	api "Go_Websocket/API"
 	ws "Go_Websocket/WS"
 	"fmt"
 	"log"
@@ -31,4 +32,5 @@ func SQLInit() {
 	}
 	log.Println("SQL|", "Connected!")
 	ws.SetDB(DB)
+	api.SetDB(DB)
 }
