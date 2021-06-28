@@ -9,6 +9,5 @@
 /inspectionProfiles/Project_Default.xml
 /sqldialects.xml
 /vcs.xml
-Go Websocket/go.mod
-Go Websocket/go.sum
-Go_Websocket/Go_Websocket.exe
+/Website/chart.js
+/Go_Websocket/Go_Websocket.exe
