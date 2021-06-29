@@ -110,15 +110,34 @@ func CreateAPI(rout *mux.Router) {
 
 		if msg == nil {
 			w.WriteHeader(http.StatusBadRequest)
-			log.Println("API|", "send: bad request")
-			return
+			msg, _ = json.Marshal(map[string]interface{}{"error": "bad request"})
 		}
+
 		_, err := w.Write(msg)
 		if err != nil {
 			log.Println("API|", "err in sending:", err)
+		} else {
+			log.Println("API|", "send:", string(msg))
+		}
+	}).Methods("POST")
+
+	rout.HandleFunc("/api/register", func(w http.ResponseWriter, r *http.Request) {
+		raw, _ := ioutil.ReadAll(r.Body)
+		w.Header().Set("Content-Type", "application/json")
+
+		var msg []byte = raw
+
+		if msg == nil {
+			w.WriteHeader(http.StatusBadRequest)
+			msg, _ = json.Marshal(map[string]interface{}{"error": "bad request"})
 		}
 
-		log.Println("API|", "send:", string(msg))
+		_, err := w.Write(msg)
+		if err != nil {
+			log.Println("API|", "err in sending:", err)
+		} else {
+			log.Println("API|", "send:", string(msg))
+		}
 	}).Methods("POST")
 }
 
