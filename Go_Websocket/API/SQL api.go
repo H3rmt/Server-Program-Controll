@@ -34,28 +34,14 @@ func getProgramm_IDfromAPIKey(APIKey string) (string, error) {
 		res.Scan(&ID)
 		return ID, nil
 	} else {
-		return "", &APIKeyerror{}
+		return "", &InvalidAPIkeyerror{}
 	}
-}
-
-/*
-Error thrown/returned when no admin priv are present
-*/
-type APIKeyerror struct{}
-
-func (m *APIKeyerror) Error() string {
-	return "Invalid APIKey"
 }
 
 /*
 adds log do the database from logrequest
 */
-func ProcessLogRequest(APIKey string, logrequest *LogRequest) error {
-	Programm_ID, err := getProgramm_IDfromAPIKey(APIKey)
-	if err != nil {
-		return err
-	}
-
+func ProcessLogRequest(Programm_ID string, logrequest *LogRequest) error {
 	sql := "INSERT INTO logs (Programm_ID,Date,Number,Message,Type) VALUES (?,?,?,?,?);"
 	stmt, err := DB.Prepare(sql)
 	if err != nil {
@@ -87,12 +73,7 @@ type LogRequest struct {
 /*
 adds activity do the database from activityrequest
 */
-func ProcessActivityRequest(APIKey string, activityrequest *ActivityRequest) error {
-	Programm_ID, err := getProgramm_IDfromAPIKey(APIKey)
-	if err != nil {
-		return err
-	}
-
+func ProcessActivityRequest(Programm_ID string, activityrequest *ActivityRequest) error {
 	sql := "INSERT INTO activity (Programm_ID,Date,Type) VALUES (?,?,?);"
 	stmt, err := DB.Prepare(sql)
 	if err != nil {

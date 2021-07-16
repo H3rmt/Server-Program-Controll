@@ -15,22 +15,30 @@ import (
 )
 
 /*
-checks if recived JSON has APIkey and ActivityRequest or LogRequest as keys
-returns the API key and REquesttype
+checks if recived JSON has APIkey and (Register or Activity or Log or Customaction) as keys
+returns the API key and Requesttype
 */
 func validateAPIJSON(js *map[string]interface{}) (string, string) {
-	APIKey, array_key_exists := (*js)["APIkey"]
-	if array_key_exists {
-		_, ActivityRequest_exists := (*js)["ActivityRequest"]
-		_, LogRequest_exists := (*js)["LogRequest"]
-		if ActivityRequest_exists && !LogRequest_exists {
-			return APIKey.(string), "ActivityRequest"
+	APIKey, Api_key_exists := (*js)["APIkey"]
+	if Api_key_exists {
+		_, Register_exists := (*js)["Register"]
+		_, Activity_exists := (*js)["Activity"]
+		_, Log_exists := (*js)["Log"]
+		_, Action_exists := (*js)["Action"]
+		if Register_exists && !Activity_exists && !Log_exists && !Action_exists {
+			return APIKey.(string), "Register"
 		}
-		if LogRequest_exists && !ActivityRequest_exists {
-			return APIKey.(string), "LogRequest"
+		if Activity_exists && !Register_exists && !Log_exists && !Action_exists {
+			return APIKey.(string), "Activity"
+		}
+		if Log_exists && !Register_exists && !Activity_exists && !Action_exists {
+			return APIKey.(string), "Log"
+		}
+		if Action_exists && !Register_exists && !Activity_exists && !Log_exists {
+			return APIKey.(string), "Action"
 		}
 	}
-	return APIKey.(string), ""
+	return "", ""
 }
 
 /*
@@ -68,15 +76,25 @@ func reciveAPI(raw *[]byte) []byte {
 	}
 	log.Println("API|", "recived: ", recive)
 
+	ProgammID, err := getProgramm_IDfromAPIKey(APIKey)
+
 	switch request {
-	case "ActivityRequest":
+	case "Register":
+		var registerrequest RegisterRequest
+		mapstructure.Decode(recive["RegisterRequest"], &registerrequest)
+		err = ProcessRegisterRequest(ProgammID, &registerrequest)
+	case "Activity":
 		var activityrequest ActivityRequest
 		mapstructure.Decode(recive["ActivityRequest"], &activityrequest)
-		err = ProcessActivityRequest(APIKey, &activityrequest)
-	case "LogRequest":
+		err = ProcessActivityRequest(ProgammID, &activityrequest)
+	case "Log":
 		var logrequest LogRequest
 		mapstructure.Decode(recive["LogRequest"], &logrequest)
-		err = ProcessLogRequest(APIKey, &logrequest)
+		err = ProcessLogRequest(ProgammID, &logrequest)
+	case "Action":
+		var commandrequest CommandRequest
+		mapstructure.Decode(recive["CommandRequest"], &commandrequest)
+		err = ProcessCommandRequest(ProgammID, &commandrequest)
 	}
 
 	if err != nil {
@@ -107,25 +125,6 @@ func CreateAPI(rout *mux.Router) {
 		w.Header().Set("Content-Type", "application/json")
 
 		msg := reciveAPI(&raw)
-
-		if msg == nil {
-			w.WriteHeader(http.StatusBadRequest)
-			msg, _ = json.Marshal(map[string]interface{}{"error": "bad request"})
-		}
-
-		_, err := w.Write(msg)
-		if err != nil {
-			log.Println("API|", "err in sending:", err)
-		} else {
-			log.Println("API|", "send:", string(msg))
-		}
-	}).Methods("POST")
-
-	rout.HandleFunc("/api/register", func(w http.ResponseWriter, r *http.Request) {
-		raw, _ := ioutil.ReadAll(r.Body)
-		w.Header().Set("Content-Type", "application/json")
-
-		var msg []byte = raw
 
 		if msg == nil {
 			w.WriteHeader(http.StatusBadRequest)

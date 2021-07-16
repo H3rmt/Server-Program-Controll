@@ -89,20 +89,26 @@ func Getactivity(recive *map[string]interface{}) ([]interface{}, error) {
 
 	var entries = make([]interface{}, count)
 
-	sql := "SELECT programm_ID,Date,Type FROM activity;"
-	res, err := DB.Query(sql)
+	sql := "SELECT programm_ID,Date,Type FROM activity WHERE programm_ID=?"
+	stmt, err := DB.Prepare(sql)
+	if err != nil {
+		return nil, err
+	}
+	defer stmt.Close()
+
+	rows, err := stmt.Query()
 	if err != nil {
 		return nil, err
 	}
 
 	// iterate through query
-	for res.Next() {
+	for rows.Next() {
 		var Programm_ID string
 		var Date string
 		var Type Activitytype
 
 		// get values from row
-		err := res.Scan(&Programm_ID, &Date, &Type)
+		err := rows.Scan(&Programm_ID, &Date, &Type)
 		if err != nil {
 			return nil, err
 		}
