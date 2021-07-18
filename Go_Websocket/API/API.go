@@ -78,6 +78,12 @@ func reciveAPI(raw *[]byte) []byte {
 
 	ProgammID, err := getProgramm_IDfromAPIKey(APIKey)
 
+	if err != nil {
+		log.Println("API|", "err:", err)
+		msg, _ := json.Marshal(map[string]interface{}{"type": request, "error": err})
+		return msg
+	}
+
 	switch request {
 	case "Register":
 		var registerrequest RegisterRequest
@@ -94,17 +100,13 @@ func reciveAPI(raw *[]byte) []byte {
 	case "Action":
 		var commandrequest CommandRequest
 		mapstructure.Decode(recive["CommandRequest"], &commandrequest)
-		err = ProcessCommandRequest(ProgammID, &commandrequest)
+		err = ProcessCommandRequest(ProgammID, &commandrequest, APIKey)
 	}
 
 	if err != nil {
 		log.Println("API|", "err:", err)
-		APIerror, ok := err.(*InvalidAPIkeyerror)
-		if ok {
-			msg, _ := json.Marshal(map[string]interface{}{"type": request, "error": APIerror})
-			return msg
-		}
-		return nil
+		msg, _ := json.Marshal(map[string]interface{}{"type": request, "error": err})
+		return msg
 	} else {
 		msg, _ := json.Marshal(map[string]interface{}{"type": request, "success": true})
 		if err != nil {
