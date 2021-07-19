@@ -14,6 +14,8 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 )
 
+var Port = "18769"
+
 var Programconnections map[string]string // Programm_ID = [IP]
 
 /*
@@ -37,16 +39,16 @@ type RegisterRequest struct {
 }
 
 /*
-Process request to execute custom command in Program
+Process request to execute command in Program
 */
-func ProcessCommandRequest(ProgammID string, customcommandrequest *CommandRequest, APIkey string) error {
+func ProcessCommandRequest(ProgammID string, commandrequest *CommandRequest, APIkey string) error {
 	IP, exists := Programconnections[ProgammID]
 	if !exists {
 		log.Println("IP not registered")
 		return &Programnotreachableerror{"IP not registered"}
 	}
 
-	request := ActualCommandRequest{customcommandrequest.Message, APIkey}
+	request := ActualCommandRequest{commandrequest.Message, APIkey}
 
 	byterequest, err := json.Marshal(request)
 	if err != nil {
@@ -54,7 +56,7 @@ func ProcessCommandRequest(ProgammID string, customcommandrequest *CommandReques
 		return err
 	}
 
-	resp, err := http.Post(IP+":18769", "application/json;", bytes.NewBuffer(byterequest))
+	resp, err := http.Post(IP+":"+Port, "application/json;", bytes.NewBuffer(byterequest))
 	if err != nil {
 		log.Println("Program did not respond")
 		return &Programnotreachableerror{"Program did not respond"}

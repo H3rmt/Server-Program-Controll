@@ -42,7 +42,7 @@ func validateAPIJSON(js *map[string]interface{}) (string, string) {
 }
 
 /*
-Error thrown/returned when no admin priviges are present
+Error returned when APIkey was invalid
 */
 type InvalidAPIkeyerror struct{}
 

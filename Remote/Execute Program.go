@@ -25,8 +25,11 @@ type Program struct {
 	Reader  Reader
 }
 
+/*
+starts the program and readers
+*/
 func (pr *Program) Start() {
-	cmd := exec.Command("python", "test.py")
+	cmd := exec.Command(pr.Program, pr.File)
 
 	pr.Reader = Reader{cmdrunning: false}
 
@@ -41,20 +44,33 @@ func (pr *Program) Start() {
 	}
 }
 
+/*
+Custom Reader containing out and err Writer
+*/
 type Reader struct {
 	cmdrunning bool
 	outReader  stdoutWriter
 	errReader  stderrWriter
 }
 
+/*
+process stdout Info
+*/
 func (r *Reader) processOutput(out string) {
 	log.Println("out:", string(out))
 }
 
+/*
+process stderr Info
+*/
 func (r *Reader) processError(err string) {
 	log.Println("err:", string(err))
 }
 
+/*
+runs parallel to Program and reads stdout and stderr
+feeds bot in processOutput and processError
+*/
 func (r *Reader) process() {
 	for r.cmdrunning {
 		time.Sleep(3 * time.Millisecond)
