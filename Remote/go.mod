@@ -1,3 +1,3 @@
-module example.com
+module Remote
 
 go 1.16

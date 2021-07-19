@@ -20,11 +20,11 @@ def printshit():
     sys.stdout.flush()
 
     sleep(0.5)
-    raise ValueError("This is an ValueError")
+    raise AttributeError("This is an err")
 
 if __name__ == '__main__':
     thr = threading.Thread(target=printshit)
     thr.start()
     sleep(0.025)
-    thr2 = threading.Thread(target=printshit)
-    thr2.start()
+    #thr2 = threading.Thread(target=printshit)
+    #thr2.start()
