@@ -38,21 +38,28 @@ func Getlogs(recive *map[string]interface{}) ([]interface{}, error) {
 
 	var entries = make([]interface{}, count)
 
-	sql := "SELECT programm_ID,Date,Number,Message,Type FROM logs;"
-	res, err := DB.Query(sql)
+	sql := "SELECT programm_ID,Date,Number,Message,Type FROM logs WHERE programm_ID=?"
+
+	stmt, err := DB.Prepare(sql)
+	if err != nil {
+		return nil, err
+	}
+	defer stmt.Close()
+
+	rows, err := stmt.Query()
 	if err != nil {
 		return nil, err
 	}
 
 	// iterate through query
-	for res.Next() {
+	for rows.Next() {
 		var Programm_ID string
 		var Date, Message string
 		var Number float64
 		var Type Logtype
 
 		// Get values from row
-		err := res.Scan(&Programm_ID, &Date, &Number, &Message, &Type)
+		err := rows.Scan(&Programm_ID, &Date, &Number, &Message, &Type)
 		if err != nil {
 			return nil, err
 		}
