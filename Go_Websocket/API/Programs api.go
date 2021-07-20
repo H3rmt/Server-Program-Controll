@@ -16,26 +16,19 @@ import (
 
 var Port = "18770"
 
-var Programconnections map[string]string // Programm_ID = [IP]
+var Programconnections = make(map[string]string) // Programm_ID = [IP]
 
 /*
 Process request to add Program to list of connections
 */
-func ProcessRegisterRequest(ProgammID string, registerrequest *RegisterRequest) error {
+func ProcessRegisterRequest(ProgammID string, addr string) error {
 	if _, exist := Programconnections[ProgammID]; exist {
-		log.Println(registerrequest.IP, " linked with ", ProgammID)
+		log.Println(addr, " relinked with id:", ProgammID)
 	} else {
-		log.Println(registerrequest.IP, " relinked with ", ProgammID)
+		log.Println(addr, " linked with id:", ProgammID)
 	}
-	Programconnections[ProgammID] = registerrequest.IP
+	Programconnections[ProgammID] = addr
 	return nil
-}
-
-/*
-Struct to represent a Request registering itself
-*/
-type RegisterRequest struct {
-	IP string
 }
 
 /*

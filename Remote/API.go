@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
@@ -43,19 +44,6 @@ func validateAPIJSON(js *map[string]interface{}) string {
 		return APIKey.(string)
 	}
 	return ""
-}
-
-/*
-finds the corresponding program from list of programs
-*/
-func getProgramm_IDfromAPIKey(APIKey string) (*Program, error) {
-	for i := 0; i < len(programs); i++ {
-		if programs[i].APIKey == APIKey {
-			log.Println("Program found:", APIKey, programs[i].Program, programs[i].Arguments)
-			return &programs[i], nil
-		}
-	}
-	return &Program{}, &InvalidAPIkeyerror{}
 }
 
 /*
@@ -119,83 +107,36 @@ func reciveAPI(raw *[]byte) []byte {
 	}
 }
 
-/*
-Process request to execute command in Program
-*/
-func ProcessCommandRequest(program *Program, request *ActualCommandRequest) (err error) {
-	switch request.Message {
-	case "Start":
-		err = program.Start()
-	case "Stop":
-		err = program.Stop()
-	default:
-		err = fmt.Errorf("unsuported Comand")
+func register(remote string, APIkey string) (err error) {
+	log.Println("Registering Program:", APIkey, " on", remote)
+	req := map[string]interface{}{"APIkey": APIkey, "Register": true}
+	jsonReq, err := json.Marshal(req)
+	if err != nil {
+		return
+	}
+
+	resp, err := http.Post(remote+":18769/api", "application/json;", bytes.NewBuffer(jsonReq))
+	if err != nil {
+		return
+	}
+
+	bodyBytes, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return
+	}
+	log.Println("recived:", string(bodyBytes))
+
+	answer := make(map[string]interface{})
+	err = json.Unmarshal(bodyBytes, &answer)
+
+	if answer["error"] != nil {
+		err = fmt.Errorf(answer["error"].(string))
 	}
 	return
 }
 
-/*
-Struct to represent a Request send to actual program asking to execute command
-*/
-type ActualCommandRequest struct {
-	Message string
-	APIkey  string
-}
-
-/*
-Struct to represent a Request asking to add a log in the Log table in DB
-*/
-type LogRequest struct {
-	Date    string
-	Number  int
-	Message string
-	Type    Logtype
-}
-
-type Logtype string
-
-const (
-	Low       Logtype = "Low"
-	Normal    Logtype = "Normal"
-	Important Logtype = "Important"
-	Error     Logtype = "Error"
-)
-
-/*
-Struct to represent a Request asking to add a activity in the Acitivity table in DB
-*/
-type ActivityRequest struct {
-	Date string
-	Type Activitytype
-}
-
-type Activitytype string
-
-const (
-	Send              Activitytype = "Send"
-	Recive            Activitytype = "Recive"
-	Process           Activitytype = "Process"
-	Backgroundprocess Activitytype = "Backgroundprocess"
-)
-
 // curl -d {\"APIkey\":\"4362fds357rd32q1f37y35e6ytefws\",\"Message\":\"Stop\"} http://localhost:18770/api
 
 /*
-	log.Println("Performing Http Post...")
-	req := map[string]interface{}{"APIkey": "5rrtg3u564uiqr43fadf", "Log": LogRequest{Date: "2021-06-17 22:26:43", Number: 12, Message: "hitext", Type: Important}}
-	jsonReq, err := json.Marshal(req)
-	if err != nil {
-		log.Fatalln(err)
-	}
 
-	resp, err := http.Post("http://localhost:18769/api", "application/json;", bytes.NewBuffer(jsonReq))
-	if err != nil {
-		log.Fatalln(err)
-	}
-
-	bodyBytes, _ := ioutil.ReadAll(resp.Body)
-
-	// Convert response body to string
-	bodyString := string(bodyBytes)
-	log.Println(bodyString)
-*/
+ */

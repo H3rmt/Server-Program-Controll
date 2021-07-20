@@ -51,6 +51,15 @@ func main() {
 	CreateAPI(router)
 	log.Println("Started API")
 
+	remoteIP := fileload["Remote IP"].(string)
+	for _, v := range programs {
+		err = register(remoteIP, v.APIKey)
+		if err != nil {
+			panic(err)
+		}
+	}
+
+	// Blocking
 	err = http.ListenAndServe(":"+Port, router)
 	log.Println("Err: ", err)
 }

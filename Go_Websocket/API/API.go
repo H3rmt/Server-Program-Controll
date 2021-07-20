@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"log"
+	"strings"
 
 	"net/http"
 
@@ -64,7 +65,7 @@ called when Connection send data;
 gets byte array out of JSON
 returns byte array out of JSON to write
 */
-func reciveAPI(raw *[]byte) []byte {
+func reciveAPI(raw *[]byte, addr string) []byte {
 	fmt.Println()
 
 	var recive map[string]interface{}
@@ -94,13 +95,10 @@ func reciveAPI(raw *[]byte) []byte {
 
 	switch request {
 	case "Register":
-		registerrequest := RegisterRequest{IP: "-1"}
-		mapstructure.Decode(recive["RegisterRequest"], &registerrequest)
-		if registerrequest.IP != "-1" {
-			err = ProcessRegisterRequest(ProgammID, &registerrequest)
-		} else {
-			err = &InvalidRequesterror{}
-		}
+		log.Println(addr)
+		addr := strings.TrimRight(addr, "0123456789:")
+		log.Println(addr)
+		err = ProcessRegisterRequest(ProgammID, addr)
 	case "Activity":
 		activityrequest := ActivityRequest{Date: "-1", Type: "-1"}
 		mapstructure.Decode(recive["ActivityRequest"], &activityrequest)
@@ -150,7 +148,7 @@ func CreateAPI(rout *mux.Router) {
 		raw, _ := ioutil.ReadAll(r.Body)
 		w.Header().Set("Content-Type", "application/json")
 
-		msg := reciveAPI(&raw)
+		msg := reciveAPI(&raw, r.RemoteAddr)
 
 		if msg == nil {
 			w.WriteHeader(http.StatusBadRequest)
