@@ -11,11 +11,13 @@ import (
 	"github.com/mitchellh/mapstructure"
 )
 
-var Port = "18769"
+var Port = "18770"
 
-func CreateAPI() {
-	router := mux.NewRouter().StrictSlash(true)
-	router.HandleFunc("/api", func(w http.ResponseWriter, r *http.Request) {
+/*
+start API to listen to CommandRequests
+*/
+func CreateAPI(rout *mux.Router) {
+	rout.HandleFunc("/api", func(w http.ResponseWriter, r *http.Request) {
 		raw, _ := ioutil.ReadAll(r.Body)
 		w.Header().Set("Content-Type", "application/json")
 
@@ -33,8 +35,6 @@ func CreateAPI() {
 			log.Println("send:", string(msg))
 		}
 	}).Methods("POST")
-	err := http.ListenAndServe(":"+Port, router)
-	log.Println("Err: ", err)
 }
 
 func validateAPIJSON(js *map[string]interface{}) string {
@@ -52,7 +52,7 @@ func getProgramm_IDfromAPIKey(APIKey string) (*Program, error) {
 	// return is program is available
 	for _, v := range programs {
 		if v.APIKey == APIKey {
-			log.Println("Program found:", APIKey, v.File)
+			log.Println("Program found:", APIKey, v.Program, v.Arguments)
 			return &v, nil
 		}
 	}
@@ -97,7 +97,7 @@ func reciveAPI(raw *[]byte) []byte {
 	Program, err := getProgramm_IDfromAPIKey(APIKey)
 	if err != nil {
 		log.Println("API|", "err:", err)
-		msg, _ := json.Marshal(map[string]interface{}{"error": err})
+		msg, _ := json.Marshal(map[string]interface{}{"error": err.Error()})
 		return msg
 	}
 
@@ -107,13 +107,13 @@ func reciveAPI(raw *[]byte) []byte {
 
 	if err != nil {
 		log.Println("API|", "err:", err)
-		msg, _ := json.Marshal(map[string]interface{}{"error": err})
+		msg, _ := json.Marshal(map[string]interface{}{"error": err.Error()})
 		return msg
 	} else {
 		msg, _ := json.Marshal(map[string]interface{}{"success": true})
 		if err != nil {
 			log.Println("API|", "err:", err)
-			msg, _ := json.Marshal(map[string]interface{}{"error": "JSONerror"})
+			msg, _ := json.Marshal(map[string]interface{}{"error": err.Error()})
 			return msg
 		}
 		return msg
@@ -157,7 +157,7 @@ const (
 /*
 Struct to represent a Request asking to add a activity in the Acitivity table in DB
 */
-type Activity struct {
+type ActivityRequest struct {
 	Date string
 	Type Activitytype
 }
@@ -173,7 +173,7 @@ const (
 
 /*
 	log.Println("Performing Http Post...")
-	req := map[string]interface{}{"APIkey": "5rrtg3u564uiqr43fadf", "LogRequest": LogRequest{Date: "2021-06-17 22:26:43", Number: 12, Message: "hitext", Type: Important}}
+	req := map[string]interface{}{"APIkey": "5rrtg3u564uiqr43fadf", "Log": LogRequest{Date: "2021-06-17 22:26:43", Number: 12, Message: "hitext", Type: Important}}
 	jsonReq, err := json.Marshal(req)
 	if err != nil {
 		log.Fatalln(err)

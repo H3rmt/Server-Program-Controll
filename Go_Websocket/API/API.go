@@ -51,6 +51,15 @@ func (m *InvalidAPIkeyerror) Error() string {
 }
 
 /*
+Error returned when Request values were invalid
+*/
+type InvalidRequesterror struct{}
+
+func (m *InvalidRequesterror) Error() string {
+	return "Invalid Request values"
+}
+
+/*
 called when Connection send data;
 gets byte array out of JSON
 returns byte array out of JSON to write
@@ -62,7 +71,7 @@ func reciveAPI(raw *[]byte) []byte {
 	err := json.Unmarshal(*raw, &recive)
 
 	if err != nil {
-		log.Println("API|", "JSON decoding error: ", err)
+		log.Println("API|", "JSON decoding error: ", err, " :", string(*raw))
 		return nil
 	}
 	if len(recive) == 0 {
@@ -77,41 +86,56 @@ func reciveAPI(raw *[]byte) []byte {
 	log.Println("API|", "recived: ", recive)
 
 	ProgammID, err := getProgramm_IDfromAPIKey(APIKey)
-
 	if err != nil {
-		log.Println("API|", "err:", err)
-		msg, _ := json.Marshal(map[string]interface{}{"type": request, "error": err})
+		log.Println("API|", "APIKeyerr:", err)
+		msg, _ := json.Marshal(map[string]interface{}{"type": request, "error": err.Error()})
 		return msg
 	}
 
 	switch request {
 	case "Register":
-		var registerrequest RegisterRequest
+		registerrequest := RegisterRequest{IP: "-1"}
 		mapstructure.Decode(recive["RegisterRequest"], &registerrequest)
-		err = ProcessRegisterRequest(ProgammID, &registerrequest)
+		if registerrequest.IP != "-1" {
+			err = ProcessRegisterRequest(ProgammID, &registerrequest)
+		} else {
+			err = &InvalidRequesterror{}
+		}
 	case "Activity":
-		var activityrequest ActivityRequest
+		activityrequest := ActivityRequest{Date: "-1", Type: "-1"}
 		mapstructure.Decode(recive["ActivityRequest"], &activityrequest)
-		err = ProcessActivityRequest(ProgammID, &activityrequest)
+		if activityrequest.Date != "-1" && activityrequest.Type != "-1" {
+			err = ProcessActivityRequest(ProgammID, &activityrequest)
+		} else {
+			err = &InvalidRequesterror{}
+		}
 	case "Log":
-		var logrequest LogRequest
+		logrequest := LogRequest{Date: "-1", Number: -1, Message: "-1", Type: "-1"}
 		mapstructure.Decode(recive["LogRequest"], &logrequest)
-		err = ProcessLogRequest(ProgammID, &logrequest)
+		if logrequest.Date != "-1" && logrequest.Number != -1 && logrequest.Message != "-1" && logrequest.Type != "-1" {
+			err = ProcessLogRequest(ProgammID, &logrequest)
+		} else {
+			err = &InvalidRequesterror{}
+		}
 	case "Action":
-		var commandrequest CommandRequest
+		commandrequest := CommandRequest{Message: "-1"}
 		mapstructure.Decode(recive["CommandRequest"], &commandrequest)
-		err = ProcessCommandRequest(ProgammID, &commandrequest, APIKey)
+		if commandrequest.Message != "-1" {
+			err = ProcessCommandRequest(ProgammID, &commandrequest, APIKey)
+		} else {
+			err = &InvalidRequesterror{}
+		}
 	}
 
 	if err != nil {
 		log.Println("API|", "err:", err)
-		msg, _ := json.Marshal(map[string]interface{}{"type": request, "error": err})
+		msg, _ := json.Marshal(map[string]interface{}{"type": request, "error": err.Error()})
 		return msg
 	} else {
 		msg, _ := json.Marshal(map[string]interface{}{"type": request, "success": true})
 		if err != nil {
 			log.Println("API|", "err:", err)
-			msg, _ := json.Marshal(map[string]interface{}{"type": request, "error": "JSONerror"})
+			msg, _ := json.Marshal(map[string]interface{}{"type": request, "error": err.Error()})
 			return msg
 		}
 		return msg
@@ -146,14 +170,14 @@ func CreateAPI(rout *mux.Router) {
 Api request:
 {
 	"APIkey":"gli23085uyljahlkhoql2emdga;fho8u3",
-		"LogRequest":{
+		"Log":{
 			"Date":"12.5.2012:13.52",
 			"Number":123,
 			"Message":"Test message",
 			"Type":"Low",
 		}
 	/
-		"ActivityRequest":{
+		"Activity":{
 			"Date":"12.5.2012:13.52",
 			"Type":"Send",
 		}
@@ -161,5 +185,5 @@ Api request:
 \
 
 test:
-curl -d {\"APIkey\":\"25253\", \"LogRequest\":1} http://localhost:18769/api
+curl -d {\"APIkey\":\"25253\",\"Log\":1} http://localhost:18769/api
 */

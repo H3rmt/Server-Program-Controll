@@ -19,24 +19,24 @@ File arg for programm, usually file but can be any series of args
 APIKey to send data to Server
 */
 type Program struct {
-	Program string
-	File    string
-	APIKey  string
-	Reader  Reader
+	Program   string
+	Arguments []string
+	APIKey    string
+	reader    Reader
 }
 
 /*
 starts the program and readers
 */
 func (pr *Program) Start() {
-	cmd := exec.Command(pr.Program, pr.File)
+	cmd := exec.Command(pr.Program, pr.Arguments...)
 
-	pr.Reader = Reader{cmdrunning: false}
+	pr.reader = Reader{cmdrunning: false}
 
-	cmd.Stdout = &pr.Reader.outReader
-	cmd.Stderr = &pr.Reader.errReader
+	cmd.Stdout = &pr.reader.outReader
+	cmd.Stderr = &pr.reader.errReader
 
-	go pr.Reader.process()
+	go pr.reader.process()
 	cmd.Wait()
 	err := cmd.Start()
 	if err != nil {

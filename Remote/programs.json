@@ -1,0 +1,15 @@
+{
+    "Programs": [
+        {
+            "Program": "python",
+            "Arguments": ["test.py", "-i"],
+            "APIKey": "4362fds357rd32q1f37y35e6ytefws"
+        },
+        {
+            "Program": "python",
+            "Arguments": ["test2.py"],
+            "APIKey": "Keeeeeeeeey22"
+        }
+    ],
+    "Remote IP" : "127.0.0.1"
+}

@@ -14,7 +14,7 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 )
 
-var Port = "18769"
+var Port = "18770"
 
 var Programconnections map[string]string // Programm_ID = [IP]
 
