@@ -49,11 +49,10 @@ func validateAPIJSON(js *map[string]interface{}) string {
 finds the corresponding program from list of programs
 */
 func getProgramm_IDfromAPIKey(APIKey string) (*Program, error) {
-	// return is program is available
-	for _, v := range programs {
-		if v.APIKey == APIKey {
-			log.Println("Program found:", APIKey, v.Program, v.Arguments)
-			return &v, nil
+	for i := 0; i < len(programs); i++ {
+		if programs[i].APIKey == APIKey {
+			log.Println("Program found:", APIKey, programs[i].Program, programs[i].Arguments)
+			return &programs[i], nil
 		}
 	}
 	return &Program{}, &InvalidAPIkeyerror{}
@@ -123,8 +122,16 @@ func reciveAPI(raw *[]byte) []byte {
 /*
 Process request to execute command in Program
 */
-func ProcessCommandRequest(program *Program, request *ActualCommandRequest) error {
-	return nil
+func ProcessCommandRequest(program *Program, request *ActualCommandRequest) (err error) {
+	switch request.Message {
+	case "Start":
+		err = program.Start()
+	case "Stop":
+		err = program.Stop()
+	default:
+		err = fmt.Errorf("unsuported Comand")
+	}
+	return
 }
 
 /*
@@ -170,6 +177,8 @@ const (
 	Process           Activitytype = "Process"
 	Backgroundprocess Activitytype = "Backgroundprocess"
 )
+
+// curl -d {\"APIkey\":\"4362fds357rd32q1f37y35e6ytefws\",\"Message\":\"Stop\"} http://localhost:18770/api
 
 /*
 	log.Println("Performing Http Post...")

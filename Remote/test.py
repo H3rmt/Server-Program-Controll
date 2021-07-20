@@ -19,7 +19,7 @@ def printshit():
     print("hi4")
     sys.stdout.flush()
 
-    sleep(0.5)
+    sleep(10.5)
     raise AttributeError("This is an err")
 
 if __name__ == '__main__':

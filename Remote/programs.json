@@ -2,7 +2,7 @@
     "Programs": [
         {
             "Program": "python",
-            "Arguments": ["test.py", "-i"],
+            "Arguments": ["test.py"],
             "APIKey": "4362fds357rd32q1f37y35e6ytefws"
         },
         {

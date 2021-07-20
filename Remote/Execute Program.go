@@ -2,6 +2,7 @@ package main
 
 import (
 	"bytes"
+	"fmt"
 	"log"
 	"os/exec"
 	"strings"
@@ -23,34 +24,61 @@ type Program struct {
 	Arguments []string
 	APIKey    string
 	reader    Reader
+	cmd       *exec.Cmd
 }
 
 /*
 starts the program and readers
 */
-func (pr *Program) Start() {
+func (pr *Program) Start() (err error) {
+	if pr.cmd != nil {
+		return fmt.Errorf("program running")
+	}
 	cmd := exec.Command(pr.Program, pr.Arguments...)
+	pr.cmd = cmd
 
-	pr.reader = Reader{cmdrunning: false}
+	pr.reader = Reader{stop: false}
 
 	cmd.Stdout = &pr.reader.outReader
 	cmd.Stderr = &pr.reader.errReader
 
 	go pr.reader.process()
-	cmd.Wait()
-	err := cmd.Start()
-	if err != nil {
-		panic(err)
+
+	err = cmd.Start()
+	log.Println("Started Program: ", pr.Program, pr.Arguments)
+
+	go func() {
+		cmd.Wait()
+		pr.reader.stop = true
+		pr.cmd = nil
+		log.Println("Program finished: ", pr.Program, pr.Arguments)
+	}()
+
+	return
+}
+
+/*
+stops the program
+*/
+func (pr *Program) Stop() (err error) {
+	if pr.cmd != nil {
+		err = pr.cmd.Process.Kill()
+		if err != nil {
+			pr.cmd = nil
+		}
+	} else {
+		err = fmt.Errorf("program was not started")
 	}
+	return
 }
 
 /*
 Custom Reader containing out and err Writer
 */
 type Reader struct {
-	cmdrunning bool
-	outReader  stdoutWriter
-	errReader  stderrWriter
+	stop      bool
+	outReader stdoutWriter
+	errReader stderrWriter
 }
 
 /*
@@ -72,7 +100,7 @@ runs parallel to Program and reads stdout and stderr
 feeds bot in processOutput and processError
 */
 func (r *Reader) process() {
-	for r.cmdrunning {
+	for !r.stop {
 		time.Sleep(3 * time.Millisecond)
 		if r.outReader.buffer.Len() > 0 {
 			read := make([]byte, r.outReader.buffer.Len())
