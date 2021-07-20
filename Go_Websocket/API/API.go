@@ -95,9 +95,7 @@ func reciveAPI(raw *[]byte, addr string) []byte {
 
 	switch request {
 	case "Register":
-		log.Println(addr)
 		addr := strings.TrimRight(addr, "0123456789:")
-		log.Println(addr)
 		err = ProcessRegisterRequest(ProgammID, addr)
 	case "Activity":
 		activityrequest := ActivityRequest{Date: "-1", Type: "-1"}

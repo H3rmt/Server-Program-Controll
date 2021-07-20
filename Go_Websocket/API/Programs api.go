@@ -23,9 +23,9 @@ Process request to add Program to list of connections
 */
 func ProcessRegisterRequest(ProgammID string, addr string) error {
 	if _, exist := Programconnections[ProgammID]; exist {
-		log.Println(addr, " relinked with id:", ProgammID)
+		log.Println("PRGR API|", addr, " relinked with id:", ProgammID)
 	} else {
-		log.Println(addr, " linked with id:", ProgammID)
+		log.Println("PRGR API|", addr, " linked with id:", ProgammID)
 	}
 	Programconnections[ProgammID] = addr
 	return nil
@@ -37,7 +37,7 @@ Process request to execute command in Program
 func ProcessCommandRequest(ProgammID string, commandrequest *CommandRequest, APIkey string) error {
 	IP, exists := Programconnections[ProgammID]
 	if !exists {
-		log.Println("IP not registered")
+		log.Println("PRGR API|", "IP not registered")
 		return &Programnotreachableerror{"IP not registered"}
 	}
 
@@ -45,28 +45,28 @@ func ProcessCommandRequest(ProgammID string, commandrequest *CommandRequest, API
 
 	byterequest, err := json.Marshal(request)
 	if err != nil {
-		log.Println("Requestbuild invalied")
+		log.Println("PRGR API|", "Requestbuild invalied")
 		return err
 	}
 
 	resp, err := http.Post(IP+":"+Port, "application/json;", bytes.NewBuffer(byterequest))
 	if err != nil {
-		log.Println("Program did not respond")
+		log.Println("PRGR API|", "Program did not respond")
 		return &Programnotreachableerror{"Program did not respond"}
 	}
 
 	bodyBytes, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
-		log.Println("Program response invalid")
+		log.Println("PRGR API|", "Program response invalid")
 		return &Programnotreachableerror{"Program respond invalid"}
 	}
 
-	log.Println("recived answer:", string(bodyBytes))
+	log.Println("PRGR API|", "recived answer:", string(bodyBytes))
 
 	var answer ActualCommandAnswer
 	err = json.Unmarshal(bodyBytes, &answer)
 	if err != nil {
-		log.Println("Program Json response invalid")
+		log.Println("PRGR API|", "Program Json response invalid")
 		return &Programnotreachableerror{"Program Json response invalid"}
 	}
 

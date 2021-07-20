@@ -54,7 +54,7 @@ func ProcessLogRequest(Programm_ID string, logrequest *LogRequest) error {
 	if err != nil {
 		return err
 	} else {
-		log.Println("Log added to database")
+		log.Println("SQL API|", "Log added to database")
 	}
 
 	return nil
@@ -86,7 +86,7 @@ func ProcessActivityRequest(Programm_ID string, activityrequest *ActivityRequest
 	if err != nil {
 		return err
 	} else {
-		log.Println("Activity added to database")
+		log.Println("SQL API|", "Activity added to database")
 	}
 
 	return nil

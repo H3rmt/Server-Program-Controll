@@ -1,13 +1,6 @@
 /.idea
-/workspace.xml
-/codeStyles/codeStyleConfig.xml
-/dataSources.xml
-/discord.xml
-/html src.iml
-/modules.xml
-/php.xml
-/inspectionProfiles/Project_Default.xml
-/sqldialects.xml
-/vcs.xml
+
 /Website/chart.js
+
 /Go_Websocket/Go_Websocket.exe
+/Remote/Remote.exe
