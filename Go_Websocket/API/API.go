@@ -20,7 +20,7 @@ checks if recived JSON has APIkey and (Register or Activity or Log or Action) as
 returns the API key and Requesttype
 */
 func validateAPIJSON(js *map[string]interface{}) (string, action string) {
-	APIKey, Api_key_exists := (*js)["APIkey"]
+	APIKey, Api_key_exists := (*js)["APIKey"]
 	if Api_key_exists {
 		_, Register_exists := (*js)["Register"]
 		_, Activity_exists := (*js)["Activity"]
@@ -90,7 +90,7 @@ func reciveAPI(raw *[]byte, addr string) []byte {
 		err = ProcessRegisterRequest(ProgammID, addr)
 	case "Activity":
 		activityrequest := ActivityRequest{Date: "-1", Type: "-1"}
-		mapstructure.Decode(recive["ActivityRequest"], &activityrequest)
+		mapstructure.Decode(recive["Activity"], &activityrequest)
 		if activityrequest.Date != "-1" && activityrequest.Type != "-1" {
 			err = ProcessActivityRequest(ProgammID, &activityrequest)
 		} else {
@@ -98,7 +98,7 @@ func reciveAPI(raw *[]byte, addr string) []byte {
 		}
 	case "Log":
 		logrequest := LogRequest{Date: "-1", Number: -1, Message: "-1", Type: "-1"}
-		mapstructure.Decode(recive["LogRequest"], &logrequest)
+		mapstructure.Decode(recive["Log"], &logrequest)
 		if logrequest.Date != "-1" && logrequest.Number != -1 && logrequest.Message != "-1" && logrequest.Type != "-1" {
 			err = ProcessLogRequest(ProgammID, &logrequest)
 		} else {
@@ -158,7 +158,7 @@ func CreateAPI(rout *mux.Router) {
 /*
 Api request:
 {
-	"APIkey":"gli23085uyljahlkhoql2emdga;fho8u3",
+	"APIKey":"gli23085uyljahlkhoql2emdga;fho8u3",
 		"Log":{
 			"Date":"12.5.2012:13.52",
 			"Number":123,
@@ -174,5 +174,5 @@ Api request:
 \
 
 test:
-curl -d {\"APIkey\":\"25253\",\"Log\":1} http://localhost:18769/api
+curl -d {\"APIKey\":\"25253\",\"Log\":1} http://localhost:18769/api
 */

@@ -33,16 +33,16 @@ func getProgramm_IDfromAPIKey(APIKey string) (string, error) {
 		res.Scan(&ID)
 		return ID, nil
 	} else {
-		return "", &InvalidAPIkeyerror{}
+		return "", &InvalidAPIKeyerror{}
 	}
 }
 
 /*
-Error returned when APIkey was invalid
+Error returned when APIKey was invalid
 */
-type InvalidAPIkeyerror struct{}
+type InvalidAPIKeyerror struct{}
 
-func (m *InvalidAPIkeyerror) Error() string {
+func (m *InvalidAPIKeyerror) Error() string {
 	return "Invalid API key"
 }
 

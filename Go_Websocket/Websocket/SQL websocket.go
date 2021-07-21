@@ -33,16 +33,16 @@ func getAPIKeyfromProgramm_ID(Programm_ID string) (string, error) {
 		res.Scan(&ID)
 		return ID, nil
 	} else {
-		return "", &InvalidAPIkeyerror{}
+		return "", &InvalidAPIKeyerror{}
 	}
 }
 
 /*
-Error returned when APIkey was invalid
+Error returned when APIKey was invalid
 */
-type InvalidAPIkeyerror struct{}
+type InvalidAPIKeyerror struct{}
 
-func (m *InvalidAPIkeyerror) Error() string {
+func (m *InvalidAPIKeyerror) Error() string {
 	return "Invalid API key"
 }
 
@@ -73,7 +73,7 @@ func Getlogs(Program_id string) ([]interface{}, error) {
 
 	var entries = make([]interface{}, count)
 
-	sql := "SELECT programm_ID,Date,Number,Message,Type FROM logs WHERE programm_ID=?"
+	sql := "SELECT Date,Number,Message,Type FROM logs WHERE programm_ID=?"
 
 	stmt, err := DB.Prepare(sql)
 	if err != nil {
@@ -88,17 +88,16 @@ func Getlogs(Program_id string) ([]interface{}, error) {
 
 	// iterate through query
 	for rows.Next() {
-		var Programm_ID string
 		var Date, Message string
 		var Number float64
 		var Type Logtype
 
 		// Get values from row
-		err := rows.Scan(&Programm_ID, &Date, &Number, &Message, &Type)
+		err := rows.Scan(&Date, &Number, &Message, &Type)
 		if err != nil {
 			return nil, err
 		}
-		entries = append(entries, Log{Programm_ID: Programm_ID, Date: Date, Number: Number, Message: Message, Type: Type})
+		entries = append(entries, Log{Date: Date, Number: Number, Message: Message, Type: Type})
 	}
 	return entries, nil
 }
@@ -107,11 +106,10 @@ func Getlogs(Program_id string) ([]interface{}, error) {
 Struct to represent a row in the Log table
 */
 type Log struct {
-	Programm_ID string
-	Date        string
-	Number      float64
-	Message     string
-	Type        Logtype
+	Date    string
+	Number  float64
+	Message string
+	Type    Logtype
 }
 
 type Logtype string
@@ -131,7 +129,7 @@ func Getactivity(Program_id string) ([]interface{}, error) {
 
 	var entries = make([]interface{}, count)
 
-	sql := "SELECT programm_ID,Date,Type FROM activity WHERE programm_ID=?"
+	sql := "SELECT Date,Type FROM activity WHERE programm_ID=?"
 	stmt, err := DB.Prepare(sql)
 	if err != nil {
 		return nil, err
@@ -145,16 +143,15 @@ func Getactivity(Program_id string) ([]interface{}, error) {
 
 	// iterate through query
 	for rows.Next() {
-		var Programm_ID string
 		var Date string
 		var Type Activitytype
 
 		// get values from row
-		err := rows.Scan(&Programm_ID, &Date, &Type)
+		err := rows.Scan(&Date, &Type)
 		if err != nil {
 			return nil, err
 		}
-		entries = append(entries, Activity{Programm_ID: Programm_ID, Date: Date, Type: Type})
+		entries = append(entries, Activity{Date: Date, Type: Type})
 	}
 	return entries, nil
 }
@@ -163,9 +160,8 @@ func Getactivity(Program_id string) ([]interface{}, error) {
 Struct to represent a row in the Activity table
 */
 type Activity struct {
-	Programm_ID string
-	Date        string
-	Type        Activitytype
+	Date string
+	Type Activitytype
 }
 
 type Activitytype string

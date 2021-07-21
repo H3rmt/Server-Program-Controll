@@ -13,6 +13,8 @@ import (
 // list of all programs
 var programs []Program
 
+var remoteIP string
+
 /*
 main method with arguments = programfile APIKey programfile APIKey ...
 */
@@ -37,7 +39,7 @@ func main() {
 			args[count] = v.(string)
 		}
 		if program != "" && key != "" {
-			programs = append(programs, Program{Program: program, APIKey: key, Arguments: args})
+			programs = append(programs, Program{Program: program, APIKey: key, Arguments: args, stop: true})
 		} else {
 			log.Println("Invalid Program:", program, key, args)
 		}
@@ -51,7 +53,7 @@ func main() {
 	CreateAPI(router)
 	log.Println("Started API")
 
-	remoteIP := fileload["Remote IP"].(string)
+	remoteIP = fileload["Remote IP"].(string)
 	for _, v := range programs {
 		err = register(remoteIP, v.APIKey)
 		if err != nil {

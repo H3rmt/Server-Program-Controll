@@ -44,13 +44,13 @@ func ProcessCommand(Program_id string, command string) error {
 		return &Programerror{"IP not registered"}
 	}
 
-	APIkey, err := getAPIKeyfromProgramm_ID(Program_id)
+	APIKey, err := getAPIKeyfromProgramm_ID(Program_id)
 	if err != nil {
 		log.Println("PRGR API|", "Programm_ID err", err, Program_id)
 		return err
 	}
 
-	request := CommandRequest{command, APIkey}
+	request := CommandRequest{command, APIKey}
 
 	byterequest, err := json.Marshal(request)
 	if err != nil {
@@ -72,7 +72,7 @@ func ProcessCommand(Program_id string, command string) error {
 
 	log.Println("PRGR API|", "recived answer:", string(bodyBytes))
 
-	var answer CommandAnswer
+	var answer Answer
 	err = json.Unmarshal(bodyBytes, &answer)
 	if err != nil {
 		log.Println("PRGR API|", "Program Json response invalid", err)
@@ -102,13 +102,12 @@ Struct to represent a Request send to program asking to execute command
 */
 type CommandRequest struct {
 	Message string
-	APIkey  string
+	APIKey  string
 }
 
 /*
-Struct to represent a Answer from the program having executed a command
+Struct to represent a Answer from the program
 */
-type CommandAnswer struct {
+type Answer struct {
 	Success bool
-	APIkey  string
 }

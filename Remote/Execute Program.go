@@ -20,11 +20,13 @@ File arg for programm, usually file but can be any series of args
 APIKey to send data to Server
 */
 type Program struct {
-	Program   string
-	Arguments []string
-	APIKey    string
-	reader    Reader
-	cmd       *exec.Cmd
+	Program    string
+	Arguments  []string
+	APIKey     string
+	reader     Reader
+	stop       bool
+	cmd        *exec.Cmd
+	logcounter int
 }
 
 /*
@@ -37,11 +39,12 @@ func (pr *Program) Start() (err error) {
 	cmd := exec.Command(pr.Program, pr.Arguments...)
 	pr.cmd = cmd
 
-	pr.reader = Reader{stop: false}
+	pr.reader = Reader{programparent: pr}
 
 	cmd.Stdout = &pr.reader.outReader
 	cmd.Stderr = &pr.reader.errReader
 
+	pr.stop = false
 	go pr.reader.process()
 
 	err = cmd.Start()
@@ -49,7 +52,7 @@ func (pr *Program) Start() (err error) {
 
 	go func() {
 		cmd.Wait()
-		pr.reader.stop = true
+		pr.stop = true
 		pr.cmd = nil
 		log.Println("Program finished: ", pr.Program, pr.Arguments)
 	}()
@@ -72,27 +75,50 @@ func (pr *Program) Stop() (err error) {
 	return
 }
 
+func processOutLevel(message string) (string, Logtype) {
+	if strings.HasPrefix(message, "LOW|") {
+		return strings.Replace(message, "LOW|", "", 1), Logtype(Low)
+	} else if strings.HasPrefix(message, "NORMAL|") {
+		return strings.Replace(message, "NORMAL|", "", 1), Logtype(Normal)
+	} else if strings.HasPrefix(message, "IMPORTANT|") {
+		return strings.Replace(message, "IMPORTANT|", "", 1), Logtype(Important)
+	} else {
+		return message, Logtype(Normal)
+	}
+}
+
 /*
 Custom Reader containing out and err Writer
 */
 type Reader struct {
-	stop      bool
-	outReader stdoutWriter
-	errReader stderrWriter
+	programparent *Program
+	outReader     stdoutWriter
+	errReader     stderrWriter
 }
 
 /*
 process stdout Info
 */
 func (r *Reader) processOutput(out string) {
-	log.Println("out:", string(out))
+	newout, logtype := processOutLevel(string(out))
+	log.Println(r.programparent.Program, r.programparent.Arguments, "out:", newout)
+	err := SendLog(newout, r.programparent, logtype)
+	if err != nil {
+		log.Println("err sending out", err)
+	}
+	r.programparent.logcounter++
 }
 
 /*
 process stderr Info
 */
 func (r *Reader) processError(err string) {
-	log.Println("err:", string(err))
+	log.Println(r.programparent.Program, r.programparent.Arguments, "err:", string(err))
+	errr := SendLog(string(err), r.programparent, Logtype(Error))
+	if errr != nil {
+		log.Println("err sending err", errr)
+	}
+	r.programparent.logcounter++
 }
 
 /*
@@ -100,7 +126,7 @@ runs parallel to Program and reads stdout and stderr
 feeds bot in processOutput and processError
 */
 func (r *Reader) process() {
-	for !r.stop {
+	for !r.programparent.stop {
 		time.Sleep(3 * time.Millisecond)
 		if r.outReader.buffer.Len() > 0 {
 			read := make([]byte, r.outReader.buffer.Len())

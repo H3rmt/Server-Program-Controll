@@ -4,15 +4,15 @@ import sys
 import threading
 
 def printshit():
-    print("hi1")
+    print("IMPORTANT|","hi1")
     sys.stdout.flush()
 
     sleep(0.5)
-    print("hi2")
+    print("NORMAL|","hi2")
     sys.stdout.flush()
 
     sleep(1)
-    print("hi3")
+    print("LOW|","hi3")
     sys.stdout.flush()
 
     sleep(1.5)

@@ -39,7 +39,7 @@ func CreateAPI(rout *mux.Router) {
 }
 
 func validateAPIJSON(js *map[string]interface{}) string {
-	APIKey, Api_key_exists := (*js)["APIkey"]
+	APIKey, Api_key_exists := (*js)["APIKey"]
 	if Api_key_exists {
 		return APIKey.(string)
 	}
@@ -47,11 +47,11 @@ func validateAPIJSON(js *map[string]interface{}) string {
 }
 
 /*
-Error returned when APIkey was invalid
+Error returned when APIKey was invalid
 */
-type InvalidAPIkeyerror struct{}
+type InvalidAPIKeyerror struct{}
 
-func (m *InvalidAPIkeyerror) Error() string {
+func (m *InvalidAPIKeyerror) Error() string {
 	return "Invalid API key"
 }
 
@@ -88,7 +88,7 @@ func reciveAPI(raw *[]byte) []byte {
 		return msg
 	}
 
-	var commandRequest ActualCommandRequest
+	var commandRequest CommandRequest
 	mapstructure.Decode(recive, &commandRequest)
 	err = ProcessCommandRequest(Program, &commandRequest)
 
@@ -107,9 +107,9 @@ func reciveAPI(raw *[]byte) []byte {
 	}
 }
 
-func register(remote string, APIkey string) (err error) {
-	log.Println("Registering Program:", APIkey, " on", remote)
-	req := map[string]interface{}{"APIkey": APIkey, "Register": true}
+func register(remote string, APIKey string) (err error) {
+	log.Println("Registering Program:", APIKey, " on", remote)
+	req := map[string]interface{}{"APIKey": APIKey, "Register": true}
 	jsonReq, err := json.Marshal(req)
 	if err != nil {
 		return
@@ -135,7 +135,7 @@ func register(remote string, APIkey string) (err error) {
 	return
 }
 
-// curl -d {\"APIkey\":\"4362fds357rd32q1f37y35e6ytefws\",\"Message\":\"Stop\"} http://localhost:18770/api
+// curl -d {\"APIKey\":\"4362fds357rd32q1f37y35e6ytefws\",\"Message\":\"Stop\"} http://localhost:18770/api
 
 /*
 
