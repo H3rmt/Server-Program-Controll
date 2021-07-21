@@ -3,12 +3,12 @@
         {
             "Program": "python",
             "Arguments": ["test.py"],
-            "APIKey": "4362fds357rd32q1f37y35e6ytefws"
+            "APIKey": "5rrtg3u564uiqr43fadf"
         },
         {
             "Program": "python",
             "Arguments": ["test2.py"],
-            "APIKey": "Keeeeeeeeey22"
+            "APIKey": "652346tdrfst233qc1tg354g3w"
         }
     ],
     "Remote IP" : "http://localhost"

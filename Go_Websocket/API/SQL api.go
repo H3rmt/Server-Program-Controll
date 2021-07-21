@@ -1,7 +1,6 @@
 package api
 
 import (
-	ws "Go_Websocket/WS"
 	"database/sql"
 	"log"
 )
@@ -39,6 +38,15 @@ func getProgramm_IDfromAPIKey(APIKey string) (string, error) {
 }
 
 /*
+Error returned when APIkey was invalid
+*/
+type InvalidAPIkeyerror struct{}
+
+func (m *InvalidAPIkeyerror) Error() string {
+	return "Invalid API key"
+}
+
+/*
 adds log do the database from logrequest
 */
 func ProcessLogRequest(Programm_ID string, logrequest *LogRequest) error {
@@ -67,8 +75,17 @@ type LogRequest struct {
 	Date    string
 	Number  float64
 	Message string
-	Type    ws.Logtype
+	Type    Logtype
 }
+
+type Logtype string
+
+const (
+	Low       Logtype = "Low"
+	Normal    Logtype = "Normal"
+	Important Logtype = "Important"
+	Error     Logtype = "Error"
+)
 
 /*
 adds activity do the database from activityrequest
@@ -97,5 +114,14 @@ Struct to represent a Request asking to add a activity in the Acitivity table in
 */
 type ActivityRequest struct {
 	Date string
-	Type ws.Activitytype
+	Type Activitytype
 }
+
+type Activitytype string
+
+const (
+	Send              Activitytype = "Send"
+	Recive            Activitytype = "Recive"
+	Process           Activitytype = "Process"
+	Backgroundprocess Activitytype = "Backgroundprocess"
+)

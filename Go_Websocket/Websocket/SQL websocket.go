@@ -12,6 +12,41 @@ func SetDB(db *sql.DB) {
 }
 
 /*
+finds the corresponding program with ID from the database
+*/
+func getAPIKeyfromProgramm_ID(Programm_ID string) (string, error) {
+	sql := "SELECT APIKey from programs WHERE ID=?;"
+	stmt, err := DB.Prepare(sql)
+	if err != nil {
+		return "", err
+	}
+	defer stmt.Close()
+
+	// Execute query
+	res, err := stmt.Query(Programm_ID)
+	if err != nil {
+		return "", err
+	}
+
+	if res.Next() {
+		ID := ""
+		res.Scan(&ID)
+		return ID, nil
+	} else {
+		return "", &InvalidAPIkeyerror{}
+	}
+}
+
+/*
+Error returned when APIkey was invalid
+*/
+type InvalidAPIkeyerror struct{}
+
+func (m *InvalidAPIkeyerror) Error() string {
+	return "Invalid API key"
+}
+
+/*
 returns how many rows will be returned from table
 */
 func getRowcount(table string) int {
@@ -33,7 +68,7 @@ func getRowcount(table string) int {
 /*
 returns logs as array of Log-structs from DB (logs)
 */
-func Getlogs(recive *map[string]interface{}) ([]interface{}, error) {
+func Getlogs(Program_id string) ([]interface{}, error) {
 	count := getRowcount("logs")
 
 	var entries = make([]interface{}, count)
@@ -46,7 +81,7 @@ func Getlogs(recive *map[string]interface{}) ([]interface{}, error) {
 	}
 	defer stmt.Close()
 
-	rows, err := stmt.Query()
+	rows, err := stmt.Query(Program_id)
 	if err != nil {
 		return nil, err
 	}
@@ -91,7 +126,7 @@ const (
 /*
 returns activity as array of Activity-structs from DB (activity)
 */
-func Getactivity(recive *map[string]interface{}) ([]interface{}, error) {
+func Getactivity(Program_id string) ([]interface{}, error) {
 	count := getRowcount("activity")
 
 	var entries = make([]interface{}, count)
@@ -103,7 +138,7 @@ func Getactivity(recive *map[string]interface{}) ([]interface{}, error) {
 	}
 	defer stmt.Close()
 
-	rows, err := stmt.Query()
+	rows, err := stmt.Query(Program_id)
 	if err != nil {
 		return nil, err
 	}

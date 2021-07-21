@@ -2,7 +2,7 @@ package main
 
 import (
 	api "Go_Websocket/API"
-	ws "Go_Websocket/WS"
+	ws "Go_Websocket/Websocket"
 	"log"
 	"net/http"
 

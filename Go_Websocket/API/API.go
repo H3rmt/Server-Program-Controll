@@ -16,10 +16,10 @@ import (
 )
 
 /*
-checks if recived JSON has APIkey and (Register or Activity or Log or Customaction) as keys
+checks if recived JSON has APIkey and (Register or Activity or Log or Action) as key
 returns the API key and Requesttype
 */
-func validateAPIJSON(js *map[string]interface{}) (string, string) {
+func validateAPIJSON(js *map[string]interface{}) (string, action string) {
 	APIKey, Api_key_exists := (*js)["APIkey"]
 	if Api_key_exists {
 		_, Register_exists := (*js)["Register"]
@@ -27,28 +27,19 @@ func validateAPIJSON(js *map[string]interface{}) (string, string) {
 		_, Log_exists := (*js)["Log"]
 		_, Action_exists := (*js)["Action"]
 		if Register_exists && !Activity_exists && !Log_exists && !Action_exists {
-			return APIKey.(string), "Register"
+			return fmt.Sprintf("%v", APIKey), "Register"
 		}
 		if Activity_exists && !Register_exists && !Log_exists && !Action_exists {
-			return APIKey.(string), "Activity"
+			return fmt.Sprintf("%v", APIKey), "Activity"
 		}
 		if Log_exists && !Register_exists && !Activity_exists && !Action_exists {
-			return APIKey.(string), "Log"
+			return fmt.Sprintf("%v", APIKey), "Log"
 		}
 		if Action_exists && !Register_exists && !Activity_exists && !Log_exists {
-			return APIKey.(string), "Action"
+			return fmt.Sprintf("%v", APIKey), "Action"
 		}
 	}
-	return "", ""
-}
-
-/*
-Error returned when APIkey was invalid
-*/
-type InvalidAPIkeyerror struct{}
-
-func (m *InvalidAPIkeyerror) Error() string {
-	return "Invalid API key"
+	return
 }
 
 /*
@@ -84,7 +75,7 @@ func reciveAPI(raw *[]byte, addr string) []byte {
 		log.Println("API|", "invalid JSON API request", recive)
 		return nil
 	}
-	log.Println("API|", "recived: ", recive)
+	log.Println("API|", "recived:", recive)
 
 	ProgammID, err := getProgramm_IDfromAPIKey(APIKey)
 	if err != nil {
@@ -113,24 +104,26 @@ func reciveAPI(raw *[]byte, addr string) []byte {
 		} else {
 			err = &InvalidRequesterror{}
 		}
-	case "Action":
-		commandrequest := CommandRequest{Message: "-1"}
-		mapstructure.Decode(recive["CommandRequest"], &commandrequest)
-		if commandrequest.Message != "-1" {
-			err = ProcessCommandRequest(ProgammID, &commandrequest, APIKey)
-		} else {
-			err = &InvalidRequesterror{}
-		}
+		/*
+			case "StateChange":  // TODO Program reporting stop or start without request
+				StateChangerequest := CommandRequest{Message: "-1"}
+				mapstructure.Decode(recive["CommandRequest"], &commandrequest)
+				if commandrequest.Message != "-1" {
+					err = ProcessCommandRequest(ProgammID, &commandrequest, APIKey)
+				} else {
+					err = &InvalidRequesterror{}
+				}
+		*/
 	}
 
 	if err != nil {
-		log.Println("API|", "err:", err)
+		log.Println("API|", "send err:", err)
 		msg, _ := json.Marshal(map[string]interface{}{"type": request, "error": err.Error()})
 		return msg
 	} else {
 		msg, _ := json.Marshal(map[string]interface{}{"type": request, "success": true})
 		if err != nil {
-			log.Println("API|", "err:", err)
+			log.Println("API|", "send err:", err)
 			msg, _ := json.Marshal(map[string]interface{}{"type": request, "error": err.Error()})
 			return msg
 		}

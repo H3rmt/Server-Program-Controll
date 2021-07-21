@@ -2,7 +2,7 @@ let websocket;
 
 function send(_action, _id, extra = null) {
     if (connection == true) {
-        websocket.send(JSON.stringify({ ...{ action: _action, id: _id, code: getcode() }, ...extra }));
+        websocket.send(JSON.stringify({ ...{ action: _action, Program_id: _id, code: getcode() }, ...extra }));
         console.log("Message send: " + JSON.stringify({ ...{ action: _action, id: _id, code: getcode() }, ...extra }));
     } else {
         console.log("connection not ready")
@@ -16,11 +16,10 @@ function getcode() {
 }
 
 const Action = {
-    getactivity: "getactivity",
-    getlogs: "getlogs",
-    start: "start",
-    stop: "stop",
-    customaction: "customaction",
+    getactivity: "Activity",
+    getlogs: "Logs",
+    start: "Start",
+    stop: "Stop"
 };
 
 function processreceived(evt) {
@@ -69,7 +68,7 @@ function builtWebSocket() {
     loading = false;
 
     websocket.onopen = function () {
-        websocket.send('{"connection":"opened!"}');
+        websocket.send('{"connection":"opened"}');
         console.log("connection opened!");
     };
 

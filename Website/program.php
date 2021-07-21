@@ -29,49 +29,33 @@ $info = getprogramm(htmlspecialchars(stripslashes(trim($_GET['id']))));
 
     function recivestart(data, error) {
         if (error != null) {
-            if (error == "Permissionerror") {
-                console.log("PermissionError");
+            if (error == "no admin permissions") {
+                console.log("no admin permissions");
             } else {
-                console.log("unexpected Error");
+                console.log("Error");
             }
             return;
         }
         if (data == true) {
-            console.log("success");
+            console.log("success", data);
         } else {
-            console.log("not successfull");
+            console.log("not successfull", data);
         }
     }
 
     function recivestop(data, error) {
         if (error != null) {
-            if (error == "Permissionerror") {
-                console.log("PermissionError");
+            if (error == "no admin permissions") {
+                console.log("no admin permissions");
             } else {
-                console.log("unexpected Error");
+                console.log("Error");
             }
             return;
         }
         if (data == true) {
-            console.log("success");
+            console.log("success", data);
         } else {
-            console.log("not successfull");
-        }
-    }
-
-    function recivecustomaction(data, error) {
-        if (error != null) {
-            if (error == "Permissionerror") {
-                console.log("PermissionError");
-            } else {
-                console.log("unexpected Error");
-            }
-            return;
-        }
-        if (data == true) {
-            console.log("success");
-        } else {
-            console.log("not successfull");
+            console.log("not successfull", data);
         }
     }
     </script>
