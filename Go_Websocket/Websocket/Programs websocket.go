@@ -11,7 +11,7 @@ import (
 	api "Go_Websocket/API"
 )
 
-var Port = "18770"
+var RemotePort = "18770"
 
 /*
 returns true if program was successfully started
@@ -37,16 +37,21 @@ func Stop(Program_id string) (map[string]string, error) {
 	}
 }
 
+/*
+Sends a command to the program using the registered IP address
+
+throws Programerrors if error happen
+*/
 func ProcessCommand(Program_id string, command string) error {
 	IP, exists := api.Programconnections[Program_id]
 	if !exists {
-		log.Println("PRGR API|", "IP not registered", Program_id)
+		log.Println("PRGR WS|", "IP not registered", Program_id)
 		return &Programerror{"IP not registered"}
 	}
 
 	APIKey, err := getAPIKeyfromProgramm_ID(Program_id)
 	if err != nil {
-		log.Println("PRGR API|", "Programm_ID err", err, Program_id)
+		log.Println("PRGR WS|", "Programm_ID err", err, Program_id)
 		return err
 	}
 
@@ -54,40 +59,41 @@ func ProcessCommand(Program_id string, command string) error {
 
 	byterequest, err := json.Marshal(request)
 	if err != nil {
-		log.Println("PRGR API|", "Requestbuild invalied", err, request)
+		log.Println("PRGR WS|", "Requestbuild invalied", err, request)
 		return err
 	}
 
-	resp, err := http.Post(fmt.Sprintf("http://%s:%s/api", IP, Port), "application/json;", bytes.NewBuffer(byterequest))
+	resp, err := http.Post(fmt.Sprintf("http://%s:%s/api", IP, RemotePort), "application/json;", bytes.NewBuffer(byterequest))
 	if err != nil {
-		log.Println("PRGR API|", "Program did not respond", err, IP+":"+Port)
+		log.Println("PRGR WS|", "Program did not respond", err, IP+":"+RemotePort)
 		return &Programerror{"Program did not respond"}
 	}
 
 	bodyBytes, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
-		log.Println("PRGR API|", "Program response invalid", err, resp.Body)
+		log.Println("PRGR WS|", "Program response invalid", err, resp.Body)
 		return &Programerror{"Program respond invalid"}
 	}
 
-	log.Println("PRGR API|", "recived answer:", string(bodyBytes))
+	log.Println("PRGR WS|", "recived answer:", string(bodyBytes))
 
 	var answer Answer
 	err = json.Unmarshal(bodyBytes, &answer)
 	if err != nil {
-		log.Println("PRGR API|", "Program Json response invalid", err)
+		log.Println("PRGR WS|", "Program Json response invalid", err)
 		return &Programerror{"Program Json response invalid"}
 	}
 
 	if answer.Success {
 		return nil
 	} else {
+		log.Println("PRGR WS|", "Command not successfully executed", err)
 		return &Programerror{"Command not successfully executed"}
 	}
 }
 
 /*
-Error thrown/returned when no admin priviges are present
+Error thrown/returned when error while communicating with the program occured
 */
 type Programerror struct {
 	message string

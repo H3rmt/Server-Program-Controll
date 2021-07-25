@@ -25,18 +25,18 @@ func validateAPIJSON(js *map[string]interface{}) (string, action string) {
 		_, Register_exists := (*js)["Register"]
 		_, Activity_exists := (*js)["Activity"]
 		_, Log_exists := (*js)["Log"]
-		_, Action_exists := (*js)["Action"]
-		if Register_exists && !Activity_exists && !Log_exists && !Action_exists {
+		_, Shutdown_exists := (*js)["Shutdown"]
+		if Register_exists && !Activity_exists && !Log_exists && !Shutdown_exists {
 			return fmt.Sprintf("%v", APIKey), "Register"
 		}
-		if Activity_exists && !Register_exists && !Log_exists && !Action_exists {
+		if Activity_exists && !Register_exists && !Log_exists && !Shutdown_exists {
 			return fmt.Sprintf("%v", APIKey), "Activity"
 		}
-		if Log_exists && !Register_exists && !Activity_exists && !Action_exists {
+		if Log_exists && !Register_exists && !Activity_exists && !Shutdown_exists {
 			return fmt.Sprintf("%v", APIKey), "Log"
 		}
-		if Action_exists && !Register_exists && !Activity_exists && !Log_exists {
-			return fmt.Sprintf("%v", APIKey), "Action"
+		if Shutdown_exists && !Register_exists && !Activity_exists && !Log_exists {
+			return fmt.Sprintf("%v", APIKey), "Shutdown"
 		}
 	}
 	return
@@ -104,16 +104,16 @@ func reciveAPI(raw *[]byte, addr string) []byte {
 		} else {
 			err = &InvalidRequesterror{}
 		}
-		/*
-			case "StateChange":  // TODO Program reporting stop or start without request
-				StateChangerequest := CommandRequest{Message: "-1"}
-				mapstructure.Decode(recive["CommandRequest"], &commandrequest)
-				if commandrequest.Message != "-1" {
-					err = ProcessCommandRequest(ProgammID, &commandrequest, APIKey)
-				} else {
-					err = &InvalidRequesterror{}
-				}
-		*/
+
+	case "Shutdown":
+		shutdownrequest := ShutdownRequest{Date: "-1"}
+		mapstructure.Decode(recive["Shutdown"], &shutdownrequest)
+		if shutdownrequest.Date != "-1" {
+			err = ProcessShutdownRequest(ProgammID, &shutdownrequest)
+		} else {
+			err = &InvalidRequesterror{}
+		}
+
 	}
 
 	if err != nil {
@@ -154,25 +154,3 @@ func CreateAPI(rout *mux.Router) {
 		}
 	}).Methods("POST")
 }
-
-/*
-Api request:
-{
-	"APIKey":"gli23085uyljahlkhoql2emdga;fho8u3",
-		"Log":{
-			"Date":"12.5.2012:13.52",
-			"Number":123,
-			"Message":"Test message",
-			"Type":"Low",
-		}
-	/
-		"Activity":{
-			"Date":"12.5.2012:13.52",
-			"Type":"Send",
-		}
-}
-\
-
-test:
-curl -d {\"APIKey\":\"25253\",\"Log\":1} http://localhost:18769/api
-*/

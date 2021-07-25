@@ -5,19 +5,16 @@ import threading
 
 def printshit():
     print("IMPORTANT|","hi1")
-    sys.stdout.flush()
 
     sleep(0.5)
     print("NORMAL|","hi2")
-    sys.stdout.flush()
 
     sleep(1)
     print("LOW|","hi3")
-    sys.stdout.flush()
 
     sleep(1.5)
     print("hi4")
-    sys.stdout.flush()
+    
 
     sleep(10.5)
     raise AttributeError("This is an err")

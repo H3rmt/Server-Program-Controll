@@ -55,6 +55,12 @@ func (pr *Program) Start() (err error) {
 		pr.stop = true
 		pr.cmd = nil
 		log.Println("Program finished: ", pr.Program, pr.Arguments)
+
+		err := SendShutdown(pr)
+		if err != nil {
+			log.Println("err sending shutdown", err)
+		}
+		pr.logcounter = 0
 	}()
 
 	return

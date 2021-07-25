@@ -38,15 +38,15 @@ func ProcessCommandRequest(program *Program, request *CommandRequest) (err error
 	return
 }
 
-func SendLog(message string, program *Program, logtype Logtype) error {
+func SendActivity(program *Program, activitytype Activitytype) error {
 	date := time.Now().Format("2006-01-02 15:04:05")
-	logrequest := map[string]interface{}{"APIKey": program.APIKey, "Log": LogRequest{Date: date, Number: program.logcounter, Message: message, Type: logtype}}
-	jsonReq, err := json.Marshal(logrequest)
+	activityrequest := map[string]interface{}{"APIKey": program.APIKey, "Log": ActivityRequest{Date: date, Type: activitytype}}
+	jsonReq, err := json.Marshal(activityrequest)
 	if err != nil {
 		return err
 	}
 
-	resp, err := http.Post(remoteIP+":18769/api", "application/json;", bytes.NewBuffer(jsonReq))
+	resp, err := http.Post(fmt.Sprintf("http://%s:%s/api", remoteIP, RemotePort), "application/json;", bytes.NewBuffer(jsonReq))
 	if err != nil {
 		return err
 	}
@@ -67,9 +67,75 @@ func SendLog(message string, program *Program, logtype Logtype) error {
 	if answer.Success {
 		return nil
 	} else {
-		return fmt.Errorf("not successfully added log")
+		return fmt.Errorf("activity not added successfully")
 	}
 
+}
+
+func SendLog(message string, program *Program, logtype Logtype) error {
+	date := time.Now().Format("2006-01-02 15:04:05")
+	logrequest := map[string]interface{}{"APIKey": program.APIKey, "Log": LogRequest{Date: date, Number: program.logcounter, Message: message, Type: logtype}}
+	jsonReq, err := json.Marshal(logrequest)
+	if err != nil {
+		return err
+	}
+
+	resp, err := http.Post(fmt.Sprintf("http://%s:%s/api", remoteIP, RemotePort), "application/json;", bytes.NewBuffer(jsonReq))
+	if err != nil {
+		return err
+	}
+
+	bodyBytes, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return err
+	}
+
+	log.Println("recived answer:", string(bodyBytes))
+
+	var answer Answer
+	err = json.Unmarshal(bodyBytes, &answer)
+	if err != nil {
+		return err
+	}
+
+	if answer.Success {
+		return nil
+	} else {
+		return fmt.Errorf("log not added successfully")
+	}
+}
+
+func SendShutdown(program *Program) error {
+	date := time.Now().Format("2006-01-02 15:04:05")
+	shutdownrequest := map[string]interface{}{"APIKey": program.APIKey, "Shutdown": ShutdownRequest{Date: date, Number: program.logcounter}}
+	jsonReq, err := json.Marshal(shutdownrequest)
+	if err != nil {
+		return err
+	} //RemotePort
+
+	resp, err := http.Post(fmt.Sprintf("http://%s:%s/api", remoteIP, RemotePort), "application/json;", bytes.NewBuffer(jsonReq))
+	if err != nil {
+		return err
+	}
+
+	bodyBytes, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return err
+	}
+
+	log.Println("recived answer:", string(bodyBytes))
+
+	var answer Answer
+	err = json.Unmarshal(bodyBytes, &answer)
+	if err != nil {
+		return err
+	}
+
+	if answer.Success {
+		return nil
+	} else {
+		return fmt.Errorf("shutdownrequest not transmitted successfully")
+	}
 }
 
 /*
@@ -85,6 +151,14 @@ Struct to represent a Request send to actual program asking to execute command
 type CommandRequest struct {
 	Message string
 	APIKey  string
+}
+
+/*
+Struct to represent a Request telling that the program stopped
+*/
+type ShutdownRequest struct {
+	Date   string
+	Number int
 }
 
 /*

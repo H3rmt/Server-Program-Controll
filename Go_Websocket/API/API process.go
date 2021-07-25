@@ -5,10 +5,34 @@ import (
 	"log"
 )
 
+var Programconnections = make(map[string]string) // Programm_ID = [IP]
+
+/*
+Process request to add Program to list of connections
+*/
+func ProcessRegisterRequest(Progamm_ID string, addr string) error {
+	if _, exist := Programconnections[Progamm_ID]; exist {
+		log.Println("PRGR API|", addr, " relinked with id:", Progamm_ID)
+	} else {
+		log.Println("PRGR API|", addr, " linked with id:", Progamm_ID)
+	}
+	Programconnections[Progamm_ID] = addr
+	return nil
+}
+
 var DB *sql.DB
 
 func SetDB(db *sql.DB) {
 	DB = db
+}
+
+/*
+Error returned when APIKey was invalid
+*/
+type SQLerror struct{}
+
+func (m *SQLerror) Error() string {
+	return "SQLerror"
 }
 
 /*
@@ -18,14 +42,16 @@ func getProgramm_IDfromAPIKey(APIKey string) (string, error) {
 	sql := "SELECT ID from programs WHERE APIKey=?;"
 	stmt, err := DB.Prepare(sql)
 	if err != nil {
-		return "", err
+		log.Println(err)
+		return "", &SQLerror{}
 	}
 	defer stmt.Close()
 
 	// Execute query
 	res, err := stmt.Query(APIKey)
 	if err != nil {
-		return "", err
+		log.Println(err)
+		return "", &SQLerror{}
 	}
 
 	if res.Next() {
@@ -53,14 +79,16 @@ func ProcessLogRequest(Programm_ID string, logrequest *LogRequest) error {
 	sql := "INSERT INTO logs (Programm_ID,Date,Number,Message,Type) VALUES (?,?,?,?,?);"
 	stmt, err := DB.Prepare(sql)
 	if err != nil {
-		return err
+		log.Println(err)
+		return &SQLerror{}
 	}
 	defer stmt.Close()
 
 	// Execute query
-	_, err = stmt.Query(Programm_ID, (*logrequest).Date, (*logrequest).Number, (*logrequest).Message, (*logrequest).Type)
+	_, err = stmt.Query(Programm_ID, logrequest.Date, logrequest.Number, logrequest.Message, logrequest.Type)
 	if err != nil {
-		return err
+		log.Println(err)
+		return &SQLerror{}
 	} else {
 		log.Println("SQL API|", "Log added to database")
 	}
@@ -94,14 +122,16 @@ func ProcessActivityRequest(Programm_ID string, activityrequest *ActivityRequest
 	sql := "INSERT INTO activity (Programm_ID,Date,Type) VALUES (?,?,?);"
 	stmt, err := DB.Prepare(sql)
 	if err != nil {
-		return err
+		log.Println(err)
+		return &SQLerror{}
 	}
 	defer stmt.Close()
 
 	// Execute query
-	_, err = stmt.Query(Programm_ID, (*activityrequest).Date, (*activityrequest).Type)
+	_, err = stmt.Query(Programm_ID, activityrequest.Date, activityrequest.Type)
 	if err != nil {
-		return err
+		log.Println(err)
+		return &SQLerror{}
 	} else {
 		log.Println("SQL API|", "Activity added to database")
 	}
@@ -125,3 +155,54 @@ const (
 	Process           Activitytype = "Process"
 	Backgroundprocess Activitytype = "Backgroundprocess"
 )
+
+/*
+Process request telling that the program stopped
+*/
+func ProcessShutdownRequest(Programm_ID string, shutdownrequest *ShutdownRequest) error {
+	sql := "UPDATE programs SET Active = 0, StartStoptime = ? WHERE ID = ?;"
+
+	stmt, err := DB.Prepare(sql)
+	if err != nil {
+		log.Println(err)
+		return &SQLerror{}
+	}
+
+	// Execute query
+	_, err = stmt.Query(shutdownrequest.Date, Programm_ID)
+	if err != nil {
+		log.Println(err)
+		return &SQLerror{}
+	}
+
+	stmt.Close()
+
+	sql = "INSERT INTO logs (Programm_ID,Date,Number,Message,Type) VALUES (?,?,?,'SHUTDOWN','Error');"
+
+	stmt, err = DB.Prepare(sql)
+	if err != nil {
+		log.Println(err)
+		return &SQLerror{}
+	}
+
+	// Execute query
+	_, err = stmt.Query(Programm_ID, shutdownrequest.Date, shutdownrequest.Number)
+	if err != nil {
+		log.Println(err)
+		return &SQLerror{}
+	} else {
+		log.Println("SQL API|", "Shutdown added to database")
+	}
+
+	stmt.Close()
+
+	return nil
+}
+
+/*
+Struct to represent a Request telling that the program stopped
+*/
+type ShutdownRequest struct {
+	Date   string
+	Number int
+}

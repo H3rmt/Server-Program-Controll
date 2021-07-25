@@ -2,7 +2,7 @@
     "Programs": [
         {
             "Program": "python",
-            "Arguments": ["test.py"],
+            "Arguments": ["-u","test.py"],
             "APIKey": "5rrtg3u564uiqr43fadf"
         },
         {
@@ -11,5 +11,5 @@
             "APIKey": "652346tdrfst233qc1tg354g3w"
         }
     ],
-    "Remote IP" : "http://localhost"
+    "Remote IP" : "localhost"
 }

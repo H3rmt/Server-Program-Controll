@@ -13,6 +13,7 @@ import (
 )
 
 var Port = "18770"
+var RemotePort = "18769"
 
 /*
 start API to listen to CommandRequests
@@ -107,36 +108,36 @@ func reciveAPI(raw *[]byte) []byte {
 	}
 }
 
-func register(remote string, APIKey string) (err error) {
+/*
+called to register a program with an APIKey to remote server
+*/
+func register(remote string, APIKey string) error {
 	log.Println("Registering Program:", APIKey, " on", remote)
 	req := map[string]interface{}{"APIKey": APIKey, "Register": true}
 	jsonReq, err := json.Marshal(req)
 	if err != nil {
-		return
+		return err
 	}
 
-	resp, err := http.Post(remote+":18769/api", "application/json;", bytes.NewBuffer(jsonReq))
+	resp, err := http.Post(fmt.Sprintf("http://%s:%s/api", remote, RemotePort), "application/json;", bytes.NewBuffer(jsonReq))
 	if err != nil {
-		return
+		return err
 	}
 
 	bodyBytes, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
-		return
+		return err
 	}
 	log.Println("recived:", string(bodyBytes))
 
 	answer := make(map[string]interface{})
 	err = json.Unmarshal(bodyBytes, &answer)
+	if err != nil {
+		return err
+	}
 
 	if answer["error"] != nil {
-		err = fmt.Errorf(answer["error"].(string))
+		return fmt.Errorf(answer["error"].(string))
 	}
-	return
+	return nil
 }
-
-// curl -d {\"APIKey\":\"4362fds357rd32q1f37y35e6ytefws\",\"Message\":\"Stop\"} http://localhost:18770/api
-
-/*
-
- */
