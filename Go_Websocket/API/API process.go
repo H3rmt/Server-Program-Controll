@@ -7,6 +7,12 @@ import (
 
 var Programconnections = make(map[string]string) // Programm_ID = [IP]
 
+var DB *sql.DB
+
+func SetDB(db *sql.DB) {
+	DB = db
+}
+
 /*
 Process request to add Program to list of connections
 */
@@ -18,12 +24,6 @@ func ProcessRegisterRequest(Progamm_ID string, addr string) error {
 	}
 	Programconnections[Progamm_ID] = addr
 	return nil
-}
-
-var DB *sql.DB
-
-func SetDB(db *sql.DB) {
-	DB = db
 }
 
 /*

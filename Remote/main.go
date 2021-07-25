@@ -8,10 +8,9 @@ import (
 	"net/http"
 
 	"github.com/gorilla/mux"
-)
 
-// list of all programs
-var programs []Program
+	api "Remote/API"
+)
 
 var remoteIP string
 
@@ -19,8 +18,6 @@ var remoteIP string
 main method with arguments = programfile APIKey programfile APIKey ...
 */
 func main() {
-	// Create programs from args
-
 	data, err := ioutil.ReadFile("programs.json")
 	if err != nil {
 		log.Println(err)
@@ -39,29 +36,30 @@ func main() {
 			args[count] = v.(string)
 		}
 		if program != "" && key != "" {
-			programs = append(programs, Program{Program: program, APIKey: key, Arguments: args, stop: true})
+			api.Programs = append(api.Programs, api.Program{Program: program, APIKey: key, Arguments: args})
 		} else {
 			log.Println("Invalid Program:", program, key, args)
 		}
 	}
 	log.Println("loaded Programs:")
-	for _, v := range programs {
+	for _, v := range api.Programs {
 		fmt.Printf("%s %s Key:%s \n", v.Program, v.Arguments, v.APIKey)
 	}
 
 	router := mux.NewRouter().StrictSlash(true)
-	CreateAPI(router)
+	api.CreateAPI(router)
 	log.Println("Started API")
 
 	remoteIP = fileload["Remote IP"].(string)
-	for _, v := range programs {
-		err = register(remoteIP, v.APIKey)
+	api.SetRemoteIP(remoteIP)
+	for _, v := range api.Programs {
+		err = api.Register(remoteIP, v.APIKey)
 		if err != nil {
 			panic(err)
 		}
 	}
 
 	// Blocking
-	err = http.ListenAndServe(":"+Port, router)
+	err = http.ListenAndServe(":"+api.Port, router)
 	log.Println("Err: ", err)
 }

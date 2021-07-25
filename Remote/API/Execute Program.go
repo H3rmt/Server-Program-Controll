@@ -1,4 +1,4 @@
-package main
+package api
 
 import (
 	"bytes"
@@ -9,15 +9,20 @@ import (
 	"time"
 )
 
+// list of all programs
+var Programs []Program
+
 /*
 struct representing a Program
 
-can be started
-
 contains
-program (python/go/...)
-File arg for programm, usually file but can be any series of args
-APIKey to send data to Server
+program  (python/go/...)
+Arguments  arg for programm, usually file but can be any series of args
+APIKey  to send data to Server
+reader  containing out and err reader
+stop  bool if program is running
+cmd  reference to Command
+logcounter  counts logs for out and err reader
 */
 type Program struct {
 	Program    string
@@ -27,6 +32,19 @@ type Program struct {
 	stop       bool
 	cmd        *exec.Cmd
 	logcounter int
+}
+
+/*
+finds the corresponding program from list of programs
+*/
+func getProgramm_IDfromAPIKey(APIKey string) (*Program, error) {
+	for i := 0; i < len(Programs); i++ {
+		if Programs[i].APIKey == APIKey {
+			log.Println("Program found:", APIKey, Programs[i].Program, Programs[i].Arguments)
+			return &Programs[i], nil
+		}
+	}
+	return &Program{}, &InvalidAPIKeyerror{}
 }
 
 /*
@@ -96,6 +114,9 @@ func (pr *Program) Stop() (err error) {
 	return
 }
 
+/*
+finds logtype of logmessage and returns message without prefix
+*/
 func processOutLevel(message string) (string, Logtype) {
 	if strings.HasPrefix(message, "LOW|") {
 		return strings.Replace(message, "LOW|", "", 1), Logtype(Low)

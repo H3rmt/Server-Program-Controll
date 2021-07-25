@@ -1,4 +1,4 @@
-package main
+package api
 
 import (
 	"bytes"
@@ -12,8 +12,14 @@ import (
 	"github.com/mitchellh/mapstructure"
 )
 
+var remoteIP string
+
 var Port = "18770"
 var RemotePort = "18769"
+
+func SetRemoteIP(nremoteIP string) {
+	remoteIP = nremoteIP
+}
 
 /*
 start API to listen to CommandRequests
@@ -58,6 +64,7 @@ func (m *InvalidAPIKeyerror) Error() string {
 
 /*
 called when Connection send data;
+
 gets byte array out of JSON
 returns byte array out of JSON to write
 */
@@ -111,7 +118,7 @@ func reciveAPI(raw *[]byte) []byte {
 /*
 called to register a program with an APIKey to remote server
 */
-func register(remote string, APIKey string) error {
+func Register(remote string, APIKey string) error {
 	log.Println("Registering Program:", APIKey, " on", remote)
 	req := map[string]interface{}{"APIKey": APIKey, "Register": true}
 	jsonReq, err := json.Marshal(req)

@@ -1,4 +1,4 @@
-package main
+package api
 
 import (
 	"bytes"
@@ -9,19 +9,6 @@ import (
 	"net/http"
 	"time"
 )
-
-/*
-finds the corresponding program from list of programs
-*/
-func getProgramm_IDfromAPIKey(APIKey string) (*Program, error) {
-	for i := 0; i < len(programs); i++ {
-		if programs[i].APIKey == APIKey {
-			log.Println("Program found:", APIKey, programs[i].Program, programs[i].Arguments)
-			return &programs[i], nil
-		}
-	}
-	return &Program{}, &InvalidAPIKeyerror{}
-}
 
 /*
 Process request to execute command in Program
@@ -38,6 +25,17 @@ func ProcessCommandRequest(program *Program, request *CommandRequest) (err error
 	return
 }
 
+/*
+Struct to represent a Request send to actual program asking to execute command
+*/
+type CommandRequest struct {
+	Message string
+	APIKey  string
+}
+
+/*
+Send Activity to server
+*/
 func SendActivity(program *Program, activitytype Activitytype) error {
 	date := time.Now().Format("2006-01-02 15:04:05")
 	activityrequest := map[string]interface{}{"APIKey": program.APIKey, "Log": ActivityRequest{Date: date, Type: activitytype}}
@@ -72,6 +70,26 @@ func SendActivity(program *Program, activitytype Activitytype) error {
 
 }
 
+/*
+Struct to represent a Request asking to add a activity in the Acitivity table in DB
+*/
+type ActivityRequest struct {
+	Date string
+	Type Activitytype
+}
+
+type Activitytype string
+
+const (
+	Send              Activitytype = "Send"
+	Recive            Activitytype = "Recive"
+	Process           Activitytype = "Process"
+	Backgroundprocess Activitytype = "Backgroundprocess"
+)
+
+/*
+Send Log to server
+*/
 func SendLog(message string, program *Program, logtype Logtype) error {
 	date := time.Now().Format("2006-01-02 15:04:05")
 	logrequest := map[string]interface{}{"APIKey": program.APIKey, "Log": LogRequest{Date: date, Number: program.logcounter, Message: message, Type: logtype}}
@@ -105,6 +123,28 @@ func SendLog(message string, program *Program, logtype Logtype) error {
 	}
 }
 
+/*
+Struct to represent a Request asking to add a log in the Log table in DB
+*/
+type LogRequest struct {
+	Date    string
+	Number  int
+	Message string
+	Type    Logtype
+}
+
+type Logtype string
+
+const (
+	Low       Logtype = "Low"
+	Normal    Logtype = "Normal"
+	Important Logtype = "Important"
+	Error     Logtype = "Error"
+)
+
+/*
+Send State Change to server
+*/
 func SendStateChange(program *Program, Start bool) error {
 	date := time.Now().Format("2006-01-02 15:04:05")
 	statechangerequest := map[string]interface{}{"APIKey": program.APIKey, "StateChange": StateChangeRequest{Date: date, Number: program.logcounter, Start: Start}}
@@ -139,21 +179,6 @@ func SendStateChange(program *Program, Start bool) error {
 }
 
 /*
-Struct to represent a Answer from the program
-*/
-type Answer struct {
-	Success bool
-}
-
-/*
-Struct to represent a Request send to actual program asking to execute command
-*/
-type CommandRequest struct {
-	Message string
-	APIKey  string
-}
-
-/*
 Struct to represent a Request telling that the program stopped or started
 */
 type StateChangeRequest struct {
@@ -163,37 +188,8 @@ type StateChangeRequest struct {
 }
 
 /*
-Struct to represent a Request asking to add a log in the Log table in DB
+Struct to represent a Answer from the program
 */
-type LogRequest struct {
-	Date    string
-	Number  int
-	Message string
-	Type    Logtype
+type Answer struct {
+	Success bool
 }
-
-type Logtype string
-
-const (
-	Low       Logtype = "Low"
-	Normal    Logtype = "Normal"
-	Important Logtype = "Important"
-	Error     Logtype = "Error"
-)
-
-/*
-Struct to represent a Request asking to add a activity in the Acitivity table in DB
-*/
-type ActivityRequest struct {
-	Date string
-	Type Activitytype
-}
-
-type Activitytype string
-
-const (
-	Send              Activitytype = "Send"
-	Recive            Activitytype = "Recive"
-	Process           Activitytype = "Process"
-	Backgroundprocess Activitytype = "Backgroundprocess"
-)
