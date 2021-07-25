@@ -5,7 +5,7 @@ import (
 	"log"
 )
 
-var Programconnections = make(map[string]string) // Programm_ID = [IP]
+var Programconnections = make(map[string]string) // Program_ID = [IP]
 
 var DB *sql.DB
 
@@ -38,7 +38,7 @@ func (m *SQLerror) Error() string {
 /*
 finds the corresponding program with ID from the database
 */
-func getProgramm_IDfromAPIKey(APIKey string) (string, error) {
+func getProgram_IDfromAPIKey(APIKey string) (string, error) {
 	sql := "SELECT ID from programs WHERE APIKey=?;"
 	stmt, err := DB.Prepare(sql)
 	if err != nil {
@@ -75,8 +75,8 @@ func (m *InvalidAPIKeyerror) Error() string {
 /*
 adds log do the database from logrequest
 */
-func ProcessLogRequest(Programm_ID string, logrequest *LogRequest) error {
-	sql := "INSERT INTO logs (Programm_ID,Date,Number,Message,Type) VALUES (?,?,?,?,?);"
+func ProcessLogRequest(Program_ID string, logrequest *LogRequest) error {
+	sql := "INSERT INTO logs (program_ID,Date,Number,Message,Type) VALUES (?,?,?,?,?);"
 	stmt, err := DB.Prepare(sql)
 	if err != nil {
 		log.Println(err)
@@ -85,7 +85,7 @@ func ProcessLogRequest(Programm_ID string, logrequest *LogRequest) error {
 	defer stmt.Close()
 
 	// Execute query
-	_, err = stmt.Query(Programm_ID, logrequest.Date, logrequest.Number, logrequest.Message, logrequest.Type)
+	_, err = stmt.Query(Program_ID, logrequest.Date, logrequest.Number, logrequest.Message, logrequest.Type)
 	if err != nil {
 		log.Println(err)
 		return &SQLerror{}
@@ -118,8 +118,8 @@ const (
 /*
 adds activity do the database from activityrequest
 */
-func ProcessActivityRequest(Programm_ID string, activityrequest *ActivityRequest) error {
-	sql := "INSERT INTO activity (Programm_ID,Date,Type) VALUES (?,?,?);"
+func ProcessActivityRequest(Program_ID string, activityrequest *ActivityRequest) error {
+	sql := "INSERT INTO activity (program_ID,Date,Type) VALUES (?,?,?);"
 	stmt, err := DB.Prepare(sql)
 	if err != nil {
 		log.Println(err)
@@ -128,7 +128,7 @@ func ProcessActivityRequest(Programm_ID string, activityrequest *ActivityRequest
 	defer stmt.Close()
 
 	// Execute query
-	_, err = stmt.Query(Programm_ID, activityrequest.Date, activityrequest.Type)
+	_, err = stmt.Query(Program_ID, activityrequest.Date, activityrequest.Type)
 	if err != nil {
 		log.Println(err)
 		return &SQLerror{}
@@ -159,7 +159,7 @@ const (
 /*
 Process request telling that the program stopped
 */
-func ProcessStateChangeRequest(Programm_ID string, statechangerequest *StateChangeRequest) error {
+func ProcessStateChangeRequest(Program_ID string, statechangerequest *StateChangeRequest) error {
 	sql := "UPDATE programs SET Active = ?, StartStoptime = ? WHERE ID = ?;"
 
 	stmt, err := DB.Prepare(sql)
@@ -169,7 +169,7 @@ func ProcessStateChangeRequest(Programm_ID string, statechangerequest *StateChan
 	}
 
 	// Execute query
-	_, err = stmt.Query(statechangerequest.Start, statechangerequest.Date, Programm_ID)
+	_, err = stmt.Query(statechangerequest.Start, statechangerequest.Date, Program_ID)
 	if err != nil {
 		log.Println(err)
 		return &SQLerror{}
@@ -177,7 +177,7 @@ func ProcessStateChangeRequest(Programm_ID string, statechangerequest *StateChan
 
 	stmt.Close()
 
-	sql = "INSERT INTO logs (Programm_ID,Date,Number,Message,Type) VALUES (?,?,?,?,?);"
+	sql = "INSERT INTO logs (program_ID,Date,Number,Message,Type) VALUES (?,?,?,?,?);"
 
 	stmt, err = DB.Prepare(sql)
 	if err != nil {
@@ -200,7 +200,7 @@ func ProcessStateChangeRequest(Programm_ID string, statechangerequest *StateChan
 	}
 
 	// Execute query
-	_, err = stmt.Query(Programm_ID, statechangerequest.Date, statechangerequest.Number, message, logtype)
+	_, err = stmt.Query(Program_ID, statechangerequest.Date, statechangerequest.Number, message, logtype)
 	if err != nil {
 		log.Println(err)
 		return &SQLerror{}

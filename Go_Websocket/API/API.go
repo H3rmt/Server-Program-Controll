@@ -77,7 +77,7 @@ func reciveAPI(raw *[]byte, addr string) []byte {
 	}
 	log.Println("API|", "recived:", recive)
 
-	ProgammID, err := getProgramm_IDfromAPIKey(APIKey)
+	ProgammID, err := getProgram_IDfromAPIKey(APIKey)
 	if err != nil {
 		log.Println("API|", "APIKeyerr:", err)
 		msg, _ := json.Marshal(map[string]interface{}{"type": request, "error": err.Error()})
@@ -104,7 +104,6 @@ func reciveAPI(raw *[]byte, addr string) []byte {
 		} else {
 			err = &InvalidRequesterror{}
 		}
-
 	case "StateChange":
 		statechangerequest := StateChangeRequest{Date: "-1", Number: -1}
 		mapstructure.Decode(recive["StateChange"], &statechangerequest)

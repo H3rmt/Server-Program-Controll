@@ -3,6 +3,7 @@ package ws
 import (
 	"database/sql"
 	"fmt"
+	"log"
 )
 
 var DB *sql.DB
@@ -12,20 +13,31 @@ func SetDB(db *sql.DB) {
 }
 
 /*
+Error returned when APIKey was invalid
+*/
+type SQLerror struct{}
+
+func (m *SQLerror) Error() string {
+	return "SQLerror"
+}
+
+/*
 finds the corresponding program with ID from the database
 */
-func getAPIKeyfromProgramm_ID(Programm_ID string) (string, error) {
+func getAPIKeyfromProgram_ID(Program_ID string) (string, error) {
 	sql := "SELECT APIKey from programs WHERE ID=?;"
 	stmt, err := DB.Prepare(sql)
 	if err != nil {
-		return "", err
+		log.Println(err)
+		return "", &SQLerror{}
 	}
 	defer stmt.Close()
 
 	// Execute query
-	res, err := stmt.Query(Programm_ID)
+	res, err := stmt.Query(Program_ID)
 	if err != nil {
-		return "", err
+		log.Println(err)
+		return "", &SQLerror{}
 	}
 
 	if res.Next() {
@@ -73,17 +85,19 @@ func Getlogs(Program_id string) ([]interface{}, error) {
 
 	var entries = make([]interface{}, count)
 
-	sql := "SELECT Date,Number,Message,Type FROM logs WHERE programm_ID=?"
+	sql := "SELECT Date,Number,Message,Type FROM logs WHERE program_ID=?"
 
 	stmt, err := DB.Prepare(sql)
 	if err != nil {
-		return nil, err
+		log.Println(err)
+		return nil, &SQLerror{}
 	}
 	defer stmt.Close()
 
 	rows, err := stmt.Query(Program_id)
 	if err != nil {
-		return nil, err
+		log.Println(err)
+		return nil, &SQLerror{}
 	}
 
 	// iterate through query
@@ -95,7 +109,8 @@ func Getlogs(Program_id string) ([]interface{}, error) {
 		// Get values from row
 		err := rows.Scan(&Date, &Number, &Message, &Type)
 		if err != nil {
-			return nil, err
+			log.Println(err)
+			return nil, &SQLerror{}
 		}
 		entries = append(entries, Log{Date: Date, Number: Number, Message: Message, Type: Type})
 	}
@@ -129,16 +144,18 @@ func Getactivity(Program_id string) ([]interface{}, error) {
 
 	var entries = make([]interface{}, count)
 
-	sql := "SELECT Date,Type FROM activity WHERE programm_ID=?"
+	sql := "SELECT Date,Type FROM activity WHERE program_ID=?"
 	stmt, err := DB.Prepare(sql)
 	if err != nil {
-		return nil, err
+		log.Println(err)
+		return nil, &SQLerror{}
 	}
 	defer stmt.Close()
 
 	rows, err := stmt.Query(Program_id)
 	if err != nil {
-		return nil, err
+		log.Println(err)
+		return nil, &SQLerror{}
 	}
 
 	// iterate through query
@@ -149,7 +166,8 @@ func Getactivity(Program_id string) ([]interface{}, error) {
 		// get values from row
 		err := rows.Scan(&Date, &Type)
 		if err != nil {
-			return nil, err
+			log.Println(err)
+			return nil, &SQLerror{}
 		}
 		entries = append(entries, Activity{Date: Date, Type: Type})
 	}

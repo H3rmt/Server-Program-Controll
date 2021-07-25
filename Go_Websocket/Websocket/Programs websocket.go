@@ -49,9 +49,9 @@ func ProcessCommand(Program_id string, command string) error {
 		return &Programerror{"IP not registered"}
 	}
 
-	APIKey, err := getAPIKeyfromProgramm_ID(Program_id)
+	APIKey, err := getAPIKeyfromProgram_ID(Program_id)
 	if err != nil {
-		log.Println("PRGR WS|", "Programm_ID err", err, Program_id)
+		log.Println("PRGR WS|", "Program_ID err", err, Program_id)
 		return err
 	}
 
@@ -87,7 +87,7 @@ func ProcessCommand(Program_id string, command string) error {
 	if answer.Success {
 		return nil
 	} else {
-		log.Println("PRGR WS|", "Command not successfully executed", err)
+		log.Println("PRGR WS|", "Command not successfully executed")
 		return &Programerror{"Command not successfully executed"}
 	}
 }

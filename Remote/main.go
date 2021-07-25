@@ -29,6 +29,7 @@ func main() {
 
 	for _, v := range fileload["Programs"].([]interface{}) {
 		p := v.(map[string]interface{})
+		var name = p["Name"].(string)
 		var program = p["Program"].(string)
 		var key = p["APIKey"].(string)
 		var args = make([]string, len(p["Arguments"].([]interface{})))
@@ -36,7 +37,7 @@ func main() {
 			args[count] = v.(string)
 		}
 		if program != "" && key != "" {
-			api.Programs = append(api.Programs, api.Program{Program: program, APIKey: key, Arguments: args})
+			api.Programs = append(api.Programs, api.Program{Name: name, Program: program, APIKey: key, Arguments: args})
 		} else {
 			log.Println("Invalid Program:", program, key, args)
 		}

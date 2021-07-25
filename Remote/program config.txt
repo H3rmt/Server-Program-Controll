@@ -1,0 +1,13 @@
+disable buffering of std.out (python add -u parameter)
+
+print logs:
+
+    normal logs: NORMAL
+
+    add LOW| or IMPORTANT| or add NORMAL| at beginning of print
+
+
+acitvity:
+
+    if log is [Backgroundprocess] or [Process] or [Recive] or [Send] 
+    it doesn't get interpreted as log, but added to acitility list
