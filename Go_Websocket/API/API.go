@@ -25,18 +25,18 @@ func validateAPIJSON(js *map[string]interface{}) (string, action string) {
 		_, Register_exists := (*js)["Register"]
 		_, Activity_exists := (*js)["Activity"]
 		_, Log_exists := (*js)["Log"]
-		_, Shutdown_exists := (*js)["Shutdown"]
-		if Register_exists && !Activity_exists && !Log_exists && !Shutdown_exists {
+		_, StateChange_exists := (*js)["StateChange"]
+		if Register_exists && !Activity_exists && !Log_exists && !StateChange_exists {
 			return fmt.Sprintf("%v", APIKey), "Register"
 		}
-		if Activity_exists && !Register_exists && !Log_exists && !Shutdown_exists {
+		if Activity_exists && !Register_exists && !Log_exists && !StateChange_exists {
 			return fmt.Sprintf("%v", APIKey), "Activity"
 		}
-		if Log_exists && !Register_exists && !Activity_exists && !Shutdown_exists {
+		if Log_exists && !Register_exists && !Activity_exists && !StateChange_exists {
 			return fmt.Sprintf("%v", APIKey), "Log"
 		}
-		if Shutdown_exists && !Register_exists && !Activity_exists && !Log_exists {
-			return fmt.Sprintf("%v", APIKey), "Shutdown"
+		if StateChange_exists && !Register_exists && !Activity_exists && !Log_exists {
+			return fmt.Sprintf("%v", APIKey), "StateChange"
 		}
 	}
 	return
@@ -105,11 +105,11 @@ func reciveAPI(raw *[]byte, addr string) []byte {
 			err = &InvalidRequesterror{}
 		}
 
-	case "Shutdown":
-		shutdownrequest := ShutdownRequest{Date: "-1"}
-		mapstructure.Decode(recive["Shutdown"], &shutdownrequest)
-		if shutdownrequest.Date != "-1" {
-			err = ProcessShutdownRequest(ProgammID, &shutdownrequest)
+	case "StateChange":
+		statechangerequest := StateChangeRequest{Date: "-1", Number: -1}
+		mapstructure.Decode(recive["StateChange"], &statechangerequest)
+		if statechangerequest.Date != "-1" {
+			err = ProcessStateChangeRequest(ProgammID, &statechangerequest)
 		} else {
 			err = &InvalidRequesterror{}
 		}

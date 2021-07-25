@@ -105,13 +105,13 @@ func SendLog(message string, program *Program, logtype Logtype) error {
 	}
 }
 
-func SendShutdown(program *Program) error {
+func SendStateChange(program *Program, Start bool) error {
 	date := time.Now().Format("2006-01-02 15:04:05")
-	shutdownrequest := map[string]interface{}{"APIKey": program.APIKey, "Shutdown": ShutdownRequest{Date: date, Number: program.logcounter}}
-	jsonReq, err := json.Marshal(shutdownrequest)
+	statechangerequest := map[string]interface{}{"APIKey": program.APIKey, "StateChange": StateChangeRequest{Date: date, Number: program.logcounter, Start: Start}}
+	jsonReq, err := json.Marshal(statechangerequest)
 	if err != nil {
 		return err
-	} //RemotePort
+	}
 
 	resp, err := http.Post(fmt.Sprintf("http://%s:%s/api", remoteIP, RemotePort), "application/json;", bytes.NewBuffer(jsonReq))
 	if err != nil {
@@ -134,7 +134,7 @@ func SendShutdown(program *Program) error {
 	if answer.Success {
 		return nil
 	} else {
-		return fmt.Errorf("shutdownrequest not transmitted successfully")
+		return fmt.Errorf("statechangerequest not transmitted successfully")
 	}
 }
 
@@ -154,11 +154,12 @@ type CommandRequest struct {
 }
 
 /*
-Struct to represent a Request telling that the program stopped
+Struct to represent a Request telling that the program stopped or started
 */
-type ShutdownRequest struct {
+type StateChangeRequest struct {
 	Date   string
 	Number int
+	Start  bool
 }
 
 /*

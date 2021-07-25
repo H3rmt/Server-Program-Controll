@@ -32,7 +32,7 @@ type Program struct {
 /*
 starts the program and readers
 */
-func (pr *Program) Start() (err error) {
+func (pr *Program) Start() error {
 	if pr.cmd != nil {
 		return fmt.Errorf("program running")
 	}
@@ -47,8 +47,24 @@ func (pr *Program) Start() (err error) {
 	pr.stop = false
 	go pr.reader.process()
 
-	err = cmd.Start()
-	log.Println("Started Program: ", pr.Program, pr.Arguments)
+	pr.logcounter = 0
+
+	err := cmd.Start()
+	if err != nil {
+		log.Println("Error Starting Program: ", pr.Program, pr.Arguments)
+		return err
+	} else {
+		log.Println("Started Program: ", pr.Program, pr.Arguments)
+	}
+
+	go func() {
+		// Delay this Message so it doesnt mix up with start response
+		time.Sleep(30 * time.Millisecond)
+		err = SendStateChange(pr, true)
+		if err != nil {
+			log.Println("err sending start", err)
+		}
+	}()
 
 	go func() {
 		cmd.Wait()
@@ -56,14 +72,13 @@ func (pr *Program) Start() (err error) {
 		pr.cmd = nil
 		log.Println("Program finished: ", pr.Program, pr.Arguments)
 
-		err := SendShutdown(pr)
+		err := SendStateChange(pr, false)
 		if err != nil {
 			log.Println("err sending shutdown", err)
 		}
-		pr.logcounter = 0
 	}()
 
-	return
+	return nil
 }
 
 /*

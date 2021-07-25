@@ -159,8 +159,8 @@ const (
 /*
 Process request telling that the program stopped
 */
-func ProcessShutdownRequest(Programm_ID string, shutdownrequest *ShutdownRequest) error {
-	sql := "UPDATE programs SET Active = 0, StartStoptime = ? WHERE ID = ?;"
+func ProcessStateChangeRequest(Programm_ID string, statechangerequest *StateChangeRequest) error {
+	sql := "UPDATE programs SET Active = ?, StartStoptime = ? WHERE ID = ?;"
 
 	stmt, err := DB.Prepare(sql)
 	if err != nil {
@@ -169,7 +169,7 @@ func ProcessShutdownRequest(Programm_ID string, shutdownrequest *ShutdownRequest
 	}
 
 	// Execute query
-	_, err = stmt.Query(shutdownrequest.Date, Programm_ID)
+	_, err = stmt.Query(statechangerequest.Start, statechangerequest.Date, Programm_ID)
 	if err != nil {
 		log.Println(err)
 		return &SQLerror{}
@@ -177,7 +177,7 @@ func ProcessShutdownRequest(Programm_ID string, shutdownrequest *ShutdownRequest
 
 	stmt.Close()
 
-	sql = "INSERT INTO logs (Programm_ID,Date,Number,Message,Type) VALUES (?,?,?,'SHUTDOWN','Error');"
+	sql = "INSERT INTO logs (Programm_ID,Date,Number,Message,Type) VALUES (?,?,?,?,?);"
 
 	stmt, err = DB.Prepare(sql)
 	if err != nil {
@@ -185,13 +185,27 @@ func ProcessShutdownRequest(Programm_ID string, shutdownrequest *ShutdownRequest
 		return &SQLerror{}
 	}
 
+	message := ""
+	if statechangerequest.Start {
+		message = "START"
+	} else {
+		message = "STOP"
+	}
+
+	logtype := ""
+	if statechangerequest.Start {
+		logtype = "Important"
+	} else {
+		logtype = "Error"
+	}
+
 	// Execute query
-	_, err = stmt.Query(Programm_ID, shutdownrequest.Date, shutdownrequest.Number)
+	_, err = stmt.Query(Programm_ID, statechangerequest.Date, statechangerequest.Number, message, logtype)
 	if err != nil {
 		log.Println(err)
 		return &SQLerror{}
 	} else {
-		log.Println("SQL API|", "Shutdown added to database")
+		log.Println("SQL API|", "State Change added to database")
 	}
 
 	stmt.Close()
@@ -200,9 +214,10 @@ func ProcessShutdownRequest(Programm_ID string, shutdownrequest *ShutdownRequest
 }
 
 /*
-Struct to represent a Request telling that the program stopped
+Struct to represent a Request telling that the program stopped or started
 */
-type ShutdownRequest struct {
+type StateChangeRequest struct {
 	Date   string
 	Number int
+	Start  bool
 }
