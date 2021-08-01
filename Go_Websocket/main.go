@@ -1,12 +1,13 @@
 package main
 
 import (
-	api "Go_Websocket/API"
-	ws "Go_Websocket/Websocket"
-	"log"
 	"net/http"
 
 	"github.com/gorilla/mux"
+
+	"Server/api"
+	"Server/util"
+	"Server/websocket"
 )
 
 var Port = "18769"
@@ -22,8 +23,8 @@ func main() {
 	SQLInit()
 	router := mux.NewRouter().StrictSlash(true)
 	api.CreateAPI(router)
-	ws.Createwebsocket(router)
-	log.Println("MAIN|", "Started")
+	websocket.Createwebsocket(router)
+	util.Log("MAIN", "Started")
 	err := http.ListenAndServe(":"+Port, router)
-	log.Println("MAIN|", "Err: ", err)
+	util.Log("MAIN", "Err: ", err)
 }

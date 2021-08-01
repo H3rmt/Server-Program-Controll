@@ -4,15 +4,15 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
-	"log"
-	"strings"
-
 	"net/http"
+	"strings"
 
 	"github.com/gorilla/mux"
 
 	// create struct from map out of JSON
 	"github.com/mitchellh/mapstructure"
+
+	"Server/util"
 )
 
 /*
@@ -63,23 +63,23 @@ func reciveAPI(raw *[]byte, addr string) []byte {
 	err := json.Unmarshal(*raw, &recive)
 
 	if err != nil {
-		log.Println("API|", "JSON decoding error: ", err, " :", string(*raw))
+		util.Log("API", "JSON decoding error: ", err, " :", string(*raw))
 		return nil
 	}
 	if len(recive) == 0 {
-		log.Println("API|", "empty JSON")
+		util.Log("API", "empty JSON")
 		return nil
 	}
 	APIKey, request := validateAPIJSON(&recive)
 	if request == "" {
-		log.Println("API|", "invalid JSON API request", recive)
+		util.Log("API", "invalid JSON API request", recive)
 		return nil
 	}
-	log.Println("API|", "recived:", recive)
+	util.Log("API", "recived:", recive)
 
 	ProgammID, err := getProgram_IDfromAPIKey(APIKey)
 	if err != nil {
-		log.Println("API|", "APIKeyerr:", err)
+		util.Log("API", "APIKeyerr:", err)
 		msg, _ := json.Marshal(map[string]interface{}{"type": request, "error": err.Error()})
 		return msg
 	}
@@ -116,13 +116,13 @@ func reciveAPI(raw *[]byte, addr string) []byte {
 	}
 
 	if err != nil {
-		log.Println("API|", "send err:", err)
+		util.Log("API", "send err:", err)
 		msg, _ := json.Marshal(map[string]interface{}{"type": request, "error": err.Error()})
 		return msg
 	} else {
 		msg, _ := json.Marshal(map[string]interface{}{"type": request, "success": true})
 		if err != nil {
-			log.Println("API|", "send err:", err)
+			util.Log("API", "send err:", err)
 			msg, _ := json.Marshal(map[string]interface{}{"type": request, "error": err.Error()})
 			return msg
 		}
@@ -147,9 +147,9 @@ func CreateAPI(rout *mux.Router) {
 
 		_, err := w.Write(msg)
 		if err != nil {
-			log.Println("API|", "err in sending:", err)
+			util.Log("API", "err in sending:", err)
 		} else {
-			log.Println("API|", "send:", string(msg))
+			util.Log("API", "send:", string(msg))
 		}
 	}).Methods("POST")
 }

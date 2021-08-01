@@ -1,16 +1,17 @@
 package main
 
 import (
-	api "Go_Websocket/API"
-	ws "Go_Websocket/Websocket"
 	"fmt"
-	"log"
 
 	"context"
 	"database/sql"
 
 	// used at sql.Open(->"mysql"<-, fmt.Sprintf
 	_ "github.com/go-sql-driver/mysql"
+
+	"Server/api"
+	"Server/util"
+	"Server/websocket"
 )
 
 var user = "Go"
@@ -23,16 +24,16 @@ Create and open SQL Connection
 func SQLInit() {
 	DB, err := sql.Open("mysql", fmt.Sprintf("%s:%s@/%s", user, password, database))
 	if err != nil {
-		log.Println("SQL|", "Error creating connection: ", err.Error())
+		util.Log("SQL", "Error creating connection: ", err.Error())
 		panic(err)
 	}
 	ctx := context.Background()
 	err = DB.PingContext(ctx)
 	if err != nil {
-		log.Println("SQL|", err.Error())
+		util.Log("SQL", err.Error())
 		panic(err)
 	}
-	log.Println("SQL|", "Connected!")
-	ws.SetDB(DB)
+	util.Log("SQL", "Connected!")
+	websocket.SetDB(DB)
 	api.SetDB(DB)
 }

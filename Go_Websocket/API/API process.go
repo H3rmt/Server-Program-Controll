@@ -2,7 +2,8 @@ package api
 
 import (
 	"database/sql"
-	"log"
+
+	"Server/util"
 )
 
 var Programconnections = make(map[string]string) // Program_ID = [IP]
@@ -18,9 +19,9 @@ Process request to add Program to list of connections
 */
 func ProcessRegisterRequest(Progamm_ID string, addr string) error {
 	if _, exist := Programconnections[Progamm_ID]; exist {
-		log.Println("PRGR API|", addr, " relinked with id:", Progamm_ID)
+		util.Log("PRGR API", addr, " relinked with id:", Progamm_ID)
 	} else {
-		log.Println("PRGR API|", addr, " linked with id:", Progamm_ID)
+		util.Log("PRGR API", addr, " linked with id:", Progamm_ID)
 	}
 	Programconnections[Progamm_ID] = addr
 	return nil
@@ -42,7 +43,7 @@ func getProgram_IDfromAPIKey(APIKey string) (string, error) {
 	sql := "SELECT ID from programs WHERE APIKey=?;"
 	stmt, err := DB.Prepare(sql)
 	if err != nil {
-		log.Println(err)
+		util.Log("PRGR API", err)
 		return "", &SQLerror{}
 	}
 	defer stmt.Close()
@@ -50,7 +51,7 @@ func getProgram_IDfromAPIKey(APIKey string) (string, error) {
 	// Execute query
 	res, err := stmt.Query(APIKey)
 	if err != nil {
-		log.Println(err)
+		util.Log("PRGR API", err)
 		return "", &SQLerror{}
 	}
 
@@ -79,7 +80,7 @@ func ProcessLogRequest(Program_ID string, logrequest *LogRequest) error {
 	sql := "INSERT INTO logs (program_ID,Date,Number,Message,Type) VALUES (?,?,?,?,?);"
 	stmt, err := DB.Prepare(sql)
 	if err != nil {
-		log.Println(err)
+		util.Log("PRGR API", err)
 		return &SQLerror{}
 	}
 	defer stmt.Close()
@@ -87,10 +88,10 @@ func ProcessLogRequest(Program_ID string, logrequest *LogRequest) error {
 	// Execute query
 	_, err = stmt.Query(Program_ID, logrequest.Date, logrequest.Number, logrequest.Message, logrequest.Type)
 	if err != nil {
-		log.Println(err)
+		util.Log("PRGR API", err)
 		return &SQLerror{}
 	} else {
-		log.Println("SQL API|", "Log added to database")
+		util.Log("SQL API", "Log added to database")
 	}
 
 	return nil
@@ -122,7 +123,7 @@ func ProcessActivityRequest(Program_ID string, activityrequest *ActivityRequest)
 	sql := "INSERT INTO activity (program_ID,Date,Type) VALUES (?,?,?);"
 	stmt, err := DB.Prepare(sql)
 	if err != nil {
-		log.Println(err)
+		util.Log("PRGR API", err)
 		return &SQLerror{}
 	}
 	defer stmt.Close()
@@ -130,10 +131,10 @@ func ProcessActivityRequest(Program_ID string, activityrequest *ActivityRequest)
 	// Execute query
 	_, err = stmt.Query(Program_ID, activityrequest.Date, activityrequest.Type)
 	if err != nil {
-		log.Println(err)
+		util.Log("PRGR API", err)
 		return &SQLerror{}
 	} else {
-		log.Println("SQL API|", "Activity added to database")
+		util.Log("SQL API", "Activity added to database")
 	}
 
 	return nil
@@ -164,14 +165,14 @@ func ProcessStateChangeRequest(Program_ID string, statechangerequest *StateChang
 
 	stmt, err := DB.Prepare(sql)
 	if err != nil {
-		log.Println(err)
+		util.Log("PRGR API", err)
 		return &SQLerror{}
 	}
 
 	// Execute query
 	_, err = stmt.Query(statechangerequest.Start, statechangerequest.Date, Program_ID)
 	if err != nil {
-		log.Println(err)
+		util.Log("PRGR API", err)
 		return &SQLerror{}
 	}
 
@@ -181,7 +182,7 @@ func ProcessStateChangeRequest(Program_ID string, statechangerequest *StateChang
 
 	stmt, err = DB.Prepare(sql)
 	if err != nil {
-		log.Println(err)
+		util.Log("PRGR API", err)
 		return &SQLerror{}
 	}
 
@@ -202,10 +203,10 @@ func ProcessStateChangeRequest(Program_ID string, statechangerequest *StateChang
 	// Execute query
 	_, err = stmt.Query(Program_ID, statechangerequest.Date, statechangerequest.Number, message, logtype)
 	if err != nil {
-		log.Println(err)
+		util.Log("PRGR API", err)
 		return &SQLerror{}
 	} else {
-		log.Println("SQL API|", "State Change added to database")
+		util.Log("SQL API", "State Change added to database")
 	}
 
 	stmt.Close()

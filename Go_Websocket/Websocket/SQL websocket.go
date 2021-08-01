@@ -1,9 +1,10 @@
-package ws
+package websocket
 
 import (
 	"database/sql"
 	"fmt"
-	"log"
+
+	"Server/util"
 )
 
 var DB *sql.DB
@@ -28,7 +29,7 @@ func getAPIKeyfromProgram_ID(Program_ID string) (string, error) {
 	sql := "SELECT APIKey from programs WHERE ID=?;"
 	stmt, err := DB.Prepare(sql)
 	if err != nil {
-		log.Println(err)
+		util.Log("SQL WS", err)
 		return "", &SQLerror{}
 	}
 	defer stmt.Close()
@@ -36,7 +37,7 @@ func getAPIKeyfromProgram_ID(Program_ID string) (string, error) {
 	// Execute query
 	res, err := stmt.Query(Program_ID)
 	if err != nil {
-		log.Println(err)
+		util.Log("SQL WS", err)
 		return "", &SQLerror{}
 	}
 
@@ -89,14 +90,14 @@ func Getlogs(Program_id string) ([]interface{}, error) {
 
 	stmt, err := DB.Prepare(sql)
 	if err != nil {
-		log.Println(err)
+		util.Log("SQL WS", err)
 		return nil, &SQLerror{}
 	}
 	defer stmt.Close()
 
 	rows, err := stmt.Query(Program_id)
 	if err != nil {
-		log.Println(err)
+		util.Log("SQL WS", err)
 		return nil, &SQLerror{}
 	}
 
@@ -109,7 +110,7 @@ func Getlogs(Program_id string) ([]interface{}, error) {
 		// Get values from row
 		err := rows.Scan(&Date, &Number, &Message, &Type)
 		if err != nil {
-			log.Println(err)
+			util.Log("SQL WS", err)
 			return nil, &SQLerror{}
 		}
 		entries = append(entries, Log{Date: Date, Number: Number, Message: Message, Type: Type})
@@ -147,14 +148,14 @@ func Getactivity(Program_id string) ([]interface{}, error) {
 	sql := "SELECT Date,Type FROM activity WHERE program_ID=?"
 	stmt, err := DB.Prepare(sql)
 	if err != nil {
-		log.Println(err)
+		util.Log("SQL WS", err)
 		return nil, &SQLerror{}
 	}
 	defer stmt.Close()
 
 	rows, err := stmt.Query(Program_id)
 	if err != nil {
-		log.Println(err)
+		util.Log("SQL WS", err)
 		return nil, &SQLerror{}
 	}
 
@@ -166,7 +167,7 @@ func Getactivity(Program_id string) ([]interface{}, error) {
 		// get values from row
 		err := rows.Scan(&Date, &Type)
 		if err != nil {
-			log.Println(err)
+			util.Log("SQL WS", err)
 			return nil, &SQLerror{}
 		}
 		entries = append(entries, Activity{Date: Date, Type: Type})

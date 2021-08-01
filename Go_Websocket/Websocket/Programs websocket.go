@@ -1,14 +1,14 @@
-package ws
+package websocket
 
 import (
 	"bytes"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
-	"log"
 	"net/http"
 
-	api "Go_Websocket/API"
+	"Server/api"
+	"Server/util"
 )
 
 var RemotePort = "18770"
@@ -45,13 +45,13 @@ throws Programerrors if error happen
 func ProcessCommand(Program_id string, command string) error {
 	IP, exists := api.Programconnections[Program_id]
 	if !exists {
-		log.Println("PRGR WS|", "IP not registered", Program_id)
+		util.Log("PRGR WS", "IP not registered", Program_id)
 		return &Programerror{"IP not registered"}
 	}
 
 	APIKey, err := getAPIKeyfromProgram_ID(Program_id)
 	if err != nil {
-		log.Println("PRGR WS|", "Program_ID err", err, Program_id)
+		util.Log("PRGR WS", "Program_ID err", err, Program_id)
 		return err
 	}
 
@@ -59,35 +59,35 @@ func ProcessCommand(Program_id string, command string) error {
 
 	byterequest, err := json.Marshal(request)
 	if err != nil {
-		log.Println("PRGR WS|", "Requestbuild invalied", err, request)
+		util.Log("PRGR WS", "Requestbuild invalied", err, request)
 		return err
 	}
 
 	resp, err := http.Post(fmt.Sprintf("http://%s:%s/api", IP, RemotePort), "application/json;", bytes.NewBuffer(byterequest))
 	if err != nil {
-		log.Println("PRGR WS|", "Program did not respond", err, IP+":"+RemotePort)
+		util.Log("PRGR WS", "Program did not respond", err, IP+":"+RemotePort)
 		return &Programerror{"Program did not respond"}
 	}
 
 	bodyBytes, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
-		log.Println("PRGR WS|", "Program response invalid", err, resp.Body)
+		util.Log("PRGR WS", "Program response invalid", err, resp.Body)
 		return &Programerror{"Program respond invalid"}
 	}
 
-	log.Println("PRGR WS|", "recived answer:", string(bodyBytes))
+	util.Log("PRGR WS", "recived answer:", string(bodyBytes))
 
 	var answer Answer
 	err = json.Unmarshal(bodyBytes, &answer)
 	if err != nil {
-		log.Println("PRGR WS|", "Program Json response invalid", err)
+		util.Log("PRGR WS", "Program Json response invalid", err)
 		return &Programerror{"Program Json response invalid"}
 	}
 
 	if answer.Success {
 		return nil
 	} else {
-		log.Println("PRGR WS|", "Command not successfully executed")
+		util.Log("PRGR WS", "Command not successfully executed")
 		return &Programerror{"Command not successfully executed"}
 	}
 }

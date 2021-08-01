@@ -1,14 +1,15 @@
-package ws
+package websocket
 
 import (
 	"encoding/json"
 	"fmt"
-	"log"
 
 	"net/http"
 
 	"github.com/gorilla/mux"
 	"github.com/gorilla/websocket"
+
+	"Server/util"
 )
 
 var up = websocket.Upgrader{
@@ -64,30 +65,30 @@ func reciveWS(c *websocket.Conn) {
 	for {
 		_, raw, err := c.ReadMessage()
 		if err != nil {
-			log.Println("WS|", "error in reciving: ", err)
+			util.Log("WS", "error in reciving: ", err)
 			fmt.Println()
 			return
 		}
 		fmt.Println()
-		log.Println("WS|", c.RemoteAddr().String()+" -> "+string(raw))
+		util.Log("WS", c.RemoteAddr().String()+" -> "+string(raw))
 
 		var recive map[string]interface{}
 		err = json.Unmarshal(raw, &recive)
 
 		if err != nil {
-			log.Println("WS|", "JSON decoding error:", err, " :", string(raw))
+			util.Log("WS", "JSON decoding error:", err, " :", string(raw))
 			continue
 		}
 		if len(recive) == 0 {
-			log.Println("WS|", "empty JSON")
+			util.Log("WS", "empty JSON")
 			continue
 		}
 		Program_id, action := validateWSJSON(&recive)
 		if action == "" {
-			log.Println("WS|", "invalid JSON WS request", recive)
+			util.Log("WS", "invalid JSON WS request", recive)
 			continue
 		}
-		log.Println("WS|", "recived:", recive)
+		util.Log("WS", "recived:", recive)
 
 		var data interface{}
 		var actionerr error
@@ -110,17 +111,17 @@ func reciveWS(c *websocket.Conn) {
 		}
 
 		if actionerr != nil {
-			log.Println("WS|", "send err:", actionerr)
+			util.Log("WS", "send err:", actionerr)
 			msg, _ := json.Marshal(map[string]interface{}{"action": action, "error": actionerr.Error()})
 			c.WriteMessage(1, msg)
 		} else {
 			msg, err := json.Marshal(map[string]interface{}{"action": action, "data": data})
 			if err != nil {
-				log.Println("WS|", "send err:", err)
+				util.Log("WS", "send err:", err)
 				msg, _ := json.Marshal(map[string]interface{}{"action": action, "error": err.Error()})
 				c.WriteMessage(1, msg)
 			}
-			log.Println("WS|", "send:", string(msg))
+			util.Log("WS", "send:", string(msg))
 			c.WriteMessage(1, msg)
 		}
 
@@ -134,11 +135,11 @@ func Createwebsocket(rout *mux.Router) {
 	rout.HandleFunc("/ws", func(w http.ResponseWriter, r *http.Request) {
 		conn, err := up.Upgrade(w, r, nil)
 		if err != nil {
-			log.Println("WS|", err)
-			log.Println("WS|", "error while upgrading conncetion to websocket: ", r.RemoteAddr)
+			util.Log("WS", err)
+			util.Log("WS", "error while upgrading conncetion to websocket: ", r.RemoteAddr)
 			return
 		}
-		log.Println("WS|", "upgraded conncetion to websocket: ", r.RemoteAddr)
+		util.Log("WS", "upgraded conncetion to websocket: ", r.RemoteAddr)
 		go reciveWS(conn)
 	})
 }
