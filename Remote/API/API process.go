@@ -1,11 +1,11 @@
 package api
 
 import (
+	"Remote/util"
 	"bytes"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
-	"log"
 	"net/http"
 	"time"
 )
@@ -54,7 +54,8 @@ func SendActivity(program *Program, activitytype Activitytype) error {
 		return err
 	}
 
-	log.Println("recived answer:", string(bodyBytes))
+	util.Log("PRGR API", "recived answer:", string(bodyBytes))
+	fmt.Println()
 
 	var answer Answer
 	err = json.Unmarshal(bodyBytes, &answer)
@@ -108,7 +109,8 @@ func SendLog(message string, program *Program, logtype Logtype) error {
 		return err
 	}
 
-	log.Println("recived answer:", string(bodyBytes))
+	util.Log("PRGR API", "recived answer:", string(bodyBytes))
+	fmt.Println()
 
 	var answer Answer
 	err = json.Unmarshal(bodyBytes, &answer)
@@ -163,7 +165,8 @@ func SendStateChange(program *Program, Start bool) error {
 		return err
 	}
 
-	log.Println("recived answer:", string(bodyBytes))
+	util.Log("PRGR API", "recived answer:", string(bodyBytes))
+	fmt.Println()
 
 	var answer Answer
 	err = json.Unmarshal(bodyBytes, &answer)

@@ -168,6 +168,7 @@ func ProcessStateChangeRequest(Program_ID string, statechangerequest *StateChang
 		util.Log("PRGR API", err)
 		return &SQLerror{}
 	}
+	defer stmt.Close()
 
 	// Execute query
 	_, err = stmt.Query(statechangerequest.Start, statechangerequest.Date, Program_ID)
@@ -185,6 +186,7 @@ func ProcessStateChangeRequest(Program_ID string, statechangerequest *StateChang
 		util.Log("PRGR API", err)
 		return &SQLerror{}
 	}
+	defer stmt.Close()
 
 	message := ""
 	if statechangerequest.Start {

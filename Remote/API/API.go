@@ -1,11 +1,11 @@
 package api
 
 import (
+	"Remote/util"
 	"bytes"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
-	"log"
 	"net/http"
 
 	"github.com/gorilla/mux"
@@ -38,9 +38,9 @@ func CreateAPI(rout *mux.Router) {
 
 		_, err := w.Write(msg)
 		if err != nil {
-			log.Println("err in sending:", err)
+			util.Log("API", "sending err:", err)
 		} else {
-			log.Println("send:", string(msg))
+			util.Log("API", "send:", string(msg))
 		}
 	}).Methods("POST")
 }
@@ -75,23 +75,23 @@ func reciveAPI(raw *[]byte) []byte {
 	err := json.Unmarshal(*raw, &recive)
 
 	if err != nil {
-		log.Println("API|", "JSON decoding error: ", err)
+		util.Log("API", "JSON decoding error: ", err)
 		return nil
 	}
 	if len(recive) == 0 {
-		log.Println("API|", "empty JSON")
+		util.Log("API", "empty JSON")
 		return nil
 	}
 	APIKey := validateAPIJSON(&recive)
 	if APIKey == "" {
-		log.Println("API|", "invalid JSON API request", recive)
+		util.Log("API", "invalid JSON API request", recive)
 		return nil
 	}
-	log.Println("API|", "recived: ", recive)
+	util.Log("API", "recived: ", recive)
 
 	Program, err := getProgramm_IDfromAPIKey(APIKey)
 	if err != nil {
-		log.Println("API|", "err:", err)
+		util.Log("API", "err:", err)
 		msg, _ := json.Marshal(map[string]interface{}{"error": err.Error()})
 		return msg
 	}
@@ -101,13 +101,13 @@ func reciveAPI(raw *[]byte) []byte {
 	err = ProcessCommandRequest(Program, &commandRequest)
 
 	if err != nil {
-		log.Println("API|", "err:", err)
+		util.Log("API", "err:", err)
 		msg, _ := json.Marshal(map[string]interface{}{"error": err.Error()})
 		return msg
 	} else {
 		msg, _ := json.Marshal(map[string]interface{}{"success": true})
 		if err != nil {
-			log.Println("API|", "err:", err)
+			util.Log("API", "err:", err)
 			msg, _ := json.Marshal(map[string]interface{}{"error": err.Error()})
 			return msg
 		}
@@ -119,7 +119,7 @@ func reciveAPI(raw *[]byte) []byte {
 called to register a program with an APIKey to remote server
 */
 func Register(remote string, APIKey string) error {
-	log.Println("Registering Program:", APIKey, " on", remote)
+	util.Log("API", "Registering Program:", APIKey, " on", remote)
 	req := map[string]interface{}{"APIKey": APIKey, "Register": true}
 	jsonReq, err := json.Marshal(req)
 	if err != nil {
@@ -135,7 +135,7 @@ func Register(remote string, APIKey string) error {
 	if err != nil {
 		return err
 	}
-	log.Println("recived:", string(bodyBytes))
+	util.Log("API", "recived:", string(bodyBytes))
 
 	answer := make(map[string]interface{})
 	err = json.Unmarshal(bodyBytes, &answer)

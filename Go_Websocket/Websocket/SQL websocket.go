@@ -27,6 +27,7 @@ finds the corresponding program with ID from the database
 */
 func getAPIKeyfromProgram_ID(Program_ID string) (string, error) {
 	sql := "SELECT APIKey from programs WHERE ID=?;"
+
 	stmt, err := DB.Prepare(sql)
 	if err != nil {
 		util.Log("SQL WS", err)
