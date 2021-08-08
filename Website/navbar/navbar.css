@@ -1,0 +1,49 @@
+
+#navbar {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	background: rgb(17, 17, 17);
+	
+	border-style: solid;
+	border-width: 2px;
+	border-color: rgb(29, 29, 29);
+	
+	position: fixed;
+	width: 240px;
+	height: calc(100% - 4px);
+	
+	overflow: auto;
+}
+
+#navbar a {
+	text-decoration: none;
+	color: inherit;
+	font-size: 150%;
+	display: block;
+	padding: 10px 10px 5px 10px;
+	
+	border-style: solid;
+	border-width: 2px;
+	border-color: transparent;
+	
+	overflow-x: hidden;
+}
+
+#navbar #Overview {
+	background-color: rgb(35, 67, 163);
+}
+
+#navbar #Overview:hover {
+	background-color: rgb(20, 50, 139);
+}
+
+#navbar a:hover:not(#Overview) {
+	background-color: rgb(32, 29, 29);
+}
+
+#navbar a:hover {
+	border-style: dashed;
+	border-width: 2px;
+	border-color: black;
+}

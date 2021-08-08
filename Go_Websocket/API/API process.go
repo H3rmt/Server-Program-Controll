@@ -161,7 +161,7 @@ const (
 Process request telling that the program stopped
 */
 func ProcessStateChangeRequest(Program_ID string, statechangerequest *StateChangeRequest) error {
-	sql := "UPDATE programs SET Active = ?, StartStoptime = ? WHERE ID = ?;"
+	sql := "UPDATE programs SET Active = ?, StatechangeTime = ? WHERE ID = ?;"
 
 	stmt, err := DB.Prepare(sql)
 	if err != nil {

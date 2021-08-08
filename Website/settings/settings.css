@@ -1,0 +1,50 @@
+#boxes {
+	grid-template-columns: 1fr 1fr;
+	
+	margin: 15px;
+	display: grid;
+	grid-gap: 20px;
+	height: 100%;
+}
+
+.settingsbox {
+	padding-left: 20px;
+	padding-bottom: 20px;
+	
+	border-style: solid;
+	border-radius: 25px;
+	border-width: 3px;
+	border-color: rgb(58, 58, 58);
+	
+	background: rgb(32, 29, 29);
+	background: linear-gradient(to bottom right, rgb(20, 21, 22), rgb(30, 30, 30));
+}
+
+.settings {
+	list-style: none;
+	margin-top: 0;
+	margin-bottom: 0;
+}
+
+.setting {
+	margin: 10px;
+}
+
+.topsetting {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	
+	overflow: hidden;
+}
+
+
+.reset {
+	height: 60px;
+	padding: 7px 12px;
+	font-size: 150%;
+	
+	align-self: right;
+	
+	border-width: 4px;
+}
