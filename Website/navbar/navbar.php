@@ -18,7 +18,7 @@ foreach(getprogramms() as $col) {
 
 ?>
 <li style="position: absolute; bottom: 0; right: 0;">
-	<a href="../settings/settings.php">
+	<a href="../settings/settings.php" style="align-self: end">
 		<img src="../Images/settings.png" alt="" onerror="this.onerror=null; this.src='../Images/settings.png'"
 		     style="width: 40px; height: 40px;"/>
 	</a>

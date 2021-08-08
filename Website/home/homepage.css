@@ -36,6 +36,7 @@
 }
 
 .front {
+	-webkit-backface-visibility: hidden;
 	backface-visibility: hidden;
 }
 

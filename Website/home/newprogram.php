@@ -27,7 +27,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST' && array_key_exists('name', $_POST) && !
 						<input id="name" type="text" name="name" value="" autocomplete="off">
 					</td>
 				</tr>
-				<tr style="height:150%">
+				<tr>
 					<td>
 						<label for="description">Program description:</label>
 					</td>

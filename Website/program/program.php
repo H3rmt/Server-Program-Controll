@@ -8,10 +8,8 @@ $info = getprogramm(htmlspecialchars(stripslashes(trim($_GET['id']))));
 
 <head>
 	<meta charset="utf-8"/>
-	<title>
-		<?= $info["Name"]; ?>
-	</title>
-	
+	<meta name="viewport" content="width=device-width">
+	<title><?= $info["Name"]; ?></title>
 	<link rel="stylesheet" href="../mainstyle.css"/>
 	<link rel="stylesheet" href="program.css"/>
 	<script src="../JS/sha256.js"></script>
@@ -92,46 +90,7 @@ $info = getprogramm(htmlspecialchars(stripslashes(trim($_GET['id']))));
 		
 		</div>
 		<div id="logs">
-			<canvas id="myChart" width="100" height="100"></canvas>
-			<script src="../../.idea/chart.js"></script>
-			<script>
-				const ctx = document.getElementById('myChart').getContext('2d');
-				
-				const DATA_COUNT = 7;
-				const NUMBER_CFG = {
-					count: DATA_COUNT,
-					min: -100,
-					max: 100
-				};
-				
-				const labels = ["friday", "friday2", "friday3", "friday4", "friday5", "friday6", "friday7"]
-				const data = {
-					labels: labels,
-					datasets: [{
-						label: 'Dataset 1',
-						data: [12, 13, 11, 12, 18, 17],
-						borderColor: 'rgb(255, 255, 132)',
-						backgroundColor: 'rgb(255, 99, 132)'
-					}]
-				};
-				
-				var myChart = new Chart(ctx, {
-					type: 'line',
-					data: data,
-					options: {
-						responsive: true,
-						plugins: {
-							legend: {
-								position: 'top',
-							},
-							title: {
-								display: true,
-								text: 'Line Chart'
-							}
-						}
-					},
-				});
-			</script>
+			
 		</div>
 	</div>
 </div>

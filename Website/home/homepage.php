@@ -3,6 +3,7 @@
 
 <head>
 	<meta charset="utf-8"/>
+	<meta name="viewport" content="width=device-width">
 	<title>Overview</title>
 	<link rel="stylesheet" href="homepage.css"/>
 	<link rel="stylesheet" href="../mainstyle.css"/>
@@ -33,7 +34,7 @@
 include "newprogram.php";
 ?>
 <script src="../JS/fade.js"></script>
-<script src="../JS/disable%20buttons.js"></script>
+<script src="../JS/disable buttons.js"></script>
 </body>
 
 </html>
