@@ -1,10 +1,9 @@
 #boxes {
-	grid-template-columns: 1fr 1fr;
-	
 	margin: 15px;
 	display: grid;
 	grid-gap: 20px;
-	height: 100%;
+	
+	grid-template-columns: repeat(auto-fit, minmax(600px, 1fr));
 }
 
 .settingsbox {
@@ -24,10 +23,12 @@
 	list-style: none;
 	margin-top: 0;
 	margin-bottom: 0;
+	
+	padding-inline-start: 20px;
 }
 
-.setting {
-	margin: 10px;
+.settings .setting {
+	margin: 1em;
 }
 
 .topsetting {
@@ -40,11 +41,8 @@
 
 
 .reset {
-	height: 60px;
-	padding: 7px 12px;
-	font-size: 150%;
-	
-	align-self: right;
-	
+	padding-top: 7px;
+	padding-bottom: 7px;
+	height: 2.2em;
 	border-width: 4px;
 }

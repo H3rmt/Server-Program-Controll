@@ -11,14 +11,10 @@
 </head>
 
 <body>
-<ul id="navbar">
-	<li>
-		<a id="Overview" href="../home/homepage.php">Overview</a>
-	</li>
-	<?php
-	include "../navbar/navbar.php";
-	?>
-</ul>
+
+<?php
+include "../navbar/navbar.php";
+?>
 
 <div id="main">
 	<div class="top">

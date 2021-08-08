@@ -48,7 +48,6 @@ body {
 	margin: 0;
 	background-color: black;
 	color: white;
-	
 	font-family: "Merriweather", monospace !important;
 }
 
@@ -57,18 +56,16 @@ body {
 	width: calc(100% - 244px);
 	
 	margin-left: 244px;
-	padding-bottom: 2px;
 }
 
 #main .top {
-	height: 85px;
+	height: 5em;
 	padding-right: 10px;
 	padding-left: 20px;
 	
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
-	font-size: 150%;
 	
 	overflow: hidden;
 	
@@ -79,6 +76,10 @@ body {
 	border-color: rgb(32, 29, 29);
 }
 
+#main .top .title {
+	font-size: 3em;
+}
+
 button {
 	border-style: solid;
 	border-radius: 25px;
@@ -86,18 +87,21 @@ button {
 	border-color: black;
 	
 	padding: 13px 25px;
-	height: 70px;
 	margin-left: 10px;
 	margin-right: 10px;
 	transition-duration: 0.15s;
 	
 	text-decoration: none;
-	font-size: inherit;
 	cursor: pointer;
 	outline: none;
 	overflow: hidden;
 	
 	background-color: rgb(58, 58, 58);
+	
+	font-family: inherit;
+	font-size: 1.5em;
+	
+	white-space: nowrap;
 }
 
 button:hover:not(.disabled) {

@@ -47,3 +47,5 @@ function getnewID(string $SQL): int {
 	}
 	return ++$id;
 }
+
+?>

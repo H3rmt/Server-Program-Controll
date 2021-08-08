@@ -2,7 +2,8 @@
 	margin: 15px;
 	display: grid;
 	grid-gap: 20px;
-	grid-template-columns: repeat(auto-fill, 380px);
+	
+	grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
 }
 
 @media only screen and (max-device-width: 480px) {
@@ -44,8 +45,7 @@
 	transform: rotateY(180deg);
 }
 
-.front,
-.back {
+:is(.front, .back) {
 	position: absolute;
 	background-color: black;
 	width: 100%;
@@ -65,28 +65,22 @@
 	background: linear-gradient(to bottom right, rgb(20, 21, 22), rgb(30, 30, 30));
 	
 	text-align: center;
-	font-size: 150%;
-}
-
-:is(.front, .back) .outerbox p {
-	margin-left: 30px;
-	margin-right: 30px;
-	overflow: hidden;
 }
 
 .front .outerbox .description {
-	min-height: 40px;
-	max-height: 80px;
+	font-size: 1.2em;
+	
+	min-height: 3.6em;
+	max-height: 3.6em;
+	
+	margin-top: 1.5em;
+	margin-bottom: 1.5em;
 }
 
-.back .outerbox :is(.startdate, .ontime) {
-	max-height: 60px;
-}
 
-:is(.front, .back) .outerbox h1 {
-	margin-left: 20px;
-	margin-right: 20px;
-	height: 50px;
+:is(.front, .back) .outerbox :is(h3, p) {
+	margin-left: 5px;
+	margin-right: 5px;
 	overflow: hidden;
 }
 
@@ -103,7 +97,7 @@
 }
 
 .front .outerbox .active {
-	height: 30px;
+	height: 1em;
 	display: flex;
 	align-items: center;
 	grid-gap: 5px;
@@ -111,8 +105,8 @@
 }
 
 .front .outerbox .active rect {
-	height: 20px;
-	width: 20px;
+	height: 1em;
+	width: 1em;
 	background: radial-gradient(rgb(99, 99, 99), rgb(20, 20, 20));
 	border-radius: 50%;
 }
@@ -125,100 +119,4 @@
 	
 	margin-top: 20px;
 	margin-bottom: 20px;
-}
-
-.modal {
-	position: fixed;
-	z-index: 1;
-	padding-top: 100px;
-	left: 0;
-	top: 0;
-	width: 100%;
-	height: 100%;
-	background-color: rgba(0, 0, 0, 0.8);
-}
-
-.modal .Popup {
-	border-style: solid;
-	border-radius: 25px;
-	border-width: 3px;
-	border-color: rgb(58, 58, 58);
-	
-	background: rgb(35, 38, 43);
-	background: linear-gradient(to bottom right, rgb(20, 21, 22), rgb(35, 38, 43));
-	
-	top: 50%;
-	left: 50%;
-	transform: translate(-50%, -50%);
-	overflow: hidden;
-	padding: 30px 30px 40px;
-	text-align: center;
-	font-size: 150%;
-	position: fixed;
-}
-
-.modal .Popup h2 {
-	margin-top: 0;
-}
-
-.modal .Popup .close {
-	color: #ffffff;
-	font-size: 50px;
-	font-weight: bold;
-	
-	position: absolute;
-	top: -5px;
-	right: 10px;
-}
-
-.modal .close:hover {
-	color: rgb(104, 104, 104);
-	cursor: pointer;
-	outline: none;
-}
-
-.modal .Popup .parallel {
-	display: flex;
-	align-items: center;
-	grid-gap: 5px;
-	justify-content: center;
-}
-
-.modal .Popup input {
-	border-style: solid;
-	border-radius: 25px;
-	border-width: 6px;
-	border-color: black;
-	
-	padding: 15px 10px;
-	text-align: center;
-	text-decoration: none;
-	color: white;
-	font-size: inherit;
-	background: rgb(55, 60, 69);
-	
-	margin: 10px;
-	width: auto;
-	
-	cursor: pointer;
-	outline: none;
-}
-
-.modal .Popup label {
-	font-size: 130%;
-	width: content-box;
-}
-
-.modal .Popup .error {
-	font-size: 130%;
-	color: red;
-}
-
-.modal .Popup .add {
-	margin-top: 20px;
-	background-color: green;
-}
-
-.modal .Popup .add:hover {
-	background-color: rgb(0, 82, 0)
 }

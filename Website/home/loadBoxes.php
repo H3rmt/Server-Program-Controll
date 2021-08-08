@@ -9,8 +9,8 @@ foreach(getprogramms() as $col) {
 			<div class="back">
 				<div class="outerbox">
 					<h1><?= $col["Name"] ?></h1>
-					<p class="ontime"><?= "ontime" ?></p>
-					<p class="startdate"><?= $col["StatechangeTime"] ?></p>
+					<h2 class="ontime"><?= "ontime" ?></h2>
+					<h2 class="startdate"><?= $col["StatechangeTime"] ?></h2>
 					<div>
 						<button class="start disabled"><b>Start</b></button>
 						<button class="stop disabled"><b>Stop</b></button>
@@ -27,7 +27,7 @@ foreach(getprogramms() as $col) {
 					<p class="description"><?= $col["Description"] ?></p>
 					<div class="active">
 						<rect></rect>
-						<p><?= "active" ?></p>
+						<h2><?= "active" ?></h2>
 					</div>
 				</div>
 			</div>
@@ -35,3 +35,4 @@ foreach(getprogramms() as $col) {
 	</div>
 	<?php
 }
+?>

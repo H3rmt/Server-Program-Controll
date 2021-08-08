@@ -7,21 +7,17 @@
 	<title>Overview</title>
 	<link rel="stylesheet" href="homepage.css"/>
 	<link rel="stylesheet" href="../mainstyle.css"/>
+	<link rel="stylesheet" href="../modal.css"/>
 </head>
 
 <body>
-<ul id="navbar">
-	<li>
-		<a id="Overview" href="homepage.php">Overview</a>
-	</li>
-	<?php
-	include "../navbar/navbar.php";
-	?>
-</ul>
+<?php
+include "../navbar/navbar.php";
+?>
 
 <div id="main">
 	<div class="top">
-		<h1>Overview</h1>
+		<h1 class="title">Overview</h1>
 		<button class="new disabled" onclick="opennewprogramm()"><b>New Program</b></button>
 	</div>
 	<div id="boxes">

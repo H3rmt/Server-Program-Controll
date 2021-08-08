@@ -1,7 +1,8 @@
-const modal = document.getElementById("closablemodal");
+let modal = null
 
 async function opennewprogramm() {
-	if (modal == null) return;
+	if (modal == null)
+		modal = document.getElementById("closablemodal");
 	if (modal.style.display === "block") {
 		modal.style.opacity = "1";
 		return;
@@ -16,7 +17,8 @@ async function opennewprogramm() {
 }
 
 async function closenewprogramm() {
-	if (modal == null) return;
+	if (modal == null)
+		modal = document.getElementById("closablemodal");
 	for (let i = 1; i > 0; i -= 0.05) {
 		modal.style.opacity = i.toString();
 		await sleep(12);
