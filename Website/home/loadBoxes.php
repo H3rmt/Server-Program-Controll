@@ -23,9 +23,7 @@ foreach(getprogramms() as $col) {
 			<div class="front">
 				<div class="outerbox">
 					<h1><?= $col["Name"] ?></h1>
-					<img src="<?= $col["Imagesource"] ?>" class="boticon"
-					     onerror="this.onerror=null; this.src='../Images/imgnotfound.png'"
-					     alt=""/>
+					<img src="<?= $col["Imagesource"] ?>" class="boticon" alt=""/>
 					<p class="description"><?= $col["Description"] ?></p>
 					<div class="active">
 						<rect></rect>

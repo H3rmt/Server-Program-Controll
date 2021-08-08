@@ -1,9 +1,17 @@
 function disable() {
-	let elements = document.body.getElementsByTagName("*");
-	console.log(elements)
-	for (let i = 0; i < elements.length; i++) {
-		elements[i].disabled = elements[i].classList.contains('disabled')
-	}
+	Array.from(document.body.getElementsByTagName('*')).forEach((element) => {
+		element.disabled = element.classList.contains('disabled')
+	})
 }
 
+function replaceImages() {
+	Array.from(document.body.getElementsByTagName('img')).forEach((img) => {
+		img.onerror = function () {
+			img.src = "../Images/imgnotfound.png";
+		}
+	})
+}
+
+
 disable();
+replaceImages();

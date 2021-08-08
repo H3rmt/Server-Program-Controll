@@ -82,15 +82,15 @@ $info = getprogramm(htmlspecialchars(stripslashes(trim($_GET['id']))));
 	</div>
 	<div id="boxes">
 		<div id="topbar">
-			<img src="<?= $info["Imagesource"]; ?>" class="boticon"
-			     onerror="this.onerror=null; this.src='../Images/imgnotfound.png'" alt=""/>
+			<img src="<?= file_exists($info["Imagesource"]) ? $info["Imagesource"] : '../Images/imgnotfound.png'; ?>" class="boticon"
+			     alt=""/>
 			<h2 class="description"><?= $info["Description"]; ?></h2>
 		</div>
 		<div id="activity">
 		
 		</div>
 		<div id="logs">
-			
+		
 		</div>
 	</div>
 </div>
