@@ -8,7 +8,7 @@ foreach(getprogramms() as $col) {
 		<div class="flipbox">
 			<div class="back">
 				<div class="outerbox">
-					<h1><?= $col["Name"] ?></h1>
+					<h1 class="title"><?= $col["Name"] ?></h1>
 					<h2 class="ontime"><?= "ontime" ?></h2>
 					<h2 class="startdate"><?= $col["StatechangeTime"] ?></h2>
 					<div>
@@ -22,7 +22,7 @@ foreach(getprogramms() as $col) {
 			</div>
 			<div class="front">
 				<div class="outerbox">
-					<h1><?= $col["Name"] ?></h1>
+					<h1 class="title"><?= $col["Name"] ?></h1>
 					<img src="<?= $col["Imagesource"] ?>" class="boticon" alt=""/>
 					<p class="description"><?= $col["Description"] ?></p>
 					<div class="active">

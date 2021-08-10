@@ -8,14 +8,12 @@
 
 @media only screen and (max-device-width: 480px) {
 	#boxes {
-		display: grid;
-		grid-gap: 20px;
 		grid-template-columns: 1fr 1fr;
 	}
 }
 
 .flipboxsensor {
-	height: 420px;
+	height: calc(17em + 150px);
 	margin-bottom: 5px;
 }
 
@@ -70,13 +68,23 @@
 .front .outerbox .description {
 	font-size: 1.2em;
 	
+	overflow: hidden;
+	
 	min-height: 3.6em;
-	max-height: 3.6em;
+	max-height: 4.8em;
 	
 	margin-top: 1.5em;
 	margin-bottom: 1.5em;
 }
 
+.front .outerbox .title {
+	max-height: 1.2em;
+	
+	overflow: hidden;
+	
+	margin-left: 10px;
+	margin-right: 10px;
+}
 
 :is(.front, .back) .outerbox :is(h3, p) {
 	margin-left: 5px;

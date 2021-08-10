@@ -53,9 +53,9 @@ body {
 
 #main {
 	height: 100%;
-	width: calc(100% - 244px);
+	width: calc(100% - 15em);
 	
-	margin-left: 244px;
+	margin-left: 15em;
 }
 
 #main .top {
@@ -120,7 +120,9 @@ button:hover:not(.disabled) {
 	top: 50%;
 	left: 50%;
 	transform: translate(110%, -50%) rotateZ(40deg);
+	
 	background: rgba(198, 0, 0, 0.4);
+	pointer-events: none;
 }
 
 .disabled:before {
@@ -131,9 +133,11 @@ button:hover:not(.disabled) {
 	top: 50%;
 	left: 50%;
 	transform: translate(-190%, -50%) rotateZ(40deg);
+	
 	background: rgba(198, 0, 0, 0.4);
+	pointer-events: none;
 }
 
-.disabled:hover {
+button.disabled:hover {
 	color: rgb(29, 29, 29);
 }

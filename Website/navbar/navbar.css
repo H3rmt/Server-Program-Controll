@@ -10,7 +10,7 @@
 	border-color: rgb(29, 29, 29);
 	
 	position: fixed;
-	width: 240px;
+	width: 15em;
 	height: calc(100% - 4px);
 	
 	overflow: auto;
@@ -18,7 +18,7 @@
 
 #navbar a {
 	display: block;
-	padding: 0.7em;
+	padding: 0.5em;
 	text-decoration: none;
 	color: inherit;
 	

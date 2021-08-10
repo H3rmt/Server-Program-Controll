@@ -24,7 +24,7 @@ include "../navbar/navbar.php";
 	<div id="boxes">
 		<div class="settingsbox">
 			<div class="topsetting">
-				<h1>Refresh settings</h1>
+				<h1>Local settings</h1>
 				<button class="reset" onclick="reset('Refresh settings')"><b>Reset to Default</b></button>
 			</div>
 			<ul class="settings">
@@ -39,9 +39,9 @@ include "../navbar/navbar.php";
 				</li>
 			</ul>
 		</div>
-		<div class="settingsbox">
+		<div class="settingsbox disabled">
 			<div class="topsetting">
-				<h1>Connection settings</h1>
+				<h1>Client settings</h1>
 				<button class="reset" onclick="reset('Connection settings')"><b>Reset to Default</b></button>
 			</div>
 			<ul class="settings">
@@ -53,9 +53,9 @@ include "../navbar/navbar.php";
 				</li>
 			</ul>
 		</div>
-		<div class="settingsbox">
+		<div class="settingsbox disabled">
 			<div class="topsetting">
-				<h1>Other settings</h1>
+				<h1>Server settings</h1>
 				<button class="reset" onclick="reset('Other settings')"><b>Reset to Default</b></button>
 			</div>
 			<ul class="settings">

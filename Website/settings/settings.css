@@ -17,6 +17,8 @@
 	
 	background: rgb(32, 29, 29);
 	background: linear-gradient(to bottom right, rgb(20, 21, 22), rgb(30, 30, 30));
+	
+	overflow: hidden;
 }
 
 .settings {
