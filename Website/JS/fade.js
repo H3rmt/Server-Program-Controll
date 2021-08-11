@@ -1,14 +1,7 @@
-let modal = null
+let modal = document.getElementById("closablemodal");
 
-async function opennewprogramm() {
-	if (modal == null)
-		modal = document.getElementById("closablemodal");
-	if (modal.style.display === "block") {
-		modal.style.opacity = "1";
-		return;
-	}
+async function openmodal() {
 	modal.style.display = "block";
-	modal.style.opacity = "0.15";
 	for (let i = 0; i < 1; i += 0.05) {
 		modal.style.opacity = i.toString();
 		await sleep(12);
@@ -16,9 +9,7 @@ async function opennewprogramm() {
 	modal.style.opacity = "1";
 }
 
-async function closenewprogramm() {
-	if (modal == null)
-		modal = document.getElementById("closablemodal");
+async function closemodal() {
 	for (let i = 1; i > 0; i -= 0.05) {
 		modal.style.opacity = i.toString();
 		await sleep(12);
@@ -29,8 +20,7 @@ async function closenewprogramm() {
 
 window.onclick = async function (event) {
 	if (event.target === modal) {
-		console.log("closing modal")
-		await closenewprogramm();
+		await closemodal();
 	}
 };
 

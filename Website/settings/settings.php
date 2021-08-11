@@ -7,19 +7,29 @@
 	<title>Settings</title>
 	<link rel="stylesheet" href="settings.css"/>
 	<link rel="stylesheet" href="../mainstyle.css"/>
-	<script src="../JS/fade.js"></script>
+	<link rel="stylesheet" href="../modal.css"/>
+	
+	<script src="../JS/sha256.js"></script>
 </head>
+
+<?php
+include "authorise.php";
+
+createcookies()
+?>
 
 <body>
 
 <?php
+
 include "../navbar/navbar.php";
+
 ?>
 
 <div id="main">
 	<div class="top">
 		<h1>Settings</h1>
-		<button class="authorise" onclick="authorise()"><b>Authorise</b></button>
+		<button class="authorise" onclick="openmodal()"><b>Authorise</b></button>
 	</div>
 	<div id="boxes">
 		<div class="settingsbox">
@@ -39,10 +49,10 @@ include "../navbar/navbar.php";
 				</li>
 			</ul>
 		</div>
-		<div class="settingsbox disabled">
+		<div class="settingsbox disabled protected">
 			<div class="topsetting">
 				<h1>Client settings</h1>
-				<button class="reset" onclick="reset('Connection settings')"><b>Reset to Default</b></button>
+				<button class="reset protected" onclick="reset('Connection settings')"><b>Reset to Default</b></button>
 			</div>
 			<ul class="settings">
 				<li class="setting">
@@ -53,10 +63,10 @@ include "../navbar/navbar.php";
 				</li>
 			</ul>
 		</div>
-		<div class="settingsbox disabled">
+		<div class="settingsbox disabled protected">
 			<div class="topsetting">
 				<h1>Server settings</h1>
-				<button class="reset" onclick="reset('Other settings')"><b>Reset to Default</b></button>
+				<button class="reset protected" onclick="reset('Other settings')"><b>Reset to Default</b></button>
 			</div>
 			<ul class="settings">
 				<li class="setting">
@@ -72,8 +82,11 @@ include "../navbar/navbar.php";
 		</div>
 	</div>
 </div>
+<?php
+createmodal()
+?>
 <script src="../JS/fade.js"></script>
-<script src="../JS/disable%20buttons.js"></script>
+<script src="../JS/disable buttons.js"></script>
 </body>
 
 </html>

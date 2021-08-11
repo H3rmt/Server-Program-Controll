@@ -3,13 +3,13 @@
 <?php
 include_once "../database.php";
 
-$info = getprogramm(htmlspecialchars(stripslashes(trim($_GET['id']))));
+$program = getprogramm(htmlspecialchars(stripslashes(trim($_GET['id']))));
 ?>
 
 <head>
 	<meta charset="utf-8"/>
 	<meta name="viewport" content="width=device-width">
-	<title><?= $info["Name"]; ?></title>
+	<title><?= $program["Name"]; ?></title>
 	<link rel="stylesheet" href="../mainstyle.css"/>
 	<link rel="stylesheet" href="program.css"/>
 	<script src="../JS/sha256.js"></script>
@@ -69,18 +69,18 @@ include "../navbar/navbar.php";
 
 <div id="main">
 	<div class="top">
-		<h1><?= $info["Name"]; ?></h1>
+		<h1><?= $program["Name"]; ?></h1>
 		<div>
-			<button class="start disabled"><b>Start</b></button>
-			<button class="stop disabled"><b>Stop</b></button>
-			<button class="delete disabled"><b>Delete</b></button>
+			<button class="start disabled protected"><b>Start</b></button>
+			<button class="stop disabled protected"><b>Stop</b></button>
+			<button class="delete disabled protected"><b>Delete</b></button>
 		</div>
 	</div>
 	<div id="boxes">
 		<div id="topbar">
-			<img src="<?= file_exists($info["Imagesource"]) ? $info["Imagesource"] : '../Images/imgnotfound.png'; ?>" class="boticon"
+			<img src="<?= file_exists($program["Imagesource"]) ? $program["Imagesource"] : '../Images/imgnotfound.png'; ?>" class="boticon"
 			     alt=""/>
-			<h2 class="description"><?= $info["Description"]; ?></h2>
+			<h2 class="description"><?= $program["Description"]; ?></h2>
 		</div>
 		<div id="activity">
 		
@@ -90,7 +90,7 @@ include "../navbar/navbar.php";
 		</div>
 	</div>
 </div>
-<script src="../JS/disable%20buttons.js"></script>
+<script src="../JS/disable buttons.js"></script>
 </body>
 
 </html>

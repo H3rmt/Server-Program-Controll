@@ -6,10 +6,10 @@ if($_SERVER['REQUEST_METHOD'] == 'POST' && array_key_exists('name', $_POST) && a
 		?>
 		<div class="modal" style="display: block">
 			<form class="Popup" action="homepage.php" method="POST" autocomplete="off">
-				<h2><?= htmlspecialchars(stripslashes(trim($_POST['name']))) ?> created</h2>
+				<h1><?= htmlspecialchars(stripslashes(trim($_POST['name']))) ?> created</h1>
 				<h2>ID: <?= $ret[0] ?></h2>
 				<h2>APIKey: <?= $ret[0] ?></h2>
-				<button class="Close"><b>Close</b></button>
+				<button class="Close" type="submit"><b>Close</b></button>
 			</form>
 		</div>
 		<?php
@@ -17,9 +17,10 @@ if($_SERVER['REQUEST_METHOD'] == 'POST' && array_key_exists('name', $_POST) && a
 		?>
 		<div class="modal" style="display: block">
 			<form class="Popup" action="homepage.php" method="POST" autocomplete="off">
-				<h2>Error creating Program</h2>
-				<h2><?php if(empty($_POST['name'])) echo "Name missing"; else if (empty($_POST['description'])) echo "Description missing";  ?></h2>
-				<button class="Close"><b>Close</b></button>
+				<h1>Error creating Program</h1>
+				<h2><?php
+					if(empty($_POST['name'])) echo "Name missing"; else if(empty($_POST['description'])) echo "Description missing"; ?></h2>
+				<button class="Close" type="submit"><b>Close</b></button>
 			</form>
 		</div>
 		<?php
@@ -29,7 +30,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST' && array_key_exists('name', $_POST) && a
 	<div class="modal" id="closablemodal" style="display: none">
 		<form class="Popup" action="homepage.php" method="POST" autocomplete="off">
 			<h1>Create a new Program</h1>
-			<p class="close" onclick="closenewprogramm()">&times;</p>
+			<p class="close" onclick="closemodal()">&times;</p>
 			<table>
 				<tr>
 					<td>
@@ -56,7 +57,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST' && array_key_exists('name', $_POST) && a
 					</td>
 				</tr>
 			</table>
-			<button class="add"><b>Add</b></button>
+			<button class="add" type="submit"><b>Add</b></button>
 		</form>
 	</div>
 	<?php

@@ -2,7 +2,7 @@
 
 $db = new PDO('mysql:host=localhost', 'Website', '/6uM8qlYUm*NFCef');
 
-function getprogramms() {
+function getprogramms(): array {
 	global $db;
 	$prep = $db->prepare("SELECT ID, Name, Description, Imagesource, StatechangeTime FROM programs.programs");
 	$prep->execute();
@@ -21,11 +21,10 @@ function getprogramm(int $id) {
 function addtoDatabase(string $Name, string $Description, string $imgsrc): array {
 	global $db;
 	$key = uniqid();
-	$ID = getnewID("SELECT ID FROM programs.programs ORDER BY ID ASC");
+	$ID = getnewID("SELECT ID FROM programs.programs ORDER BY ID");
 	$prep = $db->prepare("INSERT INTO programs.programs (ID,Name,Description,Imagesource,APIKey) VALUES (:ID,:Name,:Desc,:Imagesource,:APIKey)");
 	$prep->execute([
-		':ID' => $ID,
-		':Name' => $Name,
+		':ID' => $ID, ':Name' => $Name,
 		':Desc' => $Description,
 		':Imagesource' => $imgsrc,
 		':APIKey' => $key
@@ -48,4 +47,20 @@ function getnewID(string $SQL): int {
 	return ++$id;
 }
 
-?>
+function getSetting(string $name) {
+	global $db;
+	$prep = $db->prepare("SELECT * FROM programs.settings WHERE Name=:name");
+	$prep->execute([
+		':name' => $name
+	]);
+	return $prep->fetchAll(PDO::FETCH_ASSOC)[0]['Value'];
+}
+
+function updateSetting(string $name, $value) {
+	global $db;
+	$prep = $db->prepare("UPDATE programs.settings SET Value=:value WHERE Name=:name");
+	$prep->execute([
+		':value' => $value,
+		':name' => $name
+	]);
+}

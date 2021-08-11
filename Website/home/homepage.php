@@ -12,13 +12,14 @@
 
 <body>
 <?php
+
 include "../navbar/navbar.php";
 ?>
 
 <div id="main">
 	<div class="top">
 		<h1 class="title">Overview</h1>
-		<button class="disabled" onclick="opennewprogramm()"><b>New Program</b></button>
+		<button class="disabled protected" onclick="openmodal()"><b>New Program</b></button>
 	</div>
 	<div id="boxes">
 		<?php
