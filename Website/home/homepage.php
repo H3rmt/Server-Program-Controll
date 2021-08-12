@@ -8,6 +8,8 @@
 	<link rel="stylesheet" href="homepage.css"/>
 	<link rel="stylesheet" href="../mainstyle.css"/>
 	<link rel="stylesheet" href="../modal.css"/>
+	
+	<script src="../JS/utils.js"></script>
 </head>
 
 <body>
@@ -30,8 +32,17 @@ include "../navbar/navbar.php";
 <?php
 include "newprogram.php";
 ?>
-<script src="../JS/fade.js"></script>
-<script src="../JS/disable buttons.js"></script>
+
+<script>
+	searchmodal()
+	
+	if (getAuthorisationCookie() !== "") {
+		protect();
+	}
+	
+	disable();
+	replaceImages();
+</script>
 </body>
 
 </html>

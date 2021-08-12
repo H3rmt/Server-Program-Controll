@@ -9,6 +9,7 @@
 	<link rel="stylesheet" href="../mainstyle.css"/>
 	<link rel="stylesheet" href="../modal.css"/>
 	
+	<script src="../JS/utils.js"></script>
 	<script src="../JS/sha256.js"></script>
 </head>
 
@@ -28,7 +29,7 @@ include "../navbar/navbar.php";
 
 <div id="main">
 	<div class="top">
-		<h1>Settings</h1>
+		<h1 class="title">Settings</h1>
 		<button class="authorise" onclick="openmodal()"><b>Authorise</b></button>
 	</div>
 	<div id="boxes">
@@ -85,8 +86,16 @@ include "../navbar/navbar.php";
 <?php
 createmodal()
 ?>
-<script src="../JS/fade.js"></script>
-<script src="../JS/disable buttons.js"></script>
+<script>
+	searchmodal()
+	
+	if (getAuthorisationCookie() !== "") {
+		protect();
+	}
+	
+	disable();
+	replaceImages();
+</script>
 </body>
 
 </html>

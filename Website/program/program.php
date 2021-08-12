@@ -12,8 +12,11 @@ $program = getprogramm(htmlspecialchars(stripslashes(trim($_GET['id']))));
 	<title><?= $program["Name"]; ?></title>
 	<link rel="stylesheet" href="../mainstyle.css"/>
 	<link rel="stylesheet" href="program.css"/>
+	
 	<script src="../JS/sha256.js"></script>
 	<script src="../JS/Websocket.js"></script>
+	<script src="../JS/utils.js"></script>
+	
 	<script>
 		function recivelogs(data) {
 			data.forEach((log) => {
@@ -69,7 +72,7 @@ include "../navbar/navbar.php";
 
 <div id="main">
 	<div class="top">
-		<h1><?= $program["Name"]; ?></h1>
+		<h1 class="title"><?= $program["Name"]; ?></h1>
 		<div>
 			<button class="start disabled protected"><b>Start</b></button>
 			<button class="stop disabled protected"><b>Stop</b></button>
@@ -90,7 +93,16 @@ include "../navbar/navbar.php";
 		</div>
 	</div>
 </div>
-<script src="../JS/disable buttons.js"></script>
+<script>
+	searchmodal()
+	
+	if (getAuthorisationCookie() !== "") {
+		protect();
+	}
+	
+	disable();
+	replaceImages();
+</script>
 </body>
 
 </html>

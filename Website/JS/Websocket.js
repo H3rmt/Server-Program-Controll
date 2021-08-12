@@ -1,23 +1,13 @@
 let websocket;
 
 function send(_action, _id, extra = null) {
-	if (connection === true) {
-		websocket.send(JSON.stringify({...{action: _action, Program_id: _id, code: getcode()}, ...extra}));
-		console.log("Message send: " + JSON.stringify({...{action: _action, id: _id, code: getcode()}, ...extra}));
-	} else {
-		console.log("connection not ready")
-	}
-}
-
-let code = "test";
-
-function getcode() {
-	return SHA256(code);
+	websocket.send(JSON.stringify({...{action: _action, Program_id: _id, admin: getAuthorisationCookie()}, ...extra}));
+	console.log("Message send: " + JSON.stringify({...{action: _action, id: _id, code: getAuthorisationCookie()}, ...extra}));
 }
 
 const Action = {
-	getactivity: "Activity",
-	getlogs: "Logs",
+	getActivity: "Activity",
+	getLogs: "Logs",
 	start: "Start",
 	stop: "Stop"
 };
@@ -25,11 +15,15 @@ const Action = {
 function processreceived(evt) {
 	console.log("Message received: " + evt.data);
 	const data = JSON.parse(evt.data);
+	if (data["error"] !== undefined) {
+		console.log("error:" + data["error"]);
+		return
+	}
 	switch (data["action"]) {
-		case Action.getlogs:
+		case Action.getLogs:
 			recivelogs(data["data"]);
 			break;
-		case Action.getactivity:
+		case Action.getActivity:
 			reciveactivity(data["data"]);
 			break;
 		
@@ -41,10 +35,6 @@ function processreceived(evt) {
 			recivestop(data["data"], data["error"]);
 			break;
 		
-		case Action.customaction:
-			recivecustomaction(data["data"], data["error"]);
-			break;
-		
 		default:
 			console.log("invalid action: " + data["action"]);
 			break;
@@ -52,7 +42,6 @@ function processreceived(evt) {
 }
 
 let loading = false;
-let connection = false;
 
 function builtWebSocket() {
 	loading = true;
@@ -64,7 +53,6 @@ function builtWebSocket() {
 		loading = false;
 		return
 	}
-	connection = true;
 	loading = false;
 	
 	websocket.onopen = function () {

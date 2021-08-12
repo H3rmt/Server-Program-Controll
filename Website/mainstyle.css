@@ -115,8 +115,8 @@ button:hover:not(.disabled) {
 .disabled:after {
 	content: "";
 	position: absolute;
-	width: 13%;
-	height: 170%;
+	width: 10%;
+	height: 200%;
 	top: 50%;
 	left: 50%;
 	transform: translate(110%, -50%) rotateZ(40deg);
@@ -128,8 +128,8 @@ button:hover:not(.disabled) {
 .disabled:before {
 	content: "";
 	position: absolute;
-	width: 13%;
-	height: 170%;
+	width: 10%;
+	height: 200%;
 	top: 50%;
 	left: 50%;
 	transform: translate(-190%, -50%) rotateZ(40deg);

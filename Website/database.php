@@ -47,9 +47,9 @@ function getnewID(string $SQL): int {
 	return ++$id;
 }
 
-function getSetting(string $name) {
+function  getSetting(string $name) {
 	global $db;
-	$prep = $db->prepare("SELECT * FROM programs.settings WHERE Name=:name");
+	$prep = $db->prepare("SELECT Value FROM programs.settings WHERE Name=:name");
 	$prep->execute([
 		':name' => $name
 	]);

@@ -34,20 +34,6 @@ func validateWSJSON(js *map[string]interface{}) (string, string) {
 }
 
 /*
-check if send shacode exists or equals stored sha code
-*/
-func checkadmin(js *map[string]interface{}) error {
-	code, code_exists := (*js)["code"]
-	if code_exists {
-		valid := (code_exists && code == "9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08") //test
-		if valid {
-			return nil
-		}
-	}
-	return &Permissionerror{}
-}
-
-/*
 Error thrown/returned when no admin priv are present
 */
 type Permissionerror struct{}
@@ -95,16 +81,19 @@ func reciveWS(c *websocket.Conn) {
 
 		switch action {
 		case "Logs":
-			data, actionerr = Getlogs(Program_id)
+			actionerr = Checkadmin(&recive)
+			if actionerr == nil {
+				data, actionerr = Getlogs(Program_id)
+			}
 		case "Activity":
 			data, actionerr = Getactivity(Program_id)
 		case "Start":
-			actionerr = checkadmin(&recive)
+			actionerr = Checkadmin(&recive)
 			if actionerr == nil {
 				data, actionerr = Start(Program_id)
 			}
 		case "Stop":
-			actionerr = checkadmin(&recive)
+			actionerr = Checkadmin(&recive)
 			if actionerr == nil {
 				data, actionerr = Stop(Program_id)
 			}
@@ -124,7 +113,6 @@ func reciveWS(c *websocket.Conn) {
 			util.Log("WS", "send:", string(msg))
 			c.WriteMessage(1, msg)
 		}
-
 	}
 }
 

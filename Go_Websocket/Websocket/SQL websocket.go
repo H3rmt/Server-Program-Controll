@@ -23,10 +23,47 @@ func (m *SQLerror) Error() string {
 }
 
 /*
+check if send shacode exists or equals stored sha code
+*/
+func Checkadmin(js *map[string]interface{}) error {
+	code, code_exists := (*js)["admin"]
+	if code_exists {
+		sql := "SELECT Value FROM settings WHERE Name='admincookie'"
+
+		stmt, err := DB.Prepare(sql)
+		if err != nil {
+			util.Log("SQL WS", err)
+			return &SQLerror{}
+		}
+		defer stmt.Close()
+
+		// Execute query
+		res, err := stmt.Query()
+		if err != nil {
+			util.Log("SQL WS", err)
+			return &SQLerror{}
+		}
+
+		if res.Next() {
+			cookie := ""
+			res.Scan(&cookie)
+			if cookie == code {
+				return nil
+			}
+			return &Permissionerror{}
+		} else {
+			util.Log("SQL WS", "admincookie not found")
+			return &SQLerror{}
+		}
+	}
+	return &Permissionerror{}
+}
+
+/*
 finds the corresponding program with ID from the database
 */
 func getAPIKeyfromProgram_ID(Program_ID string) (string, error) {
-	sql := "SELECT APIKey from programs WHERE ID=?;"
+	sql := "SELECT APIKey from programs WHERE ID=?"
 
 	stmt, err := DB.Prepare(sql)
 	if err != nil {
@@ -64,7 +101,7 @@ func (m *InvalidAPIKeyerror) Error() string {
 returns how many rows will be returned from table
 */
 func getRowcount(table string) int {
-	sql := fmt.Sprintf("SELECT COUNT(*) FROM %s;", table)
+	sql := fmt.Sprintf("SELECT COUNT(*) FROM %s", table)
 
 	// Execute query
 	query, err := DB.Query(sql)
