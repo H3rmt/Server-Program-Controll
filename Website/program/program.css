@@ -12,7 +12,7 @@
 	
 	display: flex;
 	align-items: center;
-	grid-gap: 25px;
+	grid-gap: 2em;
 	justify-content: flex-start;
 	
 	border-style: solid;
@@ -31,16 +31,29 @@
 	border-color: transparent;
 }
 
-
 #topbar .description {
 	max-width: 30%;
 }
 
+
 #activity {
 	grid-area: activity;
+	
+	display: flex;
+	padding-top: 1em;
+	
+	border-style: solid;
+	border-radius: 40px;
+	border-width: 6px;
+	border-color: rgb(20, 21, 22);
 }
 
 #logs {
 	grid-area: logs;
+	
+	border-style: solid;
+	border-radius: 40px;
+	border-width: 6px;
+	border-color: rgb(20, 21, 22);
 }
 

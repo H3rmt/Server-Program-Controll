@@ -14,7 +14,6 @@
 
 <body>
 <?php
-
 include "../navbar/navbar.php";
 ?>
 
@@ -34,14 +33,14 @@ include "newprogram.php";
 ?>
 
 <script>
-	searchmodal()
+	searchmodal();
+	replaceImages();
 	
 	if (getAuthorisationCookie() !== "") {
 		protect();
 	}
 	
 	disable();
-	replaceImages();
 </script>
 </body>
 

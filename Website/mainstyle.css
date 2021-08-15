@@ -53,9 +53,9 @@ body {
 
 #main {
 	height: 100%;
-	width: calc(100% - 15em);
+	width: calc(100% - 15em - 4px);
 	
-	margin-left: 15em;
+	margin-left: calc(15em + 4px);
 }
 
 #main .top {

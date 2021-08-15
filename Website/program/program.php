@@ -14,8 +14,10 @@ $program = getprogramm(htmlspecialchars(stripslashes(trim($_GET['id']))));
 	<link rel="stylesheet" href="program.css"/>
 	
 	<script src="../JS/sha256.js"></script>
-	<script src="../JS/Websocket.js"></script>
+	<!-- <script src="../JS/Websocket.js"></script> -->
 	<script src="../JS/utils.js"></script>
+	
+	<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 	
 	<script>
 		function recivelogs(data) {
@@ -81,12 +83,87 @@ include "../navbar/navbar.php";
 	</div>
 	<div id="boxes">
 		<div id="topbar">
-			<img src="<?= file_exists($program["Imagesource"]) ? $program["Imagesource"] : '../Images/imgnotfound.png'; ?>" class="boticon"
+			<img src="<?= $program["Imagesource"] ?>" class="boticon"
 			     alt=""/>
 			<h2 class="description"><?= $program["Description"]; ?></h2>
 		</div>
 		<div id="activity">
-		
+			<div id="activity-chart"></div>
+			<script>
+				const color = '#2596e7'
+				
+				const options = {
+					chart: {
+						type: 'line',
+						width: '200%',
+						foreColor: color,
+						animations: {
+							enabled: true,
+							easing: 'linear',
+							speed: 500
+						},
+						toolbar: {
+							show: true,
+							offsetX: -15,
+							offsetY: 0,
+							tools: {
+								download: false,
+								selection: false,
+								pan: false,
+								
+								zoom: true,
+								zoomin: true,
+								zoomout: true,
+								reset: true
+							},
+							autoSelected: 'zoom'
+						}
+					},
+					tooltip: {
+						enabled: true,
+						followCursor: true,
+						intersect: false,
+						fillSeriesColor: false,
+						theme: "dark",
+						style: {
+							fontSize: '1.3em'
+						},
+						onDatasetHover: {
+							highlightDataSeries: false
+						}
+					},
+					
+					stroke: {
+						width: 3,
+						curve: 'smooth',
+						colors: color
+					},
+					series: [{
+						data: [{
+							x: new Date('2018-02-12').getTime(),
+							y: 76
+						}, {
+							x: new Date('2018-02-11').getTime(),
+							y: 90
+						}, {
+							x: new Date('2018-02-10').getTime(),
+							y: 40
+						}, {
+							x: new Date('2018-02-09').getTime(),
+							y: 20
+						}, {
+							x: new Date('2018-02-08').getTime(),
+							y: 60
+						}]
+					}],
+					xaxis: {
+						type: 'datetime'
+					}
+				};
+				
+				const chart = new ApexCharts(document.getElementById("activity-chart"), options);
+				chart.render();
+			</script>
 		</div>
 		<div id="logs">
 		

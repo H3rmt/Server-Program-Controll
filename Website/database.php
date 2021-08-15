@@ -11,7 +11,7 @@ function getprogramms(): array {
 
 function getprogramm(int $id) {
 	global $db;
-	$prep = $db->prepare("SELECT * FROM programs.programs WHERE ID=:id");
+	$prep = $db->prepare("SELECT ID, Name, Description, Imagesource, StatechangeTime FROM programs.programs WHERE ID=:id");
 	$prep->execute([
 		':id' => $id
 	]);
@@ -47,7 +47,7 @@ function getnewID(string $SQL): int {
 	return ++$id;
 }
 
-function  getSetting(string $name) {
+function getSetting(string $name) {
 	global $db;
 	$prep = $db->prepare("SELECT Value FROM programs.settings WHERE Name=:name");
 	$prep->execute([
