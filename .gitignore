@@ -1,8 +1,7 @@
 /.idea
 
-/Website/chart.js
-
 /Go_Websocket/Go_Websocket.exe
 /Remote/Remote.exe
-Remote/VoiceChannelBot^2_programm.py
-Remote/VoiceChannel^2-data.json
+
+/Remote/VoiceChannelBot^2_programm.py
+/Remote/VoiceChannel^2-data.json

@@ -25,13 +25,13 @@ $program = getprogramm(htmlspecialchars(stripslashes(trim($_GET['id']))));
 				console.log("log: ", log);
 			});
 		}
-		
+
 		function reciveactivity(data) {
 			data.forEach((activity) => {
 				console.log("activity: ", activity);
 			});
 		}
-		
+
 		function recivestart(data, error) {
 			if (error != null) {
 				if (error === "no admin permissions") {
@@ -47,7 +47,7 @@ $program = getprogramm(htmlspecialchars(stripslashes(trim($_GET['id']))));
 				console.log("not successfull", data);
 			}
 		}
-		
+
 		function recivestop(data, error) {
 			if (error != null) {
 				if (error === "no admin permissions") {
@@ -71,7 +71,6 @@ $program = getprogramm(htmlspecialchars(stripslashes(trim($_GET['id']))));
 include "../navbar/navbar.php";
 ?>
 
-
 <div id="main">
 	<div class="top">
 		<h1 class="title"><?= $program["Name"]; ?></h1>
@@ -88,14 +87,14 @@ include "../navbar/navbar.php";
 			<h2 class="description"><?= $program["Description"]; ?></h2>
 		</div>
 		<div id="activity">
-			<div id="activity-chart"></div>
+			<div id="activity-chart" style="padding-top: 0.7em;"></div>
 			<script>
 				const color = '#2596e7'
-				
+
 				const options = {
 					chart: {
 						type: 'line',
-						width: '200%',
+						width: '100%',
 						foreColor: color,
 						animations: {
 							enabled: true,
@@ -110,7 +109,7 @@ include "../navbar/navbar.php";
 								download: false,
 								selection: false,
 								pan: false,
-								
+
 								zoom: true,
 								zoomin: true,
 								zoomout: true,
@@ -132,9 +131,9 @@ include "../navbar/navbar.php";
 							highlightDataSeries: false
 						}
 					},
-					
+
 					stroke: {
-						width: 3,
+						width: 4,
 						curve: 'smooth',
 						colors: color
 					},
@@ -160,26 +159,31 @@ include "../navbar/navbar.php";
 						type: 'datetime'
 					}
 				};
-				
 				const chart = new ApexCharts(document.getElementById("activity-chart"), options);
-				chart.render();
 			</script>
 		</div>
 		<div id="logs">
-		
+			<div id="log-chart" style="padding-top: 0.7em;"></div>
+			<script>
+				const chart2 = new ApexCharts(document.getElementById("log-chart"), options);
+			</script>
 		</div>
 	</div>
 </div>
 <script>
 	searchmodal()
-	
+
 	if (getAuthorisationCookie() !== "") {
 		protect();
 	}
-	
+
 	disable();
 	replaceImages();
 </script>
 </body>
-
+<script>
+	chart.render();
+	chart2.render();
+</script>
+</script>
 </html>

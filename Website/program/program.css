@@ -38,10 +38,7 @@
 
 #activity {
 	grid-area: activity;
-	
-	display: flex;
-	padding-top: 1em;
-	
+
 	border-style: solid;
 	border-radius: 40px;
 	border-width: 6px;
