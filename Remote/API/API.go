@@ -12,14 +12,7 @@ import (
 	"github.com/mitchellh/mapstructure"
 )
 
-var remoteIP string
-
-var Port = "18770"
-var RemotePort = "18769"
-
-func SetRemoteIP(nremoteIP string) {
-	remoteIP = nremoteIP
-}
+var RemoteIP string
 
 /*
 start API to listen to CommandRequests
@@ -118,15 +111,15 @@ func reciveAPI(raw *[]byte) []byte {
 /*
 called to register a program with an APIKey to remote server
 */
-func Register(remote string, APIKey string) error {
-	util.Log("API", "Registering Program:", APIKey, " on", remote)
-	req := map[string]interface{}{"APIKey": APIKey, "Register": true}
+func Register(program *Program) error {
+	util.Log("API", "Registering Program:", program.Name, " on", util.GetConfig().RemoteIP)
+	req := map[string]interface{}{"APIKey": program.APIKey, "Register": true, "Port": util.GetConfig().Port}
 	jsonReq, err := json.Marshal(req)
 	if err != nil {
 		return err
 	}
 
-	resp, err := http.Post(fmt.Sprintf("http://%s:%s/api", remote, RemotePort), "application/json;", bytes.NewBuffer(jsonReq))
+	resp, err := http.Post(fmt.Sprintf("http://%s:%d/api", util.GetConfig().RemoteIP, util.GetConfig().RemotePort), "application/json;", bytes.NewBuffer(jsonReq))
 	if err != nil {
 		return err
 	}

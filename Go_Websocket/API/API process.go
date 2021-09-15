@@ -2,11 +2,12 @@ package api
 
 import (
 	"database/sql"
+	"fmt"
 
 	"Server/util"
 )
 
-var Programconnections = make(map[string]string) // Program_ID = [IP]
+var Programconnections = make(map[string]string) // Program_ID = [IP:port]
 
 var DB *sql.DB
 
@@ -17,13 +18,13 @@ func SetDB(db *sql.DB) {
 /*
 Process request to add Program to list of connections
 */
-func ProcessRegisterRequest(Progamm_ID string, addr string) error {
+func ProcessRegisterRequest(Progamm_ID string, addr string, port string) error {
 	if _, exist := Programconnections[Progamm_ID]; exist {
-		util.Log("PRGR API", addr, " relinked with id:", Progamm_ID)
+		util.Log("PRGR API", addr, ":", port, " relinked with id:", Progamm_ID)
 	} else {
-		util.Log("PRGR API", addr, " linked with id:", Progamm_ID)
+		util.Log("PRGR API", addr, ":", port, " linked with id:", Progamm_ID)
 	}
-	Programconnections[Progamm_ID] = addr
+	Programconnections[Progamm_ID] = fmt.Sprintf("%s:%s", addr, port)
 	return nil
 }
 

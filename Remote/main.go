@@ -12,16 +12,20 @@ import (
 	"Remote/util"
 )
 
-var remoteIP string
-
 /*
 main method with arguments = programfile APIKey programfile APIKey ...
 */
 func main() {
+	err := util.LoadConfig()
+	if err != nil {
+		util.Err(util.MAIN, err, true, "Error reading Configs")
+		return
+	}
+
 	data, err := ioutil.ReadFile("programs.json")
 	if err != nil {
-		util.Log("MAIN", "programs.json read error: ", err)
-		panic(err)
+		util.Err(util.MAIN, err, true, "programs.json read error")
+		return
 	}
 
 	var fileload map[string]interface{}
@@ -39,29 +43,28 @@ func main() {
 		if program != "" && key != "" {
 			api.Programs = append(api.Programs, api.Program{Name: name, Program: program, APIKey: key, Arguments: args})
 		} else {
-			util.Log("MAIN", "Invalid Program:", program, key, args)
+			util.Log(util.MAIN, "Invalid Program:", program, key, args)
 		}
 	}
-	util.Log("MAIN", "loaded Programs:")
+
+	util.Log(util.MAIN, "loaded Programs:")
 	for _, v := range api.Programs {
-		fmt.Printf("%s %s Key:%s \n", v.Program, v.Arguments, v.APIKey)
+		fmt.Printf("%s -> %s %s Key:%s \n", v.Name, v.Program, v.Arguments, v.APIKey)
 	}
 	fmt.Println()
 
 	router := mux.NewRouter().StrictSlash(true)
 	api.CreateAPI(router)
-	util.Log("MAIN", "Started API")
+	util.Log(util.MAIN, "Started API")
 
-	remoteIP = fileload["Remote IP"].(string)
-	api.SetRemoteIP(remoteIP)
 	for _, v := range api.Programs {
-		err = api.Register(remoteIP, v.APIKey)
+		err = api.Register(&v)
 		if err != nil {
-			panic(err)
+			util.Err(util.MAIN, err, true, "Registering Error")
 		}
 	}
 
 	// Blocking
-	err = http.ListenAndServe(":"+api.Port, router)
-	util.Log("MAIN", "Listening Error", err)
+	err = http.ListenAndServe(":"+fmt.Sprintf("%d", util.GetConfig().Port), router)
+	util.Err(util.MAIN, err, true, "Listening Error")
 }

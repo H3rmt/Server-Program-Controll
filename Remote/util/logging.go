@@ -2,16 +2,71 @@ package util
 
 import (
 	"fmt"
-	lg "log"
+	"os"
+	"runtime"
+	"runtime/debug"
+	"strconv"
+	"strings"
+	"time"
 )
 
-var stretch = "9"
+type Type string
 
-func Log(pefx string, message ...interface{}) {
-	prn := fmt.Sprintf("%-"+stretch+"s|", pefx)
+const (
+	API    Type = "API"
+	MAIN   Type = "MAIN"
+	SERVE  Type = "SERVE"
+	CONFIG Type = "CONFIG"
+)
 
-	for _, mess := range message {
-		prn += fmt.Sprintf("%v", mess)
+func Err(prefx Type, err error, printtrace bool, message ...interface{}) {
+	log(prefx, "!", message...)
+	if err != nil {
+		log(prefx, "!", err.Error())
 	}
-	lg.Println(prn)
+	if printtrace {
+		debug.PrintStack()
+	}
+}
+
+func Debug(message ...interface{}) {
+	log("DEBUG", "*", message...)
+}
+
+func Log(prefx Type, message ...interface{}) {
+	log(prefx, ">", message...)
+}
+
+func log(prefx Type, suffix string, message ...interface{}) {
+	now := time.Now() // get this early.
+
+	_, file, line, ok := runtime.Caller(2)
+	if !ok {
+		file = "???"
+		line = 0
+	}
+
+	var location string
+	{
+		file = file[strings.LastIndexByte(file, '/')+1:]
+		var locationstretch = strconv.Itoa(int(GetConfig().Locationstretch))
+		location = fmt.Sprintf("%-"+locationstretch+"s", fmt.Sprintf("%s:%d", file, line))
+	}
+
+	var prefix string
+	if GetConfig().LogPrefix {
+		var prefixstretch = strconv.Itoa(int(GetConfig().Prefixstretch))
+		prefix = fmt.Sprintf("%-"+prefixstretch+"s", prefx)
+	}
+
+	var printstr string
+	for _, mess := range message {
+		printstr += fmt.Sprintf("%v", mess) + " "
+	}
+	
+	os.Stdout.Write([]byte(fmt.Sprintf(
+		"%s %s |%s %s %s \n",
+		now.Format("2006.01.02 15:04:05.0000"),
+		location, prefix, suffix, printstr,
+	)))
 }

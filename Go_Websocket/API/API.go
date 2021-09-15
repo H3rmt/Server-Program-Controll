@@ -86,8 +86,8 @@ func reciveAPI(raw *[]byte, addr string) []byte {
 
 	switch request {
 	case "Register":
-		addr := strings.TrimRight(addr, "0123456789:")
-		err = ProcessRegisterRequest(ProgammID, addr)
+		addr := strings.TrimRight(addr, "0123456789:") // remove client port
+		err = ProcessRegisterRequest(ProgammID, addr, recive["Port"].(string))
 	case "Activity":
 		activityrequest := ActivityRequest{Date: "-1", Type: "-1"}
 		mapstructure.Decode(recive["Activity"], &activityrequest)

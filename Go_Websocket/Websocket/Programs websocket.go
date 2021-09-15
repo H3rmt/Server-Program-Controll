@@ -11,8 +11,6 @@ import (
 	"Server/util"
 )
 
-var RemotePort = "18770"
-
 /*
 returns true if program was successfully started
 */
@@ -43,7 +41,7 @@ Sends a command to the program using the registered IP address
 throws Programerrors if error happen
 */
 func ProcessCommand(Program_id string, command string) error {
-	IP, exists := api.Programconnections[Program_id]
+	IPPort, exists := api.Programconnections[Program_id]
 	if !exists {
 		util.Log("PRGR WS", "IP not registered", Program_id)
 		return &Programerror{"IP not registered"}
@@ -63,9 +61,9 @@ func ProcessCommand(Program_id string, command string) error {
 		return err
 	}
 
-	resp, err := http.Post(fmt.Sprintf("http://%s:%s/api", IP, RemotePort), "application/json;", bytes.NewBuffer(byterequest))
+	resp, err := http.Post(fmt.Sprintf("http://%s/api", IPPort), "application/json;", bytes.NewBuffer(byterequest))
 	if err != nil {
-		util.Log("PRGR WS", "Program did not respond", err, IP+":"+RemotePort)
+		util.Log("PRGR WS", "Program did not respond", err, IPPort)
 		return &Programerror{"Program did not respond"}
 	}
 

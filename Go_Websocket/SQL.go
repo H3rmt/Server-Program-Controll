@@ -14,26 +14,21 @@ import (
 	"Server/websocket"
 )
 
-var user = "Go"
-var password = "e73EG6dP2f8F2dAx"
-var database = "programs"
-
 /*
 Create and open SQL Connection
 */
 func SQLInit() {
-	DB, err := sql.Open("mysql", fmt.Sprintf("%s:%s@/%s", user, password, database))
+	DB, err := sql.Open("mysql", fmt.Sprintf("%s:%s@/%s", util.GetConfig().User, util.GetConfig().Password, util.GetConfig().Database))
 	if err != nil {
-		util.Log("SQL", "Error creating connection: ", err.Error())
-		panic(err)
+		util.Err("SQL", err, true, "Error creating connection")
 	}
 	ctx := context.Background()
 	err = DB.PingContext(ctx)
 	if err != nil {
-		util.Log("SQL", err.Error())
-		panic(err)
+		util.Err("SQL", err, true, "Error creating connection")
 	}
 	util.Log("SQL", "Connected!")
+
 	websocket.SetDB(DB)
 	api.SetDB(DB)
 }

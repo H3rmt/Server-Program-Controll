@@ -23,14 +23,14 @@ cmd  reference to Command
 logcounter  counts logs for out and err reader
 */
 type Program struct {
-	Name          string
-	Program       string
-	Arguments     []string
-	APIKey        string
-	reader        Reader
-	cmd           *exec.Cmd
-	logcounter    int
-	LogasActivity bool
+	Name       string
+	Program    string
+	Arguments  []string
+	APIKey     string
+	reader     Reader
+	cmd        *exec.Cmd
+	logcounter int
+	// LogasActivity bool
 }
 
 /*

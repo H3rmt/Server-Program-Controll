@@ -44,7 +44,7 @@ func SendActivity(program *Program, activitytype Activitytype) error {
 		return err
 	}
 
-	resp, err := http.Post(fmt.Sprintf("http://%s:%s/api", remoteIP, RemotePort), "application/json;", bytes.NewBuffer(jsonReq))
+	resp, err := http.Post(fmt.Sprintf("http://%s:%d/api", util.GetConfig().RemoteIP, util.GetConfig().RemotePort), "application/json;", bytes.NewBuffer(jsonReq))
 	if err != nil {
 		return err
 	}
@@ -99,7 +99,7 @@ func SendLog(message string, program *Program, logtype Logtype) error {
 		return err
 	}
 
-	resp, err := http.Post(fmt.Sprintf("http://%s:%s/api", remoteIP, RemotePort), "application/json;", bytes.NewBuffer(jsonReq))
+	resp, err := http.Post(fmt.Sprintf("http://%s:%d/api", util.GetConfig().RemoteIP, util.GetConfig().RemotePort), "application/json;", bytes.NewBuffer(jsonReq))
 	if err != nil {
 		return err
 	}
@@ -155,7 +155,7 @@ func SendStateChange(program *Program, Start bool) error {
 		return err
 	}
 
-	resp, err := http.Post(fmt.Sprintf("http://%s:%s/api", remoteIP, RemotePort), "application/json;", bytes.NewBuffer(jsonReq))
+	resp, err := http.Post(fmt.Sprintf("http://%s:%d/api", util.GetConfig().RemoteIP, util.GetConfig().RemotePort), "application/json;", bytes.NewBuffer(jsonReq))
 	if err != nil {
 		return err
 	}
