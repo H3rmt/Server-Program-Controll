@@ -2,7 +2,7 @@
     "Port": 18769,
     "LogPrefix": true,
     "prefixstretch": 9,
-    "locationstretch": 16,
+    "locationstretch": 20,
     "user":"Go",
     "password":"e73EG6dP2f8F2dAx",
     "database":"programs"

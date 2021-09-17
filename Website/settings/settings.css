@@ -22,16 +22,20 @@
 }
 
 .settings {
-	list-style: none;
 	margin-top: 0;
 	margin-bottom: 0;
 	
-	padding-inline-start: 20px;
+	/*padding-inline-start: 20px;*/
+	width: 100%;
 }
 
 .settings .setting {
-	margin: 1em;
+	display: flex;
+    align-items: center;
+    justify-content: space-between;
+
 }
+
 
 .topsetting {
 	display: flex;
@@ -41,10 +45,30 @@
 	overflow: hidden;
 }
 
-
 .reset {
 	padding-top: 7px;
 	padding-bottom: 7px;
 	height: 2.2em;
 	border-width: 4px;
+}
+
+input {
+	border-style: solid;
+	border-radius: 25px;
+	border-width: 6px;
+	border-color: black;
+
+	padding: 0.6em 1em;
+
+	text-decoration: none;
+	color: white;
+	background: rgb(58, 58, 58);
+
+	margin: 10px;
+	width: auto;
+
+	cursor: pointer;
+	outline: none;
+
+	font-size: 1.5em;
 }

@@ -18,13 +18,13 @@ func SetDB(db *sql.DB) {
 /*
 Process request to add Program to list of connections
 */
-func ProcessRegisterRequest(Progamm_ID string, addr string, port string) error {
+func ProcessRegisterRequest(Progamm_ID string, addr string, port uint16) error {
 	if _, exist := Programconnections[Progamm_ID]; exist {
 		util.Log("PRGR API", addr, ":", port, " relinked with id:", Progamm_ID)
 	} else {
 		util.Log("PRGR API", addr, ":", port, " linked with id:", Progamm_ID)
 	}
-	Programconnections[Progamm_ID] = fmt.Sprintf("%s:%s", addr, port)
+	Programconnections[Progamm_ID] = fmt.Sprintf("%s:%d", addr, port)
 	return nil
 }
 

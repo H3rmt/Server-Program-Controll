@@ -69,17 +69,20 @@ include "../navbar/navbar.php";
 				<h1>Server settings</h1>
 				<button class="reset protected" onclick="reset('Other settings')"><b>Reset to Default</b></button>
 			</div>
-			<ul class="settings">
-				<li class="setting">
-					<b>Other 1</b>
-				</li>
-				<li class="setting">
-					<b>Other 2</b>
-				</li>
-				<li class="setting">
-					<b>Other 3</b>
-				</li>
-			</ul>
+			<table class="settings">
+				<td class="setting">
+					<h2>
+						<label for="new password">Password</label>
+					</h2>
+					<input id="new password" type="password" name="password">
+				</td>
+				<td class="setting">
+					<h2>
+						<label for="new salt">Salt</label>
+					</h2>
+					<input id="new salt" type="password" name="salt">
+				</td>
+			</table>
 		</div>
 	</div>
 </div>
@@ -88,11 +91,11 @@ createmodal()
 ?>
 <script>
 	searchmodal()
-	
+
 	if (getAuthorisationCookie() !== "") {
 		protect();
 	}
-	
+
 	disable();
 	replaceImages();
 </script>

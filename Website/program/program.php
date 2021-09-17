@@ -82,8 +82,7 @@ include "../navbar/navbar.php";
 	</div>
 	<div id="boxes">
 		<div id="topbar">
-			<img src="<?= $program["Imagesource"] ?>" class="boticon"
-			     alt=""/>
+			<img src="<?= $program["Imagesource"] ?>" class="boticon" alt=""/>
 			<h2 class="description"><?= $program["Description"]; ?></h2>
 		</div>
 		<div id="activity">
@@ -98,8 +97,16 @@ include "../navbar/navbar.php";
 						foreColor: color,
 						animations: {
 							enabled: true,
-							easing: 'linear',
-							speed: 500
+							easing: 'easeinout',
+							speed: 800,
+							animateGradually: {
+								enabled: true,
+								delay: 150
+							},
+							dynamicAnimation: {
+								enabled: true,
+								speed: 350
+							}
 						},
 						toolbar: {
 							show: true,
@@ -185,5 +192,5 @@ include "../navbar/navbar.php";
 	chart.render();
 	chart2.render();
 </script>
-</script>
+
 </html>
