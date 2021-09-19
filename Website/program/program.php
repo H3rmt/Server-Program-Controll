@@ -87,93 +87,9 @@ include "../navbar/navbar.php";
 		</div>
 		<div id="activity">
 			<div id="activity-chart" style="padding-top: 0.7em;"></div>
-			<script>
-				const color = '#2596e7'
-
-				const options = {
-					chart: {
-						type: 'line',
-						width: '100%',
-						foreColor: color,
-						animations: {
-							enabled: true,
-							easing: 'easeinout',
-							speed: 800,
-							animateGradually: {
-								enabled: true,
-								delay: 150
-							},
-							dynamicAnimation: {
-								enabled: true,
-								speed: 350
-							}
-						},
-						toolbar: {
-							show: true,
-							offsetX: -15,
-							offsetY: 0,
-							tools: {
-								download: false,
-								selection: false,
-								pan: false,
-
-								zoom: true,
-								zoomin: true,
-								zoomout: true,
-								reset: true
-							},
-							autoSelected: 'zoom'
-						}
-					},
-					tooltip: {
-						enabled: true,
-						followCursor: true,
-						intersect: false,
-						fillSeriesColor: false,
-						theme: "dark",
-						style: {
-							fontSize: '1.3em'
-						},
-						onDatasetHover: {
-							highlightDataSeries: false
-						}
-					},
-
-					stroke: {
-						width: 4,
-						curve: 'smooth',
-						colors: color
-					},
-					series: [{
-						data: [{
-							x: new Date('2018-02-12').getTime(),
-							y: 76
-						}, {
-							x: new Date('2018-02-11').getTime(),
-							y: 90
-						}, {
-							x: new Date('2018-02-10').getTime(),
-							y: 40
-						}, {
-							x: new Date('2018-02-09').getTime(),
-							y: 20
-						}, {
-							x: new Date('2018-02-08').getTime(),
-							y: 60
-						}]
-					}],
-					xaxis: {
-						type: 'datetime'
-					}
-				};
-				const chart = new ApexCharts(document.getElementById("activity-chart"), options);
-			</script>
 		</div>
 		<div id="logs">
-			<div id="log-chart" style="padding-top: 0.7em;"></div>
-			<script>
-				const chart2 = new ApexCharts(document.getElementById("log-chart"), options);
-			</script>
+			
 		</div>
 	</div>
 </div>
@@ -188,9 +104,7 @@ include "../navbar/navbar.php";
 	replaceImages();
 </script>
 </body>
-<script>
-	chart.render();
-	chart2.render();
-</script>
+
+<script src="../JS/diagramm.js"></script>
 
 </html>

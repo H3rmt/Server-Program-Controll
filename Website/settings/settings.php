@@ -34,54 +34,61 @@ include "../navbar/navbar.php";
 	</div>
 	<div id="boxes">
 		<div class="settingsbox">
-			<div class="topsetting">
+		<div class="topsetting">
 				<h1>Local settings</h1>
-				<button class="reset" onclick="reset('Refresh settings')"><b>Reset to Default</b></button>
+				<div>
+					<button class="save protected" onclick="save('Local settings')"><b>Save</b></button>
+					<button class="reset protected" onclick="reset('Local settings')"><b>Reset to Default</b></button>
+				</div>	
 			</div>
-			<ul class="settings">
-				<li class="setting">
-					<b>Refresh Delay</b>
-				</li>
-				<li class="setting">
-					<b>Autosave</b>
-				</li>
-				<li class="setting">
-					<b>Autosave</b>
-				</li>
-			</ul>
+			<table class="settings">
+				
+			</table>
 		</div>
 		<div class="settingsbox disabled protected">
-			<div class="topsetting">
+		<div class="topsetting">
 				<h1>Client settings</h1>
-				<button class="reset protected" onclick="reset('Connection settings')"><b>Reset to Default</b></button>
+				<div>
+					<button class="save protected" onclick="save('Client settings')"><b>Save</b></button>
+					<button class="reset protected" onclick="reset('Client settings')"><b>Reset to Default</b></button>
+				</div>	
 			</div>
-			<ul class="settings">
-				<li class="setting">
-					<b>Connection</b>
-				</li>
-				<li class="setting">
-					<b>Connection</b>
-				</li>
-			</ul>
+			<table class="settings">
+				
+			</table>
 		</div>
 		<div class="settingsbox disabled protected">
 			<div class="topsetting">
 				<h1>Server settings</h1>
-				<button class="reset protected" onclick="reset('Other settings')"><b>Reset to Default</b></button>
+				<div>
+					<button class="save protected" onclick="save('Server settings')"><b>Save</b></button>
+					<button class="reset protected" onclick="reset('Server settings')"><b>Reset to Default</b></button>
+				</div>	
 			</div>
 			<table class="settings">
+				<tr>
 				<td class="setting">
-					<h2>
+					<div>
+					<h2>	
 						<label for="new password">Password</label>
-					</h2>
+					</h2>		
+					<p>New password to authorise and gain admin privileges</p>
+					</div>
 					<input id="new password" type="password" name="password">
 				</td>
+				</tr>
+				<tr><td class="seperator"></td></tr>
+				<tr>
 				<td class="setting">
+					<div>
 					<h2>
-						<label for="new salt">Salt</label>
+						<label for="new salt">Pepper</label>
 					</h2>
+					<p>Pepper is added to the password bevore Hash</p>
+					</div>
 					<input id="new salt" type="password" name="salt">
 				</td>
+				</tr>
 			</table>
 		</div>
 	</div>

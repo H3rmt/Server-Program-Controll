@@ -5,20 +5,22 @@ function searchmodal() {
 }
 
 async function openmodal() {
+	if (modal.style.display == "block")
+		return;
 	modal.style.display = "block";
 	for (let i = 0; i < 1; i += 0.05) {
 		modal.style.opacity = i.toString();
 		await sleep(12);
 	}
-	modal.style.opacity = "1";
 }
 
 async function closemodal() {
+	if (modal.style.display == "none")
+		return;
 	for (let i = 1; i > 0; i -= 0.05) {
 		modal.style.opacity = i.toString();
 		await sleep(12);
 	}
-	modal.style.opacity = "0";
 	modal.style.display = "none";
 }
 

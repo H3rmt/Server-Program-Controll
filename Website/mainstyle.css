@@ -116,7 +116,7 @@ button:hover:not(.disabled) {
 	content: "";
 	position: absolute;
 	width: 10%;
-	height: 200%;
+	height: 300%;
 	top: 50%;
 	left: 50%;
 	transform: translate(110%, -50%) rotateZ(40deg);
@@ -129,7 +129,7 @@ button:hover:not(.disabled) {
 	content: "";
 	position: absolute;
 	width: 10%;
-	height: 200%;
+	height: 300%;
 	top: 50%;
 	left: 50%;
 	transform: translate(-190%, -50%) rotateZ(40deg);
