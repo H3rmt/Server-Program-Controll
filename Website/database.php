@@ -44,7 +44,7 @@ function getnewID(string $SQL): int {
 		else
 			return $id;
 	}
-	return ++$id;
+	return $id;
 }
 
 function getSetting(string $name) {
