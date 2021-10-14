@@ -18,7 +18,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST' && array_key_exists('name', $_POST) && a
 				<form class="Popup" action="homepage.php" method="POST" autocomplete="off">
 					<h1><?= htmlspecialchars(stripslashes(trim($_POST['name']))) ?> created</h1>
 					<h2>ID: <?= $ret[0] ?></h2>
-					<h2>APIKey: <?= $ret[0] ?></h2>
+					<h2>APIKey: <?= $ret[1] ?></h2>
 					<button class="Close" type="submit"><b>Close</b></button>
 				</form>
 			</div>
