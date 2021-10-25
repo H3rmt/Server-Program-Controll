@@ -126,7 +126,7 @@ func CheckLog(message string) string {
 			return "Activity"
 		}
 	}
-	return ""
+	return "Log" // default messages interpreted as log
 }
 
 /*
