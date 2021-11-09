@@ -74,7 +74,7 @@ include "../navbar/navbar.php";
 <div id="main">
 	<div class="top">
 		<h1 class="title"><?= $program["Name"]; ?></h1>
-		<div>
+		<div class="topbuttonbar">
 			<button class="start disabled protected"><b>Start</b></button>
 			<button class="stop disabled protected"><b>Stop</b></button>
 			<button class="delete disabled protected"><b>Delete</b></button>

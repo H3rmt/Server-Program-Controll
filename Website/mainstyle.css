@@ -80,6 +80,10 @@ body {
 	font-size: 3em;
 }
 
+#main .top .topbuttonbar {
+	white-space: nowrap;
+}
+
 button {
 	border-style: solid;
 	border-radius: 25px;

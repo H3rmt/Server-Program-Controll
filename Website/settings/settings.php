@@ -30,39 +30,41 @@ include "../navbar/navbar.php";
 <div id="main">
 	<div class="top">
 		<h1 class="title">Settings</h1>
-		<button class="authorise" onclick="openmodal()"><b>Authorise</b></button>
+		<div class="topbuttonbar">
+			<button class="authorise" onclick="openmodal()"><b>Authorise</b></button>
+		</div>
 	</div>
 	<div id="boxes">
-		<div class="settingsbox">
-		<div class="topsetting">
+		<form class="settingsbox">
+			<div class="topsetting">
 				<h1>Local settings</h1>
 				<div>
-					<button class="save protected" onclick="save('Local settings')"><b>Save</b></button>
 					<button class="reset protected" onclick="reset('Local settings')"><b>Reset to Default</b></button>
+					<button class="save protected" onclick="save('Local settings')"><b>Save</b></button>
 				</div>	
 			</div>
 			<table class="settings">
 				
 			</table>
-		</div>
-		<div class="settingsbox disabled protected">
-		<div class="topsetting">
+		</form>
+		<form class="settingsbox disabled protected">
+			<div class="topsetting">
 				<h1>Client settings</h1>
 				<div>
-					<button class="save protected" onclick="save('Client settings')"><b>Save</b></button>
 					<button class="reset protected" onclick="reset('Client settings')"><b>Reset to Default</b></button>
+					<button class="save protected" onclick="save('Client settings')"><b>Save</b></button>
 				</div>	
 			</div>
 			<table class="settings">
 				
 			</table>
-		</div>
-		<div class="settingsbox disabled protected">
+		</form>
+		<form class="settingsbox disabled protected">
 			<div class="topsetting">
 				<h1>Server settings</h1>
 				<div>
-					<button class="save protected" onclick="save('Server settings')"><b>Save</b></button>
 					<button class="reset protected" onclick="reset('Server settings')"><b>Reset to Default</b></button>
+					<button class="save protected" onclick="save('Server settings')"><b>Save</b></button>
 				</div>	
 			</div>
 			<table class="settings">
@@ -90,7 +92,7 @@ include "../navbar/navbar.php";
 				</td>
 				</tr>
 			</table>
-		</div>
+		</form>
 	</div>
 </div>
 <?php

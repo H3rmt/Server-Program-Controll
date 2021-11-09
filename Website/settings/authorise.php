@@ -7,7 +7,7 @@ function createcookies() {
 		$ret = testpassword(htmlspecialchars(stripslashes(trim($_POST['password']))));
 		
 		if($ret) {
-			$cookie_val = time() / 5645;
+			$cookie_val = (int) (rand(69696969,6969696969) / 420 * 5.0);
 			setcookie('authorisation', $cookie_val, time() + (86400 / 2), "/");
 			updateSetting('admincookie', $cookie_val);
 		}

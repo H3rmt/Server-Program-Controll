@@ -20,7 +20,9 @@ include "../navbar/navbar.php";
 <div id="main">
 	<div class="top">
 		<h1 class="title">Overview</h1>
-		<button class="disabled protected" onclick="openmodal()"><b>New Program</b></button>
+		<div class="topbuttonbar">
+			<button class="disabled protected" onclick="openmodal()"><b>New Program</b></button>
+		</div>
 	</div>
 	<div id="boxes">
 		<?php
