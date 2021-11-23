@@ -14,7 +14,7 @@ $program = getprogramm(htmlspecialchars(stripslashes(trim($_GET['id']))));
 	<link rel="stylesheet" href="program.css"/>
 	
 	<script src="../JS/sha256.js"></script>
-	<!-- <script src="../JS/Websocket.js"></script> -->
+	<script src="../JS/Websocket.js"></script>
 	<script src="../JS/utils.js"></script>
 	
 	<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
