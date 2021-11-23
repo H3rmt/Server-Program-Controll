@@ -1,7 +1,7 @@
 {
     "Port": 18770,
     "RemotePort": 18769,
-	"RemoteIP": "127.0.0.1",
+    "RemoteIP": "127.0.0.1",
     "LogPrefix": true,
     "prefixstretch": 9,
     "locationstretch": 20
