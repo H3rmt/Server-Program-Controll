@@ -84,6 +84,27 @@ body {
 	white-space: nowrap;
 }
 
+input {
+	border-style: solid;
+	border-radius: 25px;
+	border-width: 5px;
+	border-color: black;
+	
+	padding: 0.5em 1em;
+	
+	text-decoration: none;
+	color: black;
+	background: rgb(58, 58, 58);
+	
+	margin: 10px;
+	width: auto;
+	
+	cursor: pointer;
+	outline: none;
+	
+	font-size: 1.5em;
+}
+
 button {
 	border-style: solid;
 	border-radius: 25px;
@@ -93,7 +114,7 @@ button {
 	padding: 13px 25px;
 	margin-left: 10px;
 	margin-right: 10px;
-	transition-duration: 0.15s;
+	transition-duration: 0.25s;
 	
 	text-decoration: none;
 	cursor: pointer;
@@ -104,13 +125,55 @@ button {
 	
 	font-family: inherit;
 	font-size: 1.5em;
-	
+	color: black;
 	white-space: nowrap;
 }
 
-button:hover:not(.disabled) {
+button:hover {
 	background-color: rgb(37, 37, 37);
+	color: black;
 }
+
+ button:not(.disabled).danger {
+	background-color: rgb(129, 0, 0);
+}
+
+ button:not(.disabled).danger:hover {
+	background-color: rgb(88, 0, 0);
+}
+
+ button:not(.disabled).add {
+	background-color: green;
+}
+
+button:not(.disabled).add:hover {
+	background-color: rgb(0, 82, 0)
+}
+
+/*
+apply affect to disabled buttons, and 
+buttons inside disabled parents
+*/
+.disabled button:hover,
+button.disabled:hover {
+	background-color: rgb(61, 54, 54);
+	color: rgb(31, 10, 10);
+
+	border-color: rgb(32, 14, 14);
+}
+
+/*
+apply affect to disabled input, and 
+input inside disabled parents
+*/
+.disabled input:hover, .disabled input:focus,
+input.disabled:hover, input.disabled:focus {
+	background-color: rgb(61, 54, 54);
+	color: rgb(31, 10, 10);
+
+	border-color: rgb(32, 14, 14);
+}
+
 
 .disabled {
 	position: relative;
@@ -125,8 +188,15 @@ button:hover:not(.disabled) {
 	left: 50%;
 	transform: translate(110%, -50%) rotateZ(40deg);
 	
-	background: rgba(198, 0, 0, 0.4);
 	pointer-events: none;
+
+	animation: animateBg 6s linear infinite;
+	background-image: linear-gradient(0deg, rgba(20, 5, 5, 0.75), rgba(56, 9, 9, 0.75), rgba(20, 5, 5, 0.75), rgba(56, 9, 9, 0.75));
+	background-size: 100% 300%;
+	
+	border-style: dashed;
+	border-width: 4px;
+	border-color: rgba(66, 11, 11, 0.75);
 }
 
 .disabled:before {
@@ -138,10 +208,18 @@ button:hover:not(.disabled) {
 	left: 50%;
 	transform: translate(-190%, -50%) rotateZ(40deg);
 	
-	background: rgba(198, 0, 0, 0.4);
 	pointer-events: none;
+
+	animation: animateBg 6s linear infinite;
+	background-image: linear-gradient(0deg, rgba(20, 5, 5, 0.75), rgba(56, 9, 9, 0.75), rgba(20, 5, 5, 0.75), rgba(56, 9, 9, 0.75));
+	background-size: 100% 300%;
+
+	border-style: dashed;
+	border-width: 4px;
+	border-color: rgba(66, 11, 11, 0.75);
 }
 
-button.disabled:hover {
-	color: rgb(29, 29, 29);
+@keyframes animateBg {
+	0% { background-position: 0% 0%; }
+	100% { background-position: 0% 100%; }
 }

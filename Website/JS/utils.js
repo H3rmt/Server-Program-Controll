@@ -48,11 +48,18 @@ function protect() {
 }
 
 function replaceImages() {
-	Array.from(document.body.getElementsByTagName('img')).forEach((img) => {
-		img.onerror = function () {
-			img.src = "../Images/imgnotfound.png";
-		}
-	})
+	Array.from(document.body.getElementsByTagName("img")).forEach((img) => {
+		let src = img.getAttribute("src");
+		if (src === null || src.length === 0) img.src = "../Images/imgnotfound.png";
+		else
+			 fetch(src).then((res) => {
+				  if (res.status >= 200 && res.status <= 299) {
+						img.src = src;
+				  } else {
+						img.src = "../Images/imgnotfound.png";
+				  }
+			 });
+  });
 }
 
 function getAuthorisationCookie() {
@@ -71,5 +78,8 @@ function getAuthorisationCookie() {
 	return "";
 }
 
+function removeAuthorisationCookie() {
+	document.cookie = "authorisation=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+}
 
 // document.cookie = "authorisation=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";

@@ -71,5 +71,3 @@ function builtWebSocket() {
 	
 	websocket.onmessage = processreceived;
 }
-
-builtWebSocket();

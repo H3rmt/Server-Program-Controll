@@ -39,7 +39,7 @@ include "../navbar/navbar.php";
 			<div class="topsetting">
 				<h1>Local settings</h1>
 				<div>
-					<button class="reset protected" onclick="reset('Local settings')"><b>Reset to Default</b></button>
+					<button class="reset protected danger" onclick="reset('Local settings')"><b>Reset to Default</b></button>
 					<button class="save protected" onclick="save('Local settings')"><b>Save</b></button>
 				</div>	
 			</div>
@@ -51,7 +51,7 @@ include "../navbar/navbar.php";
 			<div class="topsetting">
 				<h1>Client settings</h1>
 				<div>
-					<button class="reset protected" onclick="reset('Client settings')"><b>Reset to Default</b></button>
+					<button class="reset protected danger" onclick="reset('Client settings')"><b>Reset to Default</b></button>
 					<button class="save protected" onclick="save('Client settings')"><b>Save</b></button>
 				</div>	
 			</div>
@@ -63,7 +63,7 @@ include "../navbar/navbar.php";
 			<div class="topsetting">
 				<h1>Server settings</h1>
 				<div>
-					<button class="reset protected" onclick="reset('Server settings')"><b>Reset to Default</b></button>
+					<button class="reset protected danger" onclick="reset('Server settings')"><b>Reset to Default</b></button>
 					<button class="save protected" onclick="save('Server settings')"><b>Save</b></button>
 				</div>	
 			</div>
@@ -76,7 +76,7 @@ include "../navbar/navbar.php";
 					</h2>		
 					<p>New password to authorise and gain admin privileges</p>
 					</div>
-					<input id="new password" type="password" name="password">
+					<input id="new password" type="password" autocomplete="new-password" name="password">
 				</td>
 				</tr>
 				<tr><td class="seperator"></td></tr>
@@ -86,9 +86,21 @@ include "../navbar/navbar.php";
 					<h2>
 						<label for="new salt">Pepper</label>
 					</h2>
-					<p>Pepper is added to the password bevore Hash</p>
+					<p>Pepper is added to the password bevore Hash to improve Security</p>
 					</div>
 					<input id="new salt" type="password" name="salt">
+				</td>
+				</tr>
+				<tr>
+				<td class="setting">
+					<div>
+					<h2>
+						<label for="new timeout">Login Timeout</label>
+					</h2>
+					<p>Time bevore the login cookie expires in sec</p>
+					<p>86400 seconds = 24 hours</p>
+					</div>
+					<input id="new timeout" type="number" name="timeout">
 				</td>
 				</tr>
 			</table>

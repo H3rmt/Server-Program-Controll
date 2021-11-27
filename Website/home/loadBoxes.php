@@ -12,8 +12,8 @@ foreach(getprogramms() as $col) {
 					<h2 class="ontime"><?= "ontime" ?></h2>
 					<h2 class="startdate"><?= $col["StatechangeTime"] ?></h2>
 					<div>
-						<button class="start disabled protected"><b>Start</b></button>
-						<button class="stop disabled protected"><b>Stop</b></button>
+						<button class="start disabled protected add"><b>Start</b></button>
+						<button class="stop disabled protected danger"><b>Stop</b></button>
 					</div>
 					<button class="opensite" onclick="window.open('../program/program.php?id=<?= $col["ID"] ?>');">
 						<b>Open website</b>

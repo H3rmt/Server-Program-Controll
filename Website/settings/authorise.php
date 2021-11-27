@@ -29,6 +29,7 @@ function createmodal() {
 					<h1>Authorise</h1>
 					<p class="close" onclick="closemodal()">&times;</p>
 					<h3>Authorised</h3>
+					<button class="Reset danger" onclick="removeAuthorisationCookie();document.getElementById('authorise').submit()"><b>Reset</b></button>
 					<button class="Close" onclick="closemodal()"><b>Close</b></button>
 					<script>
 						document.getElementById("authorise").addEventListener("submit", (event) => {
@@ -43,7 +44,7 @@ function createmodal() {
 			<div class="modal" style="display: block">
 				<form class="Popup" id="authorise" action="settings.php" method="POST" autocomplete="on">
 					<h1>Authorise</h1>
-					<p class="close" onclick="closemodal()">&times;</p>
+					<p class="close" onclick="document.getElementById('authorise').submit()">&times;</p>
 					<h3>Wrong Password</h3>
 					<button class="Close"><b>Close</b></button>
 				</form>

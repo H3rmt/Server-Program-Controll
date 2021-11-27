@@ -25,8 +25,8 @@
 	?>
 	
 	<li style="position: absolute; bottom: 0; right: 0;">
-		<a href="../settings/settings.php" style="font-size:1em">
-			<img class="icon" src="../Images/settings.png" alt=""/>
+		<a href="../settings/settings.php" style="height:40px;overflow: hidden;">
+			<img class="icon" src="../Images/settings.svg" alt=""/>
 		</a>
 	</li>
 

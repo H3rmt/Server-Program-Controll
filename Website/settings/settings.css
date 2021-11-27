@@ -6,6 +6,10 @@
 	grid-template-columns: repeat(auto-fit, minmax(740px, 1fr));
 }
 
+.setting input {
+	color: black;
+}
+
 .settingsbox {
 	border-style: solid;
 	border-radius: 25px;
@@ -57,25 +61,6 @@
 	margin-bottom: 10px;
 }
 
-input {
-	border-style: solid;
-	border-radius: 20px;
-	border-width: 4px;
-	border-color: black;
-
-	padding: 0.6em 1em;
-
-	text-decoration: none;
-	color: white;
-	background: rgb(58, 58, 58);
-
-	margin: 10px;
-
-	cursor: pointer;
-	outline: none;
-
-	font-size: 1.5em;
-}
 
 .seperator {
 	border-top: 2px solid rgb(58, 58, 58);
