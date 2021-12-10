@@ -1,6 +1,8 @@
 <?php
 
-$db = new PDO('mysql:host=localhost', 'Website', '/6uM8qlYUm*NFCef');
+$db = new PDO('mysql:host=172.17.0.1', 'Website', '/6uM8qlYUm*NFCef');
+//$db = new PDO('mysql:host=localhost', 'Website', '/6uM8qlYUm*NFCef');
+
 
 function getprogramms(): array {
 	global $db;
@@ -63,4 +65,14 @@ function updateSetting(string $name, $value) {
 		':value' => $value,
 		':name' => $name
 	]);
+}
+
+
+function testadmincookie(): bool {
+	if(isset($_COOKIE['authorisation'])) {
+		$setting = getSetting('admincookie');
+		return $setting == $_COOKIE['authorisation'];
+	} else {
+		return false;
+	}
 }

@@ -1,14 +1,5 @@
 <?php
 
-function testadmincookie(): bool {
-	if(isset($_COOKIE['authorisation'])) {
-		$setting = getSetting('admincookie');
-		return $setting == $_COOKIE['authorisation'];
-	} else {
-		return false;
-	}
-}
-
 if($_SERVER['REQUEST_METHOD'] == 'POST' && array_key_exists('name', $_POST) && array_key_exists('picturesrc', $_POST)) {
 	if(testadmincookie()) {
 		if(!empty($_POST['name']) && !empty($_POST['description'])) {

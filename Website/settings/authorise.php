@@ -85,13 +85,4 @@ function testpassword($hash): bool {
 	return $setting == $hash;
 }
 
-function testadmincookie(): bool {
-	if(isset($_COOKIE['authorisation'])) {
-		$setting = getSetting('admincookie');
-		return $setting == $_COOKIE['authorisation'];
-	} else {
-		return false;
-	}
-}
-
 ?>

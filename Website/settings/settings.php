@@ -98,7 +98,7 @@ include "../navbar/navbar.php";
 						<label for="new timeout">Login Timeout</label>
 					</h2>
 					<p>Time bevore the login cookie expires in sec</p>
-					<p>86400 seconds = 24 hours</p>
+					<p>86400 seconds = 24 hours;  3600 seconds = 1 hour</p>
 					</div>
 					<input id="new timeout" type="number" name="timeout">
 				</td>

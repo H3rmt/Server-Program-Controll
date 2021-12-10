@@ -15,11 +15,11 @@ const Action = {
 function processreceived(evt) {
 	console.log("Message received: " + evt.data);
 	const data = JSON.parse(evt.data);
-	if (data["error"] !== undefined) {
+	if(data["error"] !== undefined) {
 		console.log("error:" + data["error"]);
 		return
 	}
-	switch (data["action"]) {
+	switch(data["action"]) {
 		case Action.getLogs:
 			recivelogs(data["data"]);
 			break;
@@ -48,23 +48,23 @@ function builtWebSocket() {
 	try {
 		websocket = new WebSocket("ws://" + window.location.host + ":18769/ws");
 		console.log("Connection built");
-	} catch (err) {
+	} catch(err) {
 		alert("Connection invalid");
 		loading = false;
 		return
 	}
 	loading = false;
 	
-	websocket.onopen = function () {
+	websocket.onopen = function() {
 		websocket.send('{"connection":"opened"}');
 		console.log("connection opened!");
 	};
 	
-	websocket.onerror = function (error) {
+	websocket.onerror = function(error) {
 		console.log("WebSocket Error: " + error);
 	};
 	
-	websocket.onclose = function () {
+	websocket.onclose = function() {
 		console.log("Connection lost");
 		alert("Connection lost");
 	};
