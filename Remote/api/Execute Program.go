@@ -1,11 +1,12 @@
 package api
 
 import (
-	"Remote/util"
 	"fmt"
 	"os/exec"
 	"strings"
 	"time"
+
+	"Remote/util"
 )
 
 // list of all programs
@@ -18,18 +19,18 @@ contains
 program  (python/go/...)
 Arguments  arg for programm, usually file but can be any series of args
 APIKey  to send data to Server
+Dir       directory where to execute cmd
 reader  containing out and err reader
 cmd  reference to Command
-logcounter  counts logs for out and err reader
 */
 type Program struct {
-	Name       string
-	Program    string
-	Arguments  []string
-	APIKey     string
-	reader     Reader
-	cmd        *exec.Cmd
-	logcounter int
+	Name      string
+	Program   string
+	Arguments []string
+	APIKey    string
+	Dir       string
+	reader    Reader
+	cmd       *exec.Cmd
 	// LogasActivity bool
 }
 
@@ -46,14 +47,14 @@ func getProgramm_IDfromAPIKey(APIKey string) (*Program, error) {
 	return &Program{}, &InvalidAPIKeyerror{}
 }
 
-/*
-starts the program and readers
-*/
+// Start
 func (pr *Program) Start() error {
 	if pr.cmd != nil {
 		return fmt.Errorf("program running")
 	}
 	cmd := exec.Command(pr.Program, pr.Arguments...)
+	cmd.Dir = pr.Dir
+
 	pr.cmd = cmd
 
 	pr.reader = Reader{}
@@ -64,8 +65,6 @@ func (pr *Program) Start() error {
 	cmd.Stdout = &pr.reader.outReader
 	cmd.Stderr = &pr.reader.errReader
 
-	pr.logcounter = 0
-
 	err := cmd.Start()
 	if err != nil {
 		util.Log("EXEC PR", "error Starting Program: ", pr.Name)
@@ -75,7 +74,7 @@ func (pr *Program) Start() error {
 	}
 
 	go func() {
-		// Delay this Message so it doesnt mix up with start response
+		// Delay this Message, so it doesn't mix up with start response
 		time.Sleep(30 * time.Millisecond)
 		err = SendStateChange(pr, true)
 		if err != nil {
@@ -97,9 +96,7 @@ func (pr *Program) Start() error {
 	return nil
 }
 
-/*
-stops the program
-*/
+// Stop /*
 func (pr *Program) Stop() (err error) {
 	if pr.cmd != nil {
 		err = pr.cmd.Process.Kill()
@@ -112,9 +109,7 @@ func (pr *Program) Stop() (err error) {
 	return
 }
 
-/*
-checks if return is log or activity
-*/
+// CheckLog /*
 func CheckLog(message string) string {
 	if strings.HasPrefix(message, "LOW|") || strings.HasPrefix(message, "NORMAL|") || strings.HasPrefix(message, "IMPORTANT|") {
 		return "Log"
@@ -149,21 +144,19 @@ finds logtype of logmessage and returns message without prefix
 */
 func processActivityLevel(message string) Activitytype {
 	if strings.HasPrefix(message, "[Backgroundprocess]") {
-		return Activitytype(Backgroundprocess)
+		return Backgroundprocess
 	} else if strings.HasPrefix(message, "[Process]") {
-		return Activitytype(Process)
+		return Process
 	} else if strings.HasPrefix(message, "[Recive]") {
-		return Activitytype(Recive)
+		return Recive
 	} else if strings.HasPrefix(message, "[Send]") {
-		return Activitytype(Send)
+		return Send
 	} else {
-		return Activitytype(Process)
+		return Process
 	}
 }
 
-/*
-Custom Reader containing out and err Writer
-*/
+// Reader /*
 type Reader struct {
 	outReader stdoutWriter
 	errReader stderrWriter
@@ -244,5 +237,4 @@ func (w *stderrWriter) processError(err string) {
 	if errr != nil {
 		util.Log("EXEC PR", "err sending err", errr)
 	}
-	w.programparent.logcounter++
 }

@@ -4,5 +4,5 @@
     "RemoteIP": "127.0.0.1",
     "LogPrefix": true,
     "prefixstretch": 9,
-    "locationstretch": 20
+    "locationstretch": 22
 }

@@ -36,12 +36,13 @@ func main() {
 		var name = p["Name"].(string)
 		var program = p["Program"].(string)
 		var key = p["APIKey"].(string)
+		var dir = p["Dir"].(string)
 		var args = make([]string, len(p["Arguments"].([]interface{})))
 		for count, v := range p["Arguments"].([]interface{}) {
 			args[count] = v.(string)
 		}
 		if program != "" && key != "" {
-			api.Programs = append(api.Programs, api.Program{Name: name, Program: program, APIKey: key, Arguments: args})
+			api.Programs = append(api.Programs, api.Program{Name: name, Program: program, Dir: dir, APIKey: key, Arguments: args})
 		} else {
 			util.Log(util.MAIN, "Invalid Program:", program, key, args)
 		}

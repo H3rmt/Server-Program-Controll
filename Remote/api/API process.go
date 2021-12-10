@@ -1,13 +1,14 @@
 package api
 
 import (
-	"Remote/util"
 	"bytes"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"net/http"
 	"time"
+
+	"Remote/util"
 )
 
 /*
@@ -93,7 +94,7 @@ Send Log to server
 */
 func SendLog(message string, program *Program, logtype Logtype) error {
 	date := time.Now().Format("2006-01-02 15:04:05")
-	logrequest := map[string]interface{}{"APIKey": program.APIKey, "Log": LogRequest{Date: date, Number: program.logcounter, Message: message, Type: logtype}}
+	logrequest := map[string]interface{}{"APIKey": program.APIKey, "Log": LogRequest{Date: date, Message: message, Type: logtype}}
 	jsonReq, err := json.Marshal(logrequest)
 	if err != nil {
 		return err
@@ -149,7 +150,7 @@ Send State Change to server
 */
 func SendStateChange(program *Program, Start bool) error {
 	date := time.Now().Format("2006-01-02 15:04:05")
-	statechangerequest := map[string]interface{}{"APIKey": program.APIKey, "StateChange": StateChangeRequest{Date: date, Number: program.logcounter, Start: Start}}
+	statechangerequest := map[string]interface{}{"APIKey": program.APIKey, "StateChange": StateChangeRequest{Date: date, Start: Start}}
 	jsonReq, err := json.Marshal(statechangerequest)
 	if err != nil {
 		return err
@@ -185,9 +186,8 @@ func SendStateChange(program *Program, Start bool) error {
 Struct to represent a Request telling that the program stopped or started
 */
 type StateChangeRequest struct {
-	Date   string
-	Number int
-	Start  bool
+	Date  string
+	Start bool
 }
 
 /*

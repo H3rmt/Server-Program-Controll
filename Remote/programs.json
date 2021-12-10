@@ -1,10 +1,11 @@
 {
     "Programs": [
         {
-            "Name": "VoiceChannelBot^2",
-            "Program": "python",
-            "Arguments": ["-u","VoiceChannelBot^2_programm.py"],
-            "APIKey": "4362fds357rd32q1f37y35e6ytefws"
+            "Name": "Test Pwd",
+            "Program": "pwd",
+            "Dir": "/home/enrico",
+            "Arguments": [""],
+            "APIKey": "61b3d640ed692"
         }
     ]
 }
