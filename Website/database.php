@@ -70,8 +70,7 @@ function updateSetting(string $name, $value) {
 
 function testadmincookie(): bool {
 	if(isset($_COOKIE['authorisation'])) {
-		$setting = getSetting('admincookie');
-		return $setting == $_COOKIE['authorisation'];
+		return getSetting('admincookie') === $_COOKIE['authorisation'];
 	} else {
 		return false;
 	}
