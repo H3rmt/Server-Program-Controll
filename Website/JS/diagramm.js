@@ -1,129 +1,148 @@
-const color = "#2596e7";
-
-let time = new Date();
-
-let activity = [
-    {
-        x: new Date(time),
-        y: Math.random() * 100,
-    },
-];
-
-let activity2 = [
-    {
-        x: new Date(time),
-        y: Math.random() * 100,
-    },
-];
-time.setMinutes(time.getMinutes() + 5);
-activity.push({
-    x: new Date(time),
-    y: Math.random() * 100,
-});
-activity2.push({
-    x: new Date(time),
-    y: Math.random() * 100,
-});
-time.setMinutes(time.getMinutes() + 5);
-activity.push({
-    x: new Date(time),
-    y: Math.random() * 100,
-});
-activity2.push({
-    x: new Date(time),
-    y: Math.random() * 100,
-});
-
 const options = {
-    chart: {
-        type: "line",
-        width: "70%",
-        foreColor: color,
-        animations: {
-            enabled: true,
-            easing: "linear",
-            dynamicAnimation: {
-                speed: 200,
-            },
-        },
-        zoom: {
-            type: "x",
-            enabled: true,
-            autoScaleYaxis: true,
-        },
-        toolbar: {
-            show: true,
-            offsetX: -15,
-            offsetY: 0,
-            tools: {
-                download: false,
-                selection: false,
-                pan: true,
+	chart: {
+		type: "line",
+		width: "100%",
+		foreColor: "#2596e7",
+		redrawOnParentResize: true,
+		animations: {
+			enabled: true,
+			easing: "linear",
+			dynamicAnimation: {
+				speed: 300,
+			},
+		},
+		zoom: {
+			type: "x",
+			enabled: true,
+			autoScaleYaxis: true,
+		},
+		toolbar: {
+			show: true,
+			offsetX: -15,
+			offsetY: 0,
+			tools: {
+				download: false,
+				selection: false,
+				pan: true,
 
-                zoom: true,
-                zoomin: true,
-                zoomout: true,
-                reset: true,
-            },
-            autoSelected: "zoom",
-        },
-    },
-    tooltip: {
-        enabled: true,
-        followCursor: true,
-        intersect: false,
-        fillSeriesColor: false,
-        theme: "dark",
-        style: {
-            fontSize: "1.3em",
-        },
-        onDatasetHover: {
-            highlightDataSeries: false,
-        },
-    },
+				zoom: true,
+				zoomin: true,
+				zoomout: true,
+				reset: true,
+			},
+			autoSelected: "zoom",
+		},
+	},
 
-    stroke: {
-        width: 4,
-        curve: "smooth",
-    },
+	dataLabels: {
+		enabled: true,
+		style: {
+			fontSize: '1em',
+			fontWeight: 'bold',
+		},
+		offsetY: -15,
+	},
 
-    series: [
-        { name: "Receive", data: activity },
-        { name: "Send", data: activity2 },
-    ],
+	tooltip: {
+		enabled: true,
+		followCursor: true,
+		intersect: false,
+		fillSeriesColor: false,
+		theme: "dark",
+		style: {
+			fontSize: "1.6em",
+		},
+		onDatasetHover: {
+			highlightDataSeries: true,
+		},
+	},
 
-    yaxis: {
-        max: 100,
-        min: 0,
-        labels: {
-            formatter: function (val) {
-                return val / 1;
-            },
-        },
-    },
+	stroke: {
+		width: 4,
+		curve: "smooth",
+		lineCap: 'butt',
+	},
 
-    xaxis: {
-        type: "datetime",
-        //range: 3600000,
-    },
+	forecastDataPoints: {
+		count: 1,
+		fillOpacity: 0.8,
+		strokeWidth: 4,
+		dashArray: 6,
+	},
+
+	noData: {
+		text: "No Data Available",
+		align: 'center',
+		verticalAlign: 'middle',
+		style: {
+			fontSize: '2.5em',
+		}
+	},
+
+	yaxis: {
+		max: 100,
+		min: 0,
+		labels: {
+			style: {
+				fontSize: '1.2em',
+			},
+			"formatter": (val) => {
+				return val / 1;
+			},
+		},
+	},
+
+	xaxis: {
+		type: "datetime",
+		tickAmount: 7,
+		labels: {
+			show: false,
+			style: {
+				fontSize: '1em',
+			},
+			"formatter": (val) => {
+				return new Date(val).getDay() + "/" + new Date(val).getMonth() + "/" + new Date(val).getFullYear() + ":" + new Date(val).getHours()
+			},
+		},
+		axisTicks: {
+			show: true,
+			borderType: 'solid',
+			height: 12,
+			offsetX: 0,
+			offsetY: -6
+		},
+	},
 };
 
-const chart = new ApexCharts(document.getElementById("activity-chart"), options);
-chart.render();
+class Chart {
 
-window.setInterval(function () {
-    time.setMinutes(time.getMinutes() + 5);
-    activity.push({
-        x: new Date(time),
-        y: Math.random() * 100,
-    });
-    activity2.push({
-        x: new Date(time),
-        y: Math.random() * 100,
-    });
+	chart
 
-    chart.updateSeries([
-        { name: "Receive", data: activity },
-        { name: "Send", data: activity2 },
-    ]);
-}, 2000);
+	series = []
+	options = options
+
+	constructor(id, ...names) {
+		names.forEach((val) => {
+			this.series.push({name: val, data: []})
+		})
+		this.options.series = this.series
+		this.chart = new ApexCharts(document.getElementById(id), this.options);
+		this.chart.render();
+	}
+
+	clear() {
+		this.series.forEach((val) => {
+			val.data.clear()
+		})
+	}
+
+	add(name, data) {
+		this.series.filter((val) => {
+			return val.name === name
+		})[0].data.push(data)
+	}
+
+	updateChart() {
+		this.chart.updateSeries(this.series);
+	}
+}
