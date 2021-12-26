@@ -1,62 +1,95 @@
-#!/bin/sh
+#!/bin/bash
 
-# githome
-#home="/home/enrico/Documents/Server-Program-Controll"
-home=$(pwd)
+initial=true
+
+# gitHome
+projectFolder=$(pwd)
 
 # dirs for the output
-html="/home/enrico/Programs/Website"
-goserver="/home/enrico/Programs/Server"
-goremote="/home/enrico/Programs/Remote"
-
+html="/tmp/home/t/Website/"
+goRemote="/tmp/home/t/Remote"
+goServer="/tmp/home/t/Server"
 
 # Update repo
-pwd=$(pwd)
-printf "WebsiteHome:%s\n" "$pwd"
+fetch=$(git fetch)
+printf "fetching from git:%s\n" "$fetch"
+reset=$(git reset --hard)
+printf "reset git:%s\n\n" "$reset"
 
-pull=$(git pull)
-printf "pulling from git:%s\n\n" "$pull"
+CopyFolder() {
+	if [ ! -d "$1" ]; then
+		echo "source $projectFolder/$1 not existing"
+		return
+	fi
 
+	if [ ! -d "$2" ]; then
+		mkdir -p "$2"
+		echo "created $2 dir"
+	else
+		if [ "$(ls -A "$2")" ]; then
+			rm -r "$2/"*
+			echo "removed files from $2"
+		else
+			echo "$2 empty"
+		fi
+	fi
 
-Copy () {
-  cd $home
+	echo "coping files from $projectFolder/$1 to $2"
+	cp -r "$projectFolder/$1/"* "$2"
 
-  if [ ! -d "$1/" ]; then
-    echo "source $home/$1 not existing"
-    return
-  fi
-
-  if [ ! -d "$2" ]; then
-    mkdir "$2"
-    echo "created $2 dir"
-  else
-    if [ "$(ls -A $2)" ]; then
-      cd $2
-      sudo rm -r *
-      echo "removed files from $2"
-    else
-      echo "$2 empty"
-    fi
-  fi
-
-  cd "$home/$1"
-
-  printf "coping files:  "
-  printf "%s; " $(ls)
-
-  pwd=$(pwd)
-  printf "\nfrom:%s\n" "$pwd"
-
-  sudo cp -r * "$2"
-
-  echo ""
+	echo ""
 }
 
-# dirs inside the $home dir
+BuildGo() {
+	if [ ! -d "$1/" ]; then
+		echo "source $projectFolder/$1 not existing"
+		return
+	fi
+	if [ ! -d "$2/" ]; then
+		mkdir -p "$2"
+		echo "created $2 dir"
+	fi
+
+	cd "$projectFolder/$1" || return
+
+	echo "building go $1"
+	go build -o "$1"
+
+	cd "$projectFolder" || return
+
+	echo "moving file $1 from $1 to $2"
+	mv "$projectFolder/$1/$1" "$2/$1"
+
+	echo ""
+}
+
+CopyFiles() {
+	arr=("$@")
+
+	# start from index 2 to exclude source and output
+	for ((i = 2; i < ${#arr[@]}; i++)); do
+		a="${arr[i]}"
+		echo "coping file $a from $projectFolder/$1 to $2"
+		cp "$projectFolder/$1/$a" "$2/$a"
+	done
+	echo ""
+}
+
+# dirs inside the $projectFolder dir
 website="Website"
 server="Server"
 remote="Remote"
 
-Copy $website $html
-Copy $server $goserver
-Copy $remote $goremote
+CopyFolder $website $html
+
+BuildGo $server $goServer
+serverFiles=("config.json")
+if [ $initial ]; then
+CopyFiles $server $goServer "${serverFiles[@]}"
+fi
+
+BuildGo $remote $goRemote
+remoteFiles=("programs.json" "config.json")
+if [ $initial ]; then
+CopyFiles $remote $goRemote "${remoteFiles[@]}"
+fi
