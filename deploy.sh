@@ -1,14 +1,21 @@
 #!/bin/bash
 
+# copy/override config files
 initial=true
+
+# dirs for the output
+html="/home/enrico/Website/"
+goRemote="/home/enrico/Remote"
+goServer="/home/enrico/Server"
+
+# dirs inside the $projectFolder dir
+website="Website"
+server="Server"
+remote="Remote"
+
 
 # gitHome
 projectFolder=$(pwd)
-
-# dirs for the output
-html="/tmp/home/t/Website/"
-goRemote="/tmp/home/t/Remote"
-goServer="/tmp/home/t/Server"
 
 # Update repo
 fetch=$(git fetch)
@@ -74,11 +81,6 @@ CopyFiles() {
 	done
 	echo ""
 }
-
-# dirs inside the $projectFolder dir
-website="Website"
-server="Server"
-remote="Remote"
 
 CopyFolder $website $html
 
