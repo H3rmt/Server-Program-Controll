@@ -1,7 +1,15 @@
 #!/bin/bash
 
 # copy/override config files
-initial=true
+read -p "initial deploy? [y/N] " r
+initial=False
+if [ "$r" = "y" ] || [ "$r" = "Y" ]; then
+	echo "selected initial deploy"
+	initial=True
+else
+	echo "selected redeploy"
+fi
+echo
 
 # dirs for the output
 html="/home/enrico/Website/"
@@ -12,7 +20,6 @@ goServer="/home/enrico/Server"
 website="Website"
 server="Server"
 remote="Remote"
-
 
 # gitHome
 projectFolder=$(pwd)
@@ -86,12 +93,12 @@ CopyFolder $website $html
 
 BuildGo $server $goServer
 serverFiles=("config.json")
-if [ $initial ]; then
-CopyFiles $server $goServer "${serverFiles[@]}"
+if [ $initial = True ]; then
+	CopyFiles $server $goServer "${serverFiles[@]}"
 fi
 
 BuildGo $remote $goRemote
 remoteFiles=("programs.json" "config.json")
-if [ $initial ]; then
-CopyFiles $remote $goRemote "${remoteFiles[@]}"
+if [ $initial = True ]; then
+	CopyFiles $remote $goRemote "${remoteFiles[@]}"
 fi
