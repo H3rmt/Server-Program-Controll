@@ -1,5 +1,11 @@
 #!/bin/bash
 
+# dirs for the output
+html="/home/enrico/Website/"
+goRemote="/home/enrico/Remote"
+goServer="/home/enrico/Server"
+
+
 # copy/override config files
 read -p "initial deploy? [y/N] " r
 initial=False
@@ -10,11 +16,6 @@ else
 	echo "selected redeploy"
 fi
 echo
-
-# dirs for the output
-html="/home/enrico/Website/"
-goRemote="/home/enrico/Remote"
-goServer="/home/enrico/Server"
 
 # dirs inside the $projectFolder dir
 website="Website"
