@@ -39,7 +39,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST' && array_key_exists('name', $_POST) && a
 	}
 } else {
 	?>
-	<div class="modal" id="closablemodal" style="display: none">
+	<div class="modal" id="closable-modal" style="display: none">
 		<form class="Popup" action="homepage.php" method="POST" autocomplete="off">
 			<h1>Create a new Program</h1>
 			<p class="close" onclick="closemodal()">&times;</p>

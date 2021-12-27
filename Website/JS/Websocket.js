@@ -26,48 +26,50 @@ function processreceived(evt) {
 		case Action.getActivity:
 			reciveactivity(data["data"]);
 			break;
-		
+
 		case Action.start:
 			recivestart(data["data"], data["error"]);
 			break;
-		
+
 		case Action.stop:
 			recivestop(data["data"], data["error"]);
 			break;
-		
+
 		default:
 			console.log("invalid action: " + data["action"]);
 			break;
 	}
 }
 
-let loading = false;
-
 function builtWebSocket() {
-	loading = true;
+	let loading = true;
 	try {
 		websocket = new WebSocket("ws://" + window.location.host + ":18769/ws");
 		console.log("Connection built");
 	} catch(err) {
+		console.log("Connection invalid");
 		alert("Connection invalid");
 		loading = false;
 		return
 	}
-	loading = false;
-	
+
 	websocket.onopen = function() {
-		websocket.send('{"connection":"opened"}');
 		console.log("connection opened!");
+		loading = false;
 	};
-	
+
 	websocket.onerror = function(error) {
 		console.log("WebSocket Error: " + error);
 	};
-	
+
 	websocket.onclose = function() {
-		console.log("Connection lost");
-		alert("Connection lost");
+		if(loading) {
+			console.log("Connection couldn't get created");
+		} else {
+			console.log("Connection lost");
+			alert("Connection lost");
+		}
 	};
-	
+
 	websocket.onmessage = processreceived;
 }

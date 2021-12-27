@@ -38,6 +38,11 @@
 	padding-right: 20px;
 }
 
+.setting .additional {
+	font-size: 75%;
+	color: darkgrey;
+}
+
 .topsetting {
 	display: flex;
 	align-items: center;

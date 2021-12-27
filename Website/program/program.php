@@ -76,9 +76,9 @@ include "../navbar/navbar.php";
 	<div class="top">
 		<h1 class="title"><?= $program["Name"]; ?></h1>
 		<div class="topbuttonbar">
-			<button class="start disabled protected add"><b>Start</b></button>
-			<button class="stop disabled protected danger"><b>Stop</b></button>
-			<button class="delete disabled protected danger"><b>Delete</b></button>
+			<button class="start disabled add"><b>Start</b></button>
+			<button class="stop disabled danger"><b>Stop</b></button>
+			<button class="delete disabled danger"><b>Delete</b></button>
 		</div>
 	</div>
 	<div id="boxes">
@@ -105,13 +105,10 @@ include "../navbar/navbar.php";
 </div>
 <script>
 	searchmodal()
-
-	if(getAuthorisationCookie() !== "") {
-		protect()
-	}
-
+	protect()
 	disable()
 	replaceImages()
+
 	builtWebSocket()
 </script>
 </body>

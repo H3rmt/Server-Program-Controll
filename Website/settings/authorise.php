@@ -2,12 +2,11 @@
 
 include_once "../database.php";
 
-function createcookies()
-{
-	if ($_SERVER['REQUEST_METHOD'] == 'POST' && array_key_exists('hashed_password', $_POST) && !empty($_POST['hashed_password'])) {
+function createcookies() {
+	if($_SERVER['REQUEST_METHOD'] == 'POST' && array_key_exists('hashed_password', $_POST) && !empty($_POST['hashed_password'])) {
 		$ret = testpassword(htmlspecialchars(stripslashes(trim($_POST['hashed_password']))));
-		
-		if ($ret) {
+
+		if($ret) {
 			$cookie_val = (int)(rand(69696969, 6969696969) / 420 * 5.0);
 			setcookie('authorisation', $cookie_val, time() + (86400 / 2), "/");
 			updateSetting('admincookie', $cookie_val);
@@ -20,15 +19,14 @@ function createcookies()
 header("Refresh:0");
  */
 
-function createmodal()
-{
+function createmodal() {
 	$isAdmin = testadmincookie();
-	
+
 	// check if password is sent
-	if ($_SERVER['REQUEST_METHOD'] == 'POST' && array_key_exists('hashed_password', $_POST) && !empty($_POST['hashed_password'])) {
+	if($_SERVER['REQUEST_METHOD'] == 'POST' && array_key_exists('hashed_password', $_POST) && !empty($_POST['hashed_password'])) {
 		$valid = testpassword(htmlspecialchars(stripslashes(trim($_POST['hashed_password']))));
-		
-		if ($valid) {
+
+		if($valid) {
 			?>
 			<div class="modal" style="display: block">
 				<form class="Popup" id="authorise">
@@ -52,10 +50,10 @@ function createmodal()
 			<?php
 		}
 	}
-	
-	if ($isAdmin) {
+
+	if($isAdmin) {
 		?>
-		<div class="modal" id="closablemodal" style="display: none">
+		<div class="modal" id="closable-modal" style="display: none">
 			<form class="Popup" id="authorise">
 				<h1>Authorise</h1>
 				<p class="close" onclick="closemodal()">&times;</p>
@@ -67,7 +65,7 @@ function createmodal()
 		<?php
 	} else {
 		?>
-		<div class="modal" id="closablemodal" style="display: none">
+		<div class="modal" id="closable-modal" style="display: none">
 			<form class="Popup" id="authorise" action="settings.php" method="POST" autocomplete="on">
 				<h1>Authorise</h1>
 				<p class="close" onclick="closemodal()">&times;</p>
@@ -96,8 +94,7 @@ function createmodal()
 }
 
 
-function testpassword($hash): bool
-{
+function testpassword($hash): bool {
 	$setting = getSetting('password');
 	return $setting == $hash;
 }
