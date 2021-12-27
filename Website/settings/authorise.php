@@ -66,7 +66,7 @@ function createmodal() {
 	} else {
 		?>
 		<div class="modal" id="closable-modal" style="display: none">
-			<form class="Popup" id="authorise" action="settings.php" method="POST" autocomplete="on">
+			<form class="Popup" id="authorise" action="settings.php" method="POST">
 				<h1>Authorise</h1>
 				<p class="close" onclick="closemodal()">&times;</p>
 				<table>
@@ -75,12 +75,13 @@ function createmodal() {
 							<label for="password">Password:</label>
 						</td>
 						<td>
-							<input id="password" type="password" name="password" value="" autocomplete="on">
+							<input id="password" aria-label="password" type="password" name="password">
 						</td>
 					</tr>
 				</table>
-				<input style="display: none" id="hashed_password" type="password" name="hashed_password">
 				<button type="submit" class="add"><b>Check</b></button>
+
+				<input style="display: none" id="hashed_password" type="password" name="hashed_password">
 				<script>
 					document.getElementById("authorise").addEventListener("submit", () => {
 						document.getElementById("hashed_password").value = SHA256(document.getElementById("password").value)

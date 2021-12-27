@@ -1,5 +1,5 @@
-function saveSettings(name, event) {
-	if(getAuthorisationCookie() === "") {
+function saveSettings(name, check, event) {
+	if(check && getAuthorisationCookie() === "") {
 		event.preventDefault()
 		alert(`Not allowed to save ${name}`)
 		console.log(`Not allowed to save ${name}`)
@@ -7,8 +7,8 @@ function saveSettings(name, event) {
 	}
 }
 
-function resetSettings(name, event) {
-	if(getAuthorisationCookie() === "") {
+function resetSettings(name, check, event) {
+	if(check && getAuthorisationCookie() === "") {
 		event.preventDefault()
 		alert(`Not allowed to reset ${name}`)
 		console.log(`Not allowed to reset ${name}`)
