@@ -190,12 +190,12 @@ input.disabled:hover, input.disabled:focus {
 	
 	pointer-events: none;
 
-	animation: animateBg 6s linear infinite;
-	background-image: linear-gradient(0deg, rgba(20, 5, 5, 0.75), rgba(56, 9, 9, 0.75), rgba(20, 5, 5, 0.75), rgba(56, 9, 9, 0.75));
+	animation: animateBg 2s linear infinite;
+	background-image: linear-gradient(0deg, rgba(30, 5, 5, 0.75), rgba(46, 9, 9, 0.75), rgba(30, 5, 5, 0.75), rgba(46, 9, 9, 0.75));
 	background-size: 100% 300%;
-	
-	border-style: dashed;
-	border-width: 4px;
+
+	border-style: solid;
+	border-width: medium;
 	border-color: rgba(66, 11, 11, 0.75);
 }
 
@@ -210,16 +210,16 @@ input.disabled:hover, input.disabled:focus {
 	
 	pointer-events: none;
 
-	animation: animateBg 6s linear infinite;
-	background-image: linear-gradient(0deg, rgba(20, 5, 5, 0.75), rgba(56, 9, 9, 0.75), rgba(20, 5, 5, 0.75), rgba(56, 9, 9, 0.75));
+	animation: animateBg 2s linear infinite;
+	background-image: linear-gradient(0deg, rgba(30, 5, 5, 0.75), rgba(46, 9, 9, 0.75), rgba(30, 5, 5, 0.75), rgba(46, 9, 9, 0.75));
 	background-size: 100% 300%;
 
-	border-style: dashed;
-	border-width: 4px;
+	border-style: solid;
+	border-width: medium;
 	border-color: rgba(66, 11, 11, 0.75);
 }
 
 @keyframes animateBg {
-	0% { background-position: 0% 0%; }
-	100% { background-position: 0% 100%; }
+	0% { background-position: 0 0; }
+	100% { background-position: 0 100%; }
 }

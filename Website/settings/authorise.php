@@ -2,29 +2,13 @@
 
 include_once "../database.php";
 
-function createcookies() {
-	if($_SERVER['REQUEST_METHOD'] == 'POST' && array_key_exists('hashed_password', $_POST) && !empty($_POST['hashed_password'])) {
-		$ret = testpassword(htmlspecialchars(stripslashes(trim($_POST['hashed_password']))));
-
-		if($ret) {
-			$cookie_val = (int)(rand(69696969, 6969696969) / 420 * 5.0);
-			setcookie('authorisation', $cookie_val, time() + (86400 / 2), "/");
-			updateSetting('admincookie', $cookie_val);
-		}
-	}
-}
-
-/*
-// refresh page on load to prevent resending of post
-header("Refresh:0");
- */
 
 function createmodal() {
-	$isAdmin = testadmincookie();
+	$isAdmin = testAdminCookie();
 
 	// check if password is sent
-	if($_SERVER['REQUEST_METHOD'] == 'POST' && array_key_exists('hashed_password', $_POST) && !empty($_POST['hashed_password'])) {
-		$valid = testpassword(htmlspecialchars(stripslashes(trim($_POST['hashed_password']))));
+	if($_SERVER['REQUEST_METHOD'] == 'POST' && array_key_exists('hashed_password', $_POST)) {
+		$valid = testpassword($_POST['hashed_password']);
 
 		if($valid) {
 			?>
@@ -94,10 +78,19 @@ function createmodal() {
 	}
 }
 
-
 function testpassword($hash): bool {
 	$setting = getSetting('password');
-	return $setting == $hash;
+	$password = hash('sha256', $hash . getPepper());
+	return $setting == $password;
+}
+
+
+if($_SERVER['REQUEST_METHOD'] == 'POST' && array_key_exists('hashed_password', $_POST)) {
+	if(testpassword(htmlspecialchars(stripslashes(trim($_POST['hashed_password']))))) {
+		$cookie_val = (int)(rand(69696969, 6969696969) / 420 * 5.0);
+		setcookie('authorisation', $cookie_val, time() + (86400 / 2), "/");
+		updateSetting('adminCookie', $cookie_val);
+	}
 }
 
 ?>

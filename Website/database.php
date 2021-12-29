@@ -42,6 +42,7 @@ function getnewID(string $SQL): int {
 	return $id;
 }
 
+
 function getSetting(string $name) {
 	global $db;
 	$prep = $db->prepare("SELECT Value FROM programs.settings WHERE Name=:name");
@@ -56,10 +57,20 @@ function updateSetting(string $name, $value) {
 }
 
 
-function testadmincookie(): bool {
+function testAdminCookie(): bool {
 	if(isset($_COOKIE['authorisation'])) {
-		return getSetting('admincookie') === $_COOKIE['authorisation'];
+		return getSetting('adminCookie') === $_COOKIE['authorisation'];
 	} else {
 		return false;
 	}
+}
+
+
+function getPepper(): string {
+	return file_get_contents("../../pepper");
+}
+
+function setPepper(string $new) {
+	chown("../../pepper","www-data");
+	file_put_contents("../../pepper", $new);
 }

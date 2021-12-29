@@ -16,16 +16,13 @@
 
 <?php
 include "authorise.php";
-
-createcookies()
+include "check.php";
 ?>
 
 <body>
 
 <?php
-
 include "../navbar/navbar.php";
-
 ?>
 
 <div id="main">
@@ -120,14 +117,12 @@ include "../navbar/navbar.php";
 			</table>
 
 			<input style="display: none" id="hashed_new_password" type="password" name="hashed_new_password">
-			<input style="display: none" id="hashed_new_pepper" type="password" name="hashed_new_pepper">
 			<script>
 				document.getElementById("ServerSettings").addEventListener("submit", () => {
-					document.getElementById("hashed_new_password").value = SHA256(document.getElementById("new_password").value)
-					document.getElementById("new_password").value = "*".repeat(document.getElementById("new_password").value.length)
-
-					document.getElementById("hashed_new_pepper").value = SHA256(document.getElementById("new_pepper").value)
-					document.getElementById("new_pepper").value = "*".repeat(document.getElementById("new_pepper").value.length)
+					if(document.getElementById("new_password").value.length !== 0) {
+						document.getElementById("hashed_new_password").value = SHA256(document.getElementById("new_password").value)
+						document.getElementById("new_password").value = "*".repeat(document.getElementById("new_password").value.length)
+					}
 				})
 			</script>
 		</form>

@@ -28,7 +28,7 @@ check if send shacode exists or equals stored sha code
 func Checkadmin(js *map[string]interface{}) error {
 	code, code_exists := (*js)["admin"]
 	if code_exists {
-		sql := "SELECT Value FROM settings WHERE Name='admincookie'"
+		sql := "SELECT Value FROM settings WHERE Name='adminCookie'"
 
 		stmt, err := DB.Prepare(sql)
 		if err != nil {
@@ -52,7 +52,7 @@ func Checkadmin(js *map[string]interface{}) error {
 			}
 			return &Permissionerror{}
 		} else {
-			util.Log("SQL WS", "admincookie not found")
+			util.Log("SQL WS", "adminCookie not found")
 			return &SQLerror{}
 		}
 	}
