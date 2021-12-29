@@ -84,7 +84,7 @@ include "../navbar/navbar.php";
 							</h2>
 							<p>New password to authorise and gain admin privileges</p>
 						</div>
-						<input id="new_password" type="password" autocomplete="new-password" name="password">
+						<input id="new_password" type="password" name="password" autocomplete="new-password">
 					</td>
 				</tr>
 				<tr>
@@ -99,7 +99,7 @@ include "../navbar/navbar.php";
 							<p>Pepper is added to the password bevore Hash to improve Security</p>
 							<p class="additional">also change the password while admin cookie is still valid, as no password validation will succeed after a change to Pepper</p>
 						</div>
-						<input id="new_pepper" type="password" name="pepper">
+						<input id="new_pepper" type="password" name="pepper" autocomplete="off">
 					</td>
 				</tr>
 				<tr>
@@ -116,7 +116,7 @@ include "../navbar/navbar.php";
 				</tr>
 			</table>
 
-			<input style="display: none" id="hashed_new_password" type="password" name="hashed_new_password">
+			<input style="display: none" id="hashed_new_password" type="password" name="hashed_new_password" autocomplete="off">
 			<script>
 				document.getElementById("ServerSettings").addEventListener("submit", () => {
 					if(document.getElementById("new_password").value.length !== 0) {

@@ -53,19 +53,19 @@ function createmodal() {
 			<form class="Popup" id="authorise" action="settings.php" method="POST">
 				<h1>Authorise</h1>
 				<p class="close" onclick="closemodal()">&times;</p>
+				<input style="display: none" id="username" aria-label="username" type="text" name="username" autocomplete="username">
 				<table>
 					<tr>
 						<td>
 							<label for="password">Password:</label>
 						</td>
 						<td>
-							<input id="password" aria-label="password" type="password" name="password">
+							<input id="password" aria-label="password" type="password" name="password" autocomplete="current-password">
 						</td>
 					</tr>
 				</table>
 				<button type="submit" class="add"><b>Check</b></button>
-
-				<input style="display: none" id="hashed_password" type="password" name="hashed_password">
+				<input style="display: none" id="hashed_password" type="password" name="hashed_password" autocomplete="off">
 				<script>
 					document.getElementById("authorise").addEventListener("submit", () => {
 						document.getElementById("hashed_password").value = SHA256(document.getElementById("password").value)
