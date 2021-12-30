@@ -1,40 +1,44 @@
 #navbar {
 	list-style: none;
+
+	position: fixed;
+	z-index: 1000;
 	margin: 0;
 	padding: 0;
-	background: rgb(17, 17, 17);
-	
-	border-style: solid;
-	border-width: 2px;
-	border-color: rgb(29, 29, 29);
-	
-	position: fixed;
-	width: 15em;
-	height: calc(100% - 4px);
-	
-	overflow: auto;
+
+	background: var(--background-darkest);
+	display: flex;
+	flex-direction: column;
+
+	transition: width 200ms ease-out;
 }
 
 #navbar a {
-	display: block;
-	padding: 0.5em;
+	display: flex;
+	align-items: center;
+	height: 5rem;
 	text-decoration: none;
-	color: inherit;
-	
-	border-style: solid;
-	border-width: 2px;
-	border-color: transparent;
-	
-	overflow-x: hidden;
+	color: var(--white);
+
+	overflow: hidden;
 }
 
-#navbar h2 {
-	margin-block-start: 0;
-	margin-block-end: 0;
-	
-	align-self: center;
-	font-weight: inherit;
+#navbar a:hover {
+	background: var(--blacker);
 }
+
+#navbar a img {
+	min-width: 2rem;
+	max-width: 2rem;
+	margin: 0 1.5rem;
+	color: var(--white);
+}
+
+#navbar a h2 {
+	opacity: 0;
+	color: var(--white);
+}
+
 
 #navbar #Overview {
 	background-color: rgb(24, 49, 122);
@@ -44,17 +48,64 @@
 	background-color: rgb(14, 35, 97);
 }
 
-#navbar a:hover:not(#Overview) {
-	background-color: rgb(32, 29, 29);
+#navbar #Settings {
+	background-color: var(--background-dark);
 }
 
-#navbar a:hover {
-	border-style: dashed;
-	border-width: 2px;
-	border-color: black;
+#navbar #Settings:hover {
+	background: var(--background-darker);
 }
 
-#navbar .icon {
-	width: 40px;
-	height: 40px;
+
+@media only screen and (max-device-width: 650px) {
+	:root {
+		font-size: 11px;
+	}
+
+	#navbar {
+		bottom: 0;
+		width: 100%;
+		height: 5rem;
+
+		flex-direction: row;
+	}
+
+	#navbar h2 {
+		display: none;
+	}
+
+
+	#navbar li:last-child {
+		margin-left: auto;
+	}
+
+	#main {
+		margin-left: 0;
+		margin-bottom: calc(5rem + 15px);
+	}
+}
+
+@media only screen and (min-device-width: 650px) {
+	:root {
+		font-size: 16px;
+	}
+
+	#navbar {
+		width: 5rem;
+		height: 100%;
+	}
+
+	#navbar:hover {
+		width: 20rem;
+	}
+
+	#navbar:hover h2 {
+		display: inline;
+		opacity: 1;
+		transition: opacity var(--speed);
+	}
+
+	#navbar li:last-child {
+		margin-top: auto;
+	}
 }

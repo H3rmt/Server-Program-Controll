@@ -44,40 +44,52 @@
 	U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
 
+:root {
+	font-family: "Merriweather", monospace !important;
+
+	--white: #fff;
+	--background: rgb(32, 33, 37);
+	--background-dark: rgb(23, 24, 26);
+	--background-darker: rgb(20, 20, 20);
+	--background-darkest: rgb(16, 16, 16);
+	--blacker: rgb(10, 10, 10);
+	--black: #000;
+
+	--speed: 600ms;
+}
+
 body {
 	margin: 0;
-	background-color: black;
-	color: white;
-	font-family: "Merriweather", monospace !important;
+	background-color: var(--background);
+	color: var(--white);
 }
 
 #main {
 	height: 100%;
-	width: calc(100% - 15em - 4px);
-	
-	margin-left: calc(15em + 4px);
+	margin-left: 5rem;
+	color: var(--white);
 }
 
 #main .top {
-	height: 5em;
+	height: 5.5rem;
 	padding-right: 10px;
 	padding-left: 20px;
-	
+
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
-	
+
 	overflow: hidden;
-	
-	background: rgb(13, 13, 13);
-	
+
+	background: var(--background-dark);
+
 	border-style: solid;
 	border-width: 0 0 4px 0;
-	border-color: rgb(32, 29, 29);
+	border-color: var(--background-darkest);
 }
 
 #main .top .title {
-	font-size: 3em;
+	font-size: 3rem;
 }
 
 #main .top .topbuttonbar {
@@ -89,44 +101,64 @@ input {
 	border-radius: 25px;
 	border-width: 5px;
 	border-color: black;
-	
+
 	padding: 0.5em 1em;
-	
+
 	text-decoration: none;
-	color: black;
+	color: var(--white);
 	background: rgb(58, 58, 58);
-	
+
 	margin: 10px;
 	width: auto;
-	
+
 	cursor: pointer;
 	outline: none;
-	
+
 	font-size: 1.5em;
 }
 
 button {
 	border-style: solid;
-	border-radius: 25px;
-	border-width: 6px;
-	border-color: black;
-	
-	padding: 13px 25px;
-	margin-left: 10px;
-	margin-right: 10px;
-	transition-duration: 0.25s;
-	
+	border-color: var(--black);
+
 	text-decoration: none;
 	cursor: pointer;
 	outline: none;
 	overflow: hidden;
-	
+
 	background-color: rgb(58, 58, 58);
-	
+
 	font-family: inherit;
-	font-size: 1.5em;
-	color: black;
 	white-space: nowrap;
+}
+
+@media only screen and (min-device-width: 650px) {
+	button {
+		border-radius: 25px;
+		border-width: 6px;
+
+		padding: 13px 25px;
+		margin-left: 10px;
+		margin-right: 10px;
+
+		transition-duration: 0.25s;
+		font-size: 1.5rem;
+		color: var(--black);
+	}
+}
+
+@media only screen and (max-device-width: 650px) {
+	button {
+		border-radius: 20px;
+		border-width: 4px;
+
+		padding: 10px 20px;
+		margin-left: 5px;
+		margin-right: 5px;
+
+		font-size: 1.3rem;
+		color: var(--white);
+	}
 }
 
 button:hover {
@@ -134,15 +166,15 @@ button:hover {
 	color: black;
 }
 
- button:not(.disabled).danger {
+button:not(.disabled).danger {
 	background-color: rgb(129, 0, 0);
 }
 
- button:not(.disabled).danger:hover {
+button:not(.disabled).danger:hover {
 	background-color: rgb(88, 0, 0);
 }
 
- button:not(.disabled).add {
+button:not(.disabled).add {
 	background-color: green;
 }
 
@@ -187,7 +219,7 @@ input.disabled:hover, input.disabled:focus {
 	top: 50%;
 	left: 50%;
 	transform: translate(110%, -50%) rotateZ(40deg);
-	
+
 	pointer-events: none;
 
 	animation: animateBg 2s linear infinite;
@@ -207,7 +239,7 @@ input.disabled:hover, input.disabled:focus {
 	top: 50%;
 	left: 50%;
 	transform: translate(-190%, -50%) rotateZ(40deg);
-	
+
 	pointer-events: none;
 
 	animation: animateBg 2s linear infinite;
@@ -220,6 +252,10 @@ input.disabled:hover, input.disabled:focus {
 }
 
 @keyframes animateBg {
-	0% { background-position: 0 0; }
-	100% { background-position: 0 100%; }
+	0% {
+		background-position: 0 0;
+	}
+	100% {
+		background-position: 0 100%;
+	}
 }
