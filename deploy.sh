@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # dirs for the output
-html="/home/enrico/Website/"
+html="/var/www/html"
 goRemote="/home/enrico/Remote"
 goServer="/home/enrico/Server"
 
