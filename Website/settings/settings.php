@@ -42,7 +42,7 @@
 			<div class="topsetting">
 				<h1>Local settings</h1>
 				<div>
-					<button class="reset danger" onclick="event.preventDefault();resetSettings('Local settings',false,event)"><b>Restore Defaults</b></button>
+					<button class="reset danger" onclick="rresetSettings('Local settings',false,event)"><b>Restore Defaults</b></button>
 					<button class="save" onclick="saveSettings('Local settings',false,event)"><b>Save</b></button>
 				</div>
 			</div>
@@ -62,7 +62,7 @@
 			<div class="topsetting">
 				<h1>Client settings</h1>
 				<div>
-					<button class="reset danger" onclick="resetSettings('Client settings',true,event);"><b>Restore Defaults</b></button>
+					<button class="reset danger" onclick="rresetSettings('Client settings',true,event);"><b>Restore Defaults</b></button>
 					<button class="save" onclick="saveSettings('Client settings',true,event);"><b>Save</b></button>
 				</div>
 			</div>
@@ -82,7 +82,7 @@
 			<div class="topsetting">
 				<h1>Server settings</h1>
 				<div>
-					<button class="reset danger" onclick="resetSettings('Server settings',true,event)"><b>Restore Defaults</b></button>
+					<button class="reset danger" onclick="rresetSettings('Server settings',true,event)"><b>Restore Defaults</b></button>
 					<button class="save" onclick="saveSettings('Server settings',true,event)"><b>Save</b></button>
 				</div>
 			</div>

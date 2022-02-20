@@ -1,4 +1,4 @@
-function resetSettings(name, check, e) {
+function rresetSettings(name, check, e) {
 	e.stopPropagation()
 	if (check && getAuthorisationCookie() === "") {
 		alert(`Not allowed to reset ${name}`)
