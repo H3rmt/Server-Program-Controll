@@ -13,22 +13,22 @@ function createmodal() {
 		if($valid) {
 			?>
 			<div class="modal" style="display: block">
-				<form class="Popup" id="authorise">
+				<form class="Popup" id="authorise_feedback">
 					<h1>Authorise</h1>
 					<p class="close" onclick="document.getElementById('authorise').submit()">&times;</p>
 					<h3>Authorisation succeeded</h3>
-					<button class="Close"><b>Close</b></button>
+					<button autofocus class="Close"><b>Close</b></button>
 				</form>
 			</div>
 			<?php
 		} else {
 			?>
 			<div class="modal" style="display: block">
-				<form class="Popup" id="authorise">
+				<form class="Popup" id="authorise_feedback">
 					<h1>Authorise</h1>
 					<p class="close" onclick="document.getElementById('authorise').submit()">&times;</p>
 					<h3>Authorisation failed</h3>
-					<button class="Close"><b>Close</b></button>
+					<button autofocus class="Close"><b>Close</b></button>
 				</form>
 			</div>
 			<?php
@@ -42,8 +42,10 @@ function createmodal() {
 				<h1>Authorise</h1>
 				<p class="close" onclick="closemodal()">&times;</p>
 				<h3>Authorised</h3>
-				<button class="Reset danger" onclick="removeAuthorisationCookie();document.getElementById('authorise').submit()"><b>Reset</b></button>
-				<button class="Close"><b>Close</b></button>
+				<button class="Reset danger" onclick="removeAuthorisationCookie();document.getElementById('authorise').submit()">
+					<b>Reset</b>
+				</button>
+				<button class="Close" onclick="event.preventDefault();closemodal()"><b>Close</b></button>
 			</form>
 		</div>
 		<?php
@@ -86,7 +88,7 @@ function testpassword($hash): bool {
 
 
 if($_SERVER['REQUEST_METHOD'] == 'POST' && array_key_exists('hashed_password', $_POST)) {
-	if(testpassword(htmlspecialchars(stripslashes(trim($_POST['hashed_password']))))) {
+	if(testpassword($_POST['hashed_password'])) {
 		$cookie_val = (int)(rand(69696969, 6969696969) / 420 * 5.0);
 		setcookie('authorisation', $cookie_val, time() + (86400 / 2), "/");
 		updateSetting('adminCookie', $cookie_val);

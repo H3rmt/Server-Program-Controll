@@ -1,4 +1,6 @@
-# created by PHP-Storm
+create schema Programs;
+use Programs;
+
 create table programs
 (
     ID              int(13)     not null
@@ -51,3 +53,16 @@ create table settings
         unique (Name)
 );
 
+# inital password = authorise
+
+INSERT INTO settings (Name, Value) VALUES ('adminCookie', '');
+INSERT INTO settings (Name, Value) VALUES ('password', '20569225230b1abc60cff5c8cd4c990024841f733d7bf22b53a46b30bb53e8b0');
+INSERT INTO settings (Name, Value) VALUES ('timeout', '86400');
+
+create user Website
+    identified by '/6uM8qlYUm*NFCef';
+grant create, insert, select, update on Programs.* to Website;
+
+create user go
+    identified by 'e73EG6dP2f8F2dAx';
+grant create, insert, select, update on Programs.* to go;

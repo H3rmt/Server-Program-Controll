@@ -2,14 +2,14 @@
 <html lang="en">
 
 <head>
-<meta charset="utf-8"/>
-<meta name="viewport" content="width=device-width">
-<title>Overview</title>
-<link rel="stylesheet" href="homepage.css"/>
-<link rel="stylesheet" href="../mainstyle.css"/>
-<link rel="stylesheet" href="../modal.css"/>
+	<meta charset="utf-8"/>
+	<meta name="viewport" content="width=device-width">
+	<title>Overview</title>
+	<link rel="stylesheet" href="homepage.css"/>
+	<link rel="stylesheet" href="../mainstyle.css"/>
+	<link rel="stylesheet" href="../modal.css"/>
 
-<script src="../JS/utils.js"></script>
+	<script src="../JS/utils.js"></script>
 </head>
 
 <body>

@@ -14,16 +14,33 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 	}
 
+	// testtesttest
+
 	// Server Settings
 	if($isAdmin) {
-		if(!empty($_POST['hashed_new_password'])) {
-			updateSetting("password", hash('sha256', $_POST['hashed_new_password'] . getPepper()));
+		if(!empty($_POST['hashed-new-password'])) {
+			if(hash('sha256', $_POST['hashed-new-password'] . getPepper()) != getSetting('password')) {
+				updateSetting("password", hash('sha256', $_POST['hashed-new-password'] . getPepper()));
+				?>
+				<h2 class="feedback">New Password Set</h2>
+				<?php
+			}
 		}
-		if(!empty($_POST['pepper'])) {
-			setPepper($_POST['pepper']);
+		if(!empty($_POST['new-pepper'])) {
+			if($_POST['new-pepper'] != getPepper()) {
+				setPepper($_POST['new-pepper']);  // update password, as the old one wouldn't function anymore
+				?>
+				<h2 class="feedback">New Pepper Set</h2>
+				<?php
+			}
 		}
-		if(!empty($_POST['new_timeout'])) {
-			updateSetting("timeout", $_POST['new_timeout']);
+		if(!empty($_POST['new-timeout'])) {
+			if($_POST['new-timeout'] != getSetting('timeout')) {
+				updateSetting("timeout", $_POST['new-timeout']);
+				?>
+				<h2 class="feedback">New Timeout Set</h2>
+				<?php
+			}
 		}
 	}
 }

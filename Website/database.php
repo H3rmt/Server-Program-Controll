@@ -1,19 +1,19 @@
 <?php
 
-$db = new PDO('mysql:host=172.17.0.1', 'Website', '/6uM8qlYUm*NFCef');
+$db = new PDO('mysql:host=172.17.0.1; port=3308; dbname=Programs', 'Website', '/6uM8qlYUm*NFCef');
 //$db = new PDO('mysql:host=localhost', 'Website', '/6uM8qlYUm*NFCef');
 
 
 function getprogramms(): array {
 	global $db;
-	$prep = $db->prepare("SELECT ID, Name, Description, Imagesource, StatechangeTime FROM programs.programs");
+	$prep = $db->prepare("SELECT ID, Name, Description, Imagesource, StatechangeTime FROM programs");
 	$prep->execute();
 	return $prep->fetchAll(PDO::FETCH_ASSOC);
 }
 
 function getprogramm(int $id) {
 	global $db;
-	$prep = $db->prepare("SELECT ID, Name, Description, Imagesource, StatechangeTime FROM programs.programs WHERE ID=:id");
+	$prep = $db->prepare("SELECT ID, Name, Description, Imagesource, StatechangeTime FROM programs WHERE ID=:id");
 	$prep->execute([':id' => $id]);
 	return $prep->fetchAll(PDO::FETCH_ASSOC)[0];
 }
@@ -21,8 +21,8 @@ function getprogramm(int $id) {
 function addtoDatabase(string $Name, string $Description, string $imgsrc): array {
 	global $db;
 	$key = uniqid();
-	$ID = getnewID("SELECT ID FROM programs.programs ORDER BY ID");
-	$prep = $db->prepare("INSERT INTO programs.programs (ID,Name,Description,Imagesource,APIKey) VALUES (:ID,:Name,:Desc,:Imagesource,:APIKey)");
+	$ID = getnewID("SELECT ID FROM programs ORDER BY ID");
+	$prep = $db->prepare("INSERT INTO programs (ID,Name,Description,Imagesource,APIKey) VALUES (:ID,:Name,:Desc,:Imagesource,:APIKey)");
 	$prep->execute([':ID' => $ID, ':Name' => $Name, ':Desc' => $Description, ':Imagesource' => $imgsrc, ':APIKey' => $key]);
 	return [$ID, $key];
 }
@@ -45,14 +45,14 @@ function getnewID(string $SQL): int {
 
 function getSetting(string $name) {
 	global $db;
-	$prep = $db->prepare("SELECT Value FROM programs.settings WHERE Name=:name");
+	$prep = $db->prepare("SELECT Value FROM settings WHERE Name=:name");
 	$prep->execute([':name' => $name]);
 	return $prep->fetchAll(PDO::FETCH_ASSOC)[0]['Value'];
 }
 
 function updateSetting(string $name, $value) {
 	global $db;
-	$prep = $db->prepare("UPDATE programs.settings SET Value=:value WHERE Name=:name");
+	$prep = $db->prepare("UPDATE settings SET Value=:value WHERE Name=:name");
 	$prep->execute([':value' => $value, ':name' => $name]);
 }
 
@@ -71,6 +71,6 @@ function getPepper(): string {
 }
 
 function setPepper(string $new) {
-	chown("../../pepper","www-data");
+	chown("../../pepper", "http"); //www-data
 	file_put_contents("../../pepper", $new);
 }
