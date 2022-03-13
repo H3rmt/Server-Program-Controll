@@ -41,13 +41,18 @@ func (m *SQLerror) Error() string {
 finds the corresponding program with ID from the database
 */
 func getProgram_IDfromAPIKey(APIKey string) (string, error) {
-	sql := "SELECT ID from programs WHERE APIKey=?;"
-	stmt, err := DB.Prepare(sql)
+	sq := "SELECT ID from programs WHERE APIKey=?;"
+	stmt, err := DB.Prepare(sq)
 	if err != nil {
-		util.Log("PRGR API", err)
+		util.Err("PRGR API", err, true)
 		return "", &SQLerror{}
 	}
-	defer stmt.Close()
+	defer func(stmt *sql.Stmt) {
+		err := stmt.Close()
+		if err != nil {
+			util.Err("PRGR API", err, true)
+		}
+	}(stmt)
 
 	// Execute query
 	res, err := stmt.Query(APIKey)
@@ -78,13 +83,18 @@ func (m *InvalidAPIKeyerror) Error() string {
 adds log do the database from logrequest
 */
 func ProcessLogRequest(Program_ID string, logrequest *LogRequest) error {
-	sql := "INSERT INTO logs (program_ID,Date,Number,Message,Type) VALUES (?,?,?,?,?);"
-	stmt, err := DB.Prepare(sql)
+	sq := "INSERT INTO logs (program_ID,Date,Number,Message,Type) VALUES (?,?,?,?,?);"
+	stmt, err := DB.Prepare(sq)
 	if err != nil {
 		util.Log("PRGR API", err)
 		return &SQLerror{}
 	}
-	defer stmt.Close()
+	defer func(stmt *sql.Stmt) {
+		err := stmt.Close()
+		if err != nil {
+			util.Err("PRGR API", err, true)
+		}
+	}(stmt)
 
 	// Execute query
 	_, err = stmt.Query(Program_ID, logrequest.Date, logrequest.Number, logrequest.Message, logrequest.Type)
@@ -121,13 +131,18 @@ const (
 adds activity do the database from activityrequest
 */
 func ProcessActivityRequest(Program_ID string, activityrequest *ActivityRequest) error {
-	sql := "INSERT INTO activity (program_ID,Date,Type) VALUES (?,?,?);"
-	stmt, err := DB.Prepare(sql)
+	sq := "INSERT INTO activity (program_ID,Date,Type) VALUES (?,?,?);"
+	stmt, err := DB.Prepare(sq)
 	if err != nil {
 		util.Log("PRGR API", err)
 		return &SQLerror{}
 	}
-	defer stmt.Close()
+	defer func(stmt *sql.Stmt) {
+		err := stmt.Close()
+		if err != nil {
+			util.Err("PRGR API", err, true)
+		}
+	}(stmt)
 
 	// Execute query
 	_, err = stmt.Query(Program_ID, activityrequest.Date, activityrequest.Type)
@@ -162,14 +177,19 @@ const (
 Process request telling that the program stopped
 */
 func ProcessStateChangeRequest(Program_ID string, statechangerequest *StateChangeRequest) error {
-	sql := "UPDATE programs SET Active = ?, StatechangeTime = ? WHERE ID = ?;"
+	sq := "UPDATE programs SET Active = ?, StatechangeTime = ? WHERE ID = ?;"
 
-	stmt, err := DB.Prepare(sql)
+	stmt, err := DB.Prepare(sq)
 	if err != nil {
 		util.Log("PRGR API", err)
 		return &SQLerror{}
 	}
-	defer stmt.Close()
+	defer func(stmt *sql.Stmt) {
+		err := stmt.Close()
+		if err != nil {
+			util.Err("PRGR API", err, true)
+		}
+	}(stmt)
 
 	// Execute query
 	_, err = stmt.Query(statechangerequest.Start, statechangerequest.Date, Program_ID)
@@ -178,16 +198,19 @@ func ProcessStateChangeRequest(Program_ID string, statechangerequest *StateChang
 		return &SQLerror{}
 	}
 
-	stmt.Close()
+	sq = "INSERT INTO logs (program_ID,Date,Number,Message,Type) VALUES (?,?,?,?,?);"
 
-	sql = "INSERT INTO logs (program_ID,Date,Number,Message,Type) VALUES (?,?,?,?,?);"
-
-	stmt, err = DB.Prepare(sql)
+	stmt, err = DB.Prepare(sq)
 	if err != nil {
 		util.Log("PRGR API", err)
 		return &SQLerror{}
 	}
-	defer stmt.Close()
+	defer func(stmt *sql.Stmt) {
+		err := stmt.Close()
+		if err != nil {
+			util.Err("PRGR API", err, true)
+		}
+	}(stmt)
 
 	message := ""
 	if statechangerequest.Start {
@@ -211,8 +234,6 @@ func ProcessStateChangeRequest(Program_ID string, statechangerequest *StateChang
 	} else {
 		util.Log("SQL API", "State Change added to database")
 	}
-
-	stmt.Close()
 
 	return nil
 }
