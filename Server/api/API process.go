@@ -184,12 +184,6 @@ func ProcessStateChangeRequest(Program_ID string, statechangerequest *StateChang
 		util.Log("PRGR API", err)
 		return &SQLerror{}
 	}
-	defer func(stmt *sql.Stmt) {
-		err := stmt.Close()
-		if err != nil {
-			util.Err("PRGR API", err, true)
-		}
-	}(stmt)
 
 	// Execute query
 	_, err = stmt.Query(statechangerequest.Start, statechangerequest.Date, Program_ID)
@@ -197,6 +191,11 @@ func ProcessStateChangeRequest(Program_ID string, statechangerequest *StateChang
 		util.Log("PRGR API", err)
 		return &SQLerror{}
 	}
+	err = stmt.Close()
+	if err != nil {
+		util.Err("PRGR API", err, true)
+	}
+	//
 
 	sq = "INSERT INTO logs (program_ID,Date,Number,Message,Type) VALUES (?,?,?,?,?);"
 
