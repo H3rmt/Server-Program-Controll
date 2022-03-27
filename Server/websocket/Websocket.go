@@ -3,7 +3,6 @@ package websocket
 import (
 	"encoding/json"
 	"fmt"
-
 	"net/http"
 
 	"github.com/gorilla/mux"
@@ -22,7 +21,7 @@ var up = websocket.Upgrader{
 /*
 checks if recived JSON has action as key
 */
-func validateWSJSON(js *map[string]interface{}) (string, string) {
+func validateWSJSON(js *map[string]any) (string, string) {
 	Program_id, Program_id_key_exists := (*js)["Program_id"]
 	if Program_id_key_exists {
 		action := fmt.Sprintf("%v", (*js)["action"])
@@ -58,7 +57,7 @@ func reciveWS(c *websocket.Conn) {
 		fmt.Println()
 		util.Log("WS", c.RemoteAddr().String()+" -> "+string(raw))
 
-		var recive map[string]interface{}
+		var recive map[string]any
 		err = json.Unmarshal(raw, &recive)
 
 		if err != nil {
@@ -76,7 +75,7 @@ func reciveWS(c *websocket.Conn) {
 		}
 		util.Log("WS", "recived:", recive)
 
-		var data interface{}
+		var data any
 		var actionerr error
 
 		switch action {
@@ -101,13 +100,13 @@ func reciveWS(c *websocket.Conn) {
 
 		if actionerr != nil {
 			util.Log("WS", "send err:", actionerr)
-			msg, _ := json.Marshal(map[string]interface{}{"action": action, "error": actionerr.Error()})
+			msg, _ := json.Marshal(map[string]any{"action": action, "error": actionerr.Error()})
 			c.WriteMessage(1, msg)
 		} else {
-			msg, err := json.Marshal(map[string]interface{}{"action": action, "data": data})
+			msg, err := json.Marshal(map[string]any{"action": action, "data": data})
 			if err != nil {
 				util.Log("WS", "send err:", err)
-				msg, _ := json.Marshal(map[string]interface{}{"action": action, "error": err.Error()})
+				msg, _ := json.Marshal(map[string]any{"action": action, "error": err.Error()})
 				c.WriteMessage(1, msg)
 			}
 			util.Log("WS", "send:", string(msg))
@@ -127,7 +126,7 @@ func Createwebsocket(rout *mux.Router) {
 			util.Log("WS", "error while upgrading conncetion to websocket: ", r.RemoteAddr)
 			return
 		}
-		util.Log("WS", "upgraded conncetion to websocket: ", r.RemoteAddr)
+		// util.Log("WS", "upgraded conncetion to websocket: ", r.RemoteAddr)
 		go reciveWS(conn)
 	})
 }

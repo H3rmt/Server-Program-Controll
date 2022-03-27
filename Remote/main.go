@@ -28,17 +28,20 @@ func main() {
 		return
 	}
 
-	var fileload map[string]interface{}
-	json.Unmarshal(data, &fileload)
+	var fileload map[string]any
+	err = json.Unmarshal(data, &fileload)
+	if err != nil {
+		panic(err)
+	}
 
-	for _, v := range fileload["Programs"].([]interface{}) {
-		p := v.(map[string]interface{})
+	for _, v := range fileload["Programs"].([]any) {
+		p := v.(map[string]any)
 		var name = p["Name"].(string)
 		var program = p["Program"].(string)
 		var key = p["APIKey"].(string)
 		var dir = p["Dir"].(string)
-		var args = make([]string, len(p["Arguments"].([]interface{})))
-		for count, v := range p["Arguments"].([]interface{}) {
+		var args = make([]string, len(p["Arguments"].([]any)))
+		for count, v := range p["Arguments"].([]any) {
 			args[count] = v.(string)
 		}
 		if program != "" && key != "" {

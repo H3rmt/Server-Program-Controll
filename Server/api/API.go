@@ -9,7 +9,6 @@ import (
 
 	"github.com/gorilla/mux"
 
-	// create struct from map out of JSON
 	"github.com/mitchellh/mapstructure"
 
 	"Server/util"
@@ -19,23 +18,23 @@ import (
 checks if recived JSON has APIkey and (Register or Activity or Log or Action) as key
 returns the API key and Requesttype
 */
-func validateAPIJSON(js *map[string]interface{}) (string, action string) {
-	APIKey, Api_key_exists := (*js)["APIKey"]
-	if Api_key_exists {
-		_, Register_exists := (*js)["Register"]
-		_, Activity_exists := (*js)["Activity"]
-		_, Log_exists := (*js)["Log"]
-		_, StateChange_exists := (*js)["StateChange"]
-		if Register_exists && !Activity_exists && !Log_exists && !StateChange_exists {
+func validateAPIJSON(js *map[string]any) (string, action string) {
+	APIKey, ApiKeyExists := (*js)["APIKey"]
+	if ApiKeyExists {
+		_, RegisterExists := (*js)["Register"]
+		_, ActivityExists := (*js)["Activity"]
+		_, LogExists := (*js)["Log"]
+		_, StatechangeExists := (*js)["StateChange"]
+		if RegisterExists && !ActivityExists && !LogExists && !StatechangeExists {
 			return fmt.Sprintf("%v", APIKey), "Register"
 		}
-		if Activity_exists && !Register_exists && !Log_exists && !StateChange_exists {
+		if ActivityExists && !RegisterExists && !LogExists && !StatechangeExists {
 			return fmt.Sprintf("%v", APIKey), "Activity"
 		}
-		if Log_exists && !Register_exists && !Activity_exists && !StateChange_exists {
+		if LogExists && !RegisterExists && !ActivityExists && !StatechangeExists {
 			return fmt.Sprintf("%v", APIKey), "Log"
 		}
-		if StateChange_exists && !Register_exists && !Activity_exists && !Log_exists {
+		if StatechangeExists && !RegisterExists && !ActivityExists && !LogExists {
 			return fmt.Sprintf("%v", APIKey), "StateChange"
 		}
 	}
@@ -45,9 +44,9 @@ func validateAPIJSON(js *map[string]interface{}) (string, action string) {
 /*
 Error returned when Request values were invalid
 */
-type InvalidRequesterror struct{}
+type InvalidRequestError struct{}
 
-func (m *InvalidRequesterror) Error() string {
+func (m *InvalidRequestError) Error() string {
 	return "Invalid Request values"
 }
 
@@ -59,7 +58,7 @@ returns byte array out of JSON to write
 func reciveAPI(raw *[]byte, addr string) []byte {
 	fmt.Println()
 
-	var recive map[string]interface{}
+	var recive map[string]any
 	err := json.Unmarshal(*raw, &recive)
 
 	if err != nil {
@@ -80,7 +79,7 @@ func reciveAPI(raw *[]byte, addr string) []byte {
 	ProgammID, err := getProgram_IDfromAPIKey(APIKey)
 	if err != nil {
 		util.Log("API", "APIKeyerr:", err)
-		msg, _ := json.Marshal(map[string]interface{}{"type": request, "error": err.Error()})
+		msg, _ := json.Marshal(map[string]any{"type": request, "error": err.Error()})
 		return msg
 	}
 
@@ -95,7 +94,7 @@ func reciveAPI(raw *[]byte, addr string) []byte {
 		if activityrequest.Date != "-1" && activityrequest.Type != "-1" {
 			err = ProcessActivityRequest(ProgammID, &activityrequest)
 		} else {
-			err = &InvalidRequesterror{}
+			err = &InvalidRequestError{}
 		}
 	case "Log":
 		logrequest := LogRequest{Date: "-1", Number: -1, Message: "-1", Type: "-1"}
@@ -103,7 +102,7 @@ func reciveAPI(raw *[]byte, addr string) []byte {
 		if logrequest.Date != "-1" && logrequest.Number != -1 && logrequest.Message != "-1" && logrequest.Type != "-1" {
 			err = ProcessLogRequest(ProgammID, &logrequest)
 		} else {
-			err = &InvalidRequesterror{}
+			err = &InvalidRequestError{}
 		}
 	case "StateChange":
 		statechangerequest := StateChangeRequest{Date: "-1", Number: -1}
@@ -111,20 +110,20 @@ func reciveAPI(raw *[]byte, addr string) []byte {
 		if statechangerequest.Date != "-1" {
 			err = ProcessStateChangeRequest(ProgammID, &statechangerequest)
 		} else {
-			err = &InvalidRequesterror{}
+			err = &InvalidRequestError{}
 		}
 
 	}
 
 	if err != nil {
 		util.Log("API", "send err:", err)
-		msg, _ := json.Marshal(map[string]interface{}{"type": request, "error": err.Error()})
+		msg, _ := json.Marshal(map[string]any{"type": request, "error": err.Error()})
 		return msg
 	} else {
-		msg, _ := json.Marshal(map[string]interface{}{"type": request, "success": true})
+		msg, _ := json.Marshal(map[string]any{"type": request, "success": true})
 		if err != nil {
 			util.Log("API", "send err:", err)
-			msg, _ := json.Marshal(map[string]interface{}{"type": request, "error": err.Error()})
+			msg, _ := json.Marshal(map[string]any{"type": request, "error": err.Error()})
 			return msg
 		}
 		return msg
@@ -143,7 +142,7 @@ func CreateAPI(rout *mux.Router) {
 
 		if msg == nil {
 			w.WriteHeader(http.StatusBadRequest)
-			msg, _ = json.Marshal(map[string]interface{}{"error": "bad request"})
+			msg, _ = json.Marshal(map[string]any{"error": "bad request"})
 		}
 
 		_, err := w.Write(msg)

@@ -16,6 +16,7 @@ type config struct {
 	User            string
 	Password        string
 	Database        string
+	DbPort          uint16
 }
 
 var conf config
@@ -52,4 +53,5 @@ func defaultConfig() {
 	conf.User = ""
 	conf.Password = ""
 	conf.Database = ""
+	conf.DbPort = 0
 }

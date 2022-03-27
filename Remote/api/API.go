@@ -1,18 +1,17 @@
 package api
 
 import (
-	"Remote/util"
 	"bytes"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"net/http"
 
+	"Remote/util"
+
 	"github.com/gorilla/mux"
 	"github.com/mitchellh/mapstructure"
 )
-
-var RemoteIP string
 
 /*
 start API to listen to CommandRequests
@@ -26,7 +25,7 @@ func CreateAPI(rout *mux.Router) {
 
 		if msg == nil {
 			w.WriteHeader(http.StatusBadRequest)
-			msg, _ = json.Marshal(map[string]interface{}{"error": "bad request"})
+			msg, _ = json.Marshal(map[string]any{"error": "bad request"})
 		}
 
 		_, err := w.Write(msg)
@@ -38,9 +37,9 @@ func CreateAPI(rout *mux.Router) {
 	}).Methods("POST")
 }
 
-func validateAPIJSON(js *map[string]interface{}) string {
-	APIKey, Api_key_exists := (*js)["APIKey"]
-	if Api_key_exists {
+func validateAPIJSON(js *map[string]any) string {
+	APIKey, ApiKeyExists := (*js)["APIKey"]
+	if ApiKeyExists {
 		return APIKey.(string)
 	}
 	return ""
@@ -64,7 +63,7 @@ returns byte array out of JSON to write
 func reciveAPI(raw *[]byte) []byte {
 	fmt.Println()
 
-	var recive map[string]interface{}
+	var recive map[string]any
 	err := json.Unmarshal(*raw, &recive)
 
 	if err != nil {
@@ -82,10 +81,10 @@ func reciveAPI(raw *[]byte) []byte {
 	}
 	util.Log("API", "recived: ", recive)
 
-	Program, err := getProgramm_IDfromAPIKey(APIKey)
+	Program, err := getprogrammIdfromapikey(APIKey)
 	if err != nil {
 		util.Log("API", "err:", err)
-		msg, _ := json.Marshal(map[string]interface{}{"error": err.Error()})
+		msg, _ := json.Marshal(map[string]any{"error": err.Error()})
 		return msg
 	}
 
@@ -95,13 +94,13 @@ func reciveAPI(raw *[]byte) []byte {
 
 	if err != nil {
 		util.Log("API", "err:", err)
-		msg, _ := json.Marshal(map[string]interface{}{"error": err.Error()})
+		msg, _ := json.Marshal(map[string]any{"error": err.Error()})
 		return msg
 	} else {
-		msg, _ := json.Marshal(map[string]interface{}{"success": true})
+		msg, _ := json.Marshal(map[string]any{"success": true})
 		if err != nil {
 			util.Log("API", "err:", err)
-			msg, _ := json.Marshal(map[string]interface{}{"error": err.Error()})
+			msg, _ := json.Marshal(map[string]any{"error": err.Error()})
 			return msg
 		}
 		return msg
@@ -113,7 +112,7 @@ called to register a program with an APIKey to remote server
 */
 func Register(program *Program) error {
 	util.Log("API", "Registering Program:", program.Name, " on", util.GetConfig().RemoteIP)
-	req := map[string]interface{}{"APIKey": program.APIKey, "Register": true, "Port": util.GetConfig().Port}
+	req := map[string]any{"APIKey": program.APIKey, "Register": true, "Port": util.GetConfig().Port}
 	jsonReq, err := json.Marshal(req)
 	if err != nil {
 		return err
@@ -130,7 +129,7 @@ func Register(program *Program) error {
 	}
 	util.Log("API", "recived:", string(bodyBytes))
 
-	answer := make(map[string]interface{})
+	answer := make(map[string]any)
 	err = json.Unmarshal(bodyBytes, &answer)
 	if err != nil {
 		return err
