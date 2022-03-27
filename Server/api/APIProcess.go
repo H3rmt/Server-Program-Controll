@@ -77,10 +77,9 @@ func ProcessLogRequest(Program_ID string, logrequest *LogRequest) error {
 	_, err := DB.NamedExec(sq, &struct {
 		ProgramId string `db:"programId"`
 		Date      string `db:"Date"`
-		Number    int    `db:"Number"`
 		Message   string `db:"Message"`
 		Type      string `db:"Type"`
-	}{Program_ID, logrequest.Date, int(logrequest.Number), logrequest.Message, string(logrequest.Type)})
+	}{Program_ID, logrequest.Date, logrequest.Message, string(logrequest.Type)})
 	if err != nil {
 		util.Log("PRGR API", err)
 		return &SQLerror{}
@@ -95,7 +94,6 @@ Struct to represent a Request asking to add a log in the Log table in DB
 */
 type LogRequest struct {
 	Date    string
-	Number  float64
 	Message string
 	Type    Logtype
 }
@@ -169,10 +167,9 @@ func ProcessStateChangeRequest(Program_ID string, statechangerequest *StateChang
 	_, err = DB.NamedExec(sq, &struct {
 		ProgramId string `db:"program_ID"`
 		Date      string `db:"Date"`
-		Number    int    `db:"Number"`
 		Message   string `db:"Message"`
 		Type      string `db:"Type"`
-	}{Program_ID, statechangerequest.Date, statechangerequest.Number, message, "Important"})
+	}{Program_ID, statechangerequest.Date, message, "Important"})
 	if err != nil {
 		util.Log("PRGR API", err)
 		return &SQLerror{}
@@ -187,7 +184,6 @@ func ProcessStateChangeRequest(Program_ID string, statechangerequest *StateChang
 Struct to represent a Request telling that the program stopped or started
 */
 type StateChangeRequest struct {
-	Date   string
-	Number int
-	Start  bool
+	Date  string
+	Start bool
 }

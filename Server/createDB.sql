@@ -35,7 +35,6 @@ create table logs
         primary key,
     program_ID int(13)                                      not null,
     Date       timestamp default current_timestamp()        not null on update current_timestamp(),
-    Number     int                                          not null,
     Message    text                                         not null,
     Type       enum ('Low', 'Normal', 'Important', 'Error') not null,
     constraint logs_ibfk_1

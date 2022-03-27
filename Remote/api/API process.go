@@ -131,7 +131,6 @@ Struct to represent a Request asking to add a log in the Log table in DB
 */
 type LogRequest struct {
 	Date    string
-	Number  int
 	Message string
 	Type    Logtype
 }
