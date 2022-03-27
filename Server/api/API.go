@@ -97,15 +97,15 @@ func reciveAPI(raw *[]byte, addr string) []byte {
 			err = &InvalidRequestError{}
 		}
 	case "Log":
-		logrequest := LogRequest{Date: "-1", Number: -1, Message: "-1", Type: "-1"}
+		logrequest := LogRequest{Date: "-1", Message: "-1", Type: "-1"}
 		mapstructure.Decode(recive["Log"], &logrequest)
-		if logrequest.Date != "-1" && logrequest.Number != -1 && logrequest.Message != "-1" && logrequest.Type != "-1" {
+		if logrequest.Date != "-1" && logrequest.Message != "-1" && logrequest.Type != "-1" {
 			err = ProcessLogRequest(ProgammID, &logrequest)
 		} else {
 			err = &InvalidRequestError{}
 		}
 	case "StateChange":
-		statechangerequest := StateChangeRequest{Date: "-1", Number: -1}
+		statechangerequest := StateChangeRequest{Date: "-1"}
 		mapstructure.Decode(recive["StateChange"], &statechangerequest)
 		if statechangerequest.Date != "-1" {
 			err = ProcessStateChangeRequest(ProgammID, &statechangerequest)

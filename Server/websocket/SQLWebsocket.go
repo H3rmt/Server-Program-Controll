@@ -82,7 +82,7 @@ func (m *InvalidAPIKeyerror) Error() string {
 returns logs as array of Log-structs from DB (logs)
 */
 func Getlogs(Program_id string) ([]Log, error) {
-	sql := "SELECT Date,Number,Message,Type FROM logs WHERE program_ID=?"
+	sql := "SELECT Date,Message,Type FROM logs WHERE program_ID=?"
 
 	// []Log{} so it sends empty array instead of null
 	var logs = []Log{}
@@ -99,7 +99,6 @@ Struct to represent a row in the Log table
 */
 type Log struct {
 	Date    string  `db:"Date"`
-	Number  float64 `db:"Number"`
 	Message string  `db:"Message"`
 	Type    Logtype `db:"Type"`
 }

@@ -123,10 +123,10 @@ func Createwebsocket(rout *mux.Router) {
 		conn, err := up.Upgrade(w, r, nil)
 		if err != nil {
 			util.Log("WS", err)
-			util.Log("WS", "error while upgrading conncetion to websocket: ", r.RemoteAddr)
+			util.Log("WS", "error while upgrading connection to websocket: ", r.RemoteAddr)
 			return
 		}
-		// util.Log("WS", "upgraded conncetion to websocket: ", r.RemoteAddr)
+		// util.Log("WS", "upgraded connection to websocket: ", r.RemoteAddr)
 		go reciveWS(conn)
 	})
 }
