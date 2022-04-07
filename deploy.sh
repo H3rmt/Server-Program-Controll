@@ -1,9 +1,9 @@
 #!/bin/bash
 
 # dirs for the output
-html="/var/www/html"
-goRemote="/home/enrico/Remote"
-goServer="/home/enrico/Server"
+html="/srv/http"
+goRemote="/home/remote/Remote"
+goServer="/home/remote/Server"
 
 
 # copy/override config files
