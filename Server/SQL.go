@@ -1,13 +1,11 @@
 package main
 
 import (
-	"context"
-	"database/sql"
 	"fmt"
-	
 	// used at sql.Open(->"mysql"<-, fmt.Sprintf
 	_ "github.com/go-sql-driver/mysql"
-	
+	"github.com/jmoiron/sqlx"
+
 	"Server/api"
 	"Server/util"
 	"Server/websocket"
@@ -17,14 +15,15 @@ import (
 Create and open SQL Connection
 */
 func SQLInit() {
-	DB, err := sql.Open("mysql", fmt.Sprintf("%s:%s@/%s", util.GetConfig().User, util.GetConfig().Password, util.GetConfig().Database))
+	DB, err := sqlx.Open("mysql", fmt.Sprintf("%s:%s@tcp(localhost:%d)/%s", util.GetConfig().User, util.GetConfig().Password, util.GetConfig().DbPort, util.GetConfig().Database))
 	if err != nil {
 		util.Err("SQL", err, true, "Error creating connection")
+		panic(err)
 	}
-	ctx := context.Background()
-	err = DB.PingContext(ctx)
+	err = DB.Ping()
 	if err != nil {
 		util.Err("SQL", err, true, "Error creating connection")
+		panic(err)
 	}
 	util.Log("SQL", "Connected!")
 

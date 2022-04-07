@@ -19,7 +19,7 @@ const (
 	CONFIG Type = "CONFIG"
 )
 
-func Err(prefx Type, err error, printtrace bool, message ...interface{}) {
+func Err(prefx Type, err error, printtrace bool, message ...any) {
 	log(prefx, "!", message...)
 	if err != nil {
 		log(prefx, "!", err.Error())
@@ -29,15 +29,15 @@ func Err(prefx Type, err error, printtrace bool, message ...interface{}) {
 	}
 }
 
-func Debug(message ...interface{}) {
+func Debug(message ...any) {
 	log("DEBUG", "*", message...)
 }
 
-func Log(prefx Type, message ...interface{}) {
+func Log(prefx Type, message ...any) {
 	log(prefx, ">", message...)
 }
 
-func log(prefx Type, suffix string, message ...interface{}) {
+func log(prefx Type, suffix string, message ...any) {
 	now := time.Now() // get this early.
 
 	_, file, line, ok := runtime.Caller(2)

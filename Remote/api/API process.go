@@ -39,7 +39,7 @@ Send Activity to server
 */
 func SendActivity(program *Program, activitytype Activitytype) error {
 	date := time.Now().Format("2006-01-02 15:04:05")
-	activityrequest := map[string]interface{}{"APIKey": program.APIKey, "Activity": ActivityRequest{Date: date, Type: activitytype}}
+	activityrequest := map[string]any{"APIKey": program.APIKey, "Activity": ActivityRequest{Date: date, Type: activitytype}}
 	jsonReq, err := json.Marshal(activityrequest)
 	if err != nil {
 		return err
@@ -94,7 +94,7 @@ Send Log to server
 */
 func SendLog(message string, program *Program, logtype Logtype) error {
 	date := time.Now().Format("2006-01-02 15:04:05")
-	logrequest := map[string]interface{}{"APIKey": program.APIKey, "Log": LogRequest{Date: date, Message: message, Type: logtype}}
+	logrequest := map[string]any{"APIKey": program.APIKey, "Log": LogRequest{Date: date, Message: message, Type: logtype}}
 	jsonReq, err := json.Marshal(logrequest)
 	if err != nil {
 		return err
@@ -131,7 +131,6 @@ Struct to represent a Request asking to add a log in the Log table in DB
 */
 type LogRequest struct {
 	Date    string
-	Number  int
 	Message string
 	Type    Logtype
 }
@@ -150,7 +149,7 @@ Send State Change to server
 */
 func SendStateChange(program *Program, Start bool) error {
 	date := time.Now().Format("2006-01-02 15:04:05")
-	statechangerequest := map[string]interface{}{"APIKey": program.APIKey, "StateChange": StateChangeRequest{Date: date, Start: Start}}
+	statechangerequest := map[string]any{"APIKey": program.APIKey, "StateChange": StateChangeRequest{Date: date, Start: Start}}
 	jsonReq, err := json.Marshal(statechangerequest)
 	if err != nil {
 		return err

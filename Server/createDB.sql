@@ -35,7 +35,6 @@ create table logs
         primary key,
     program_ID int(13)                                      not null,
     Date       timestamp default current_timestamp()        not null on update current_timestamp(),
-    Number     int                                          not null,
     Message    text                                         not null,
     Type       enum ('Low', 'Normal', 'Important', 'Error') not null,
     constraint logs_ibfk_1
@@ -53,7 +52,7 @@ create table settings
         unique (Name)
 );
 
-# inital password = authorise
+# initial password = authorise
 
 INSERT INTO settings (Name, Value) VALUES ('adminCookie', '');
 INSERT INTO settings (Name, Value) VALUES ('password', '20569225230b1abc60cff5c8cd4c990024841f733d7bf22b53a46b30bb53e8b0');

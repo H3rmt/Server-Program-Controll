@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"os/exec"
 	"strings"
-	"time"
 
 	"Remote/util"
 )
@@ -37,7 +36,7 @@ type Program struct {
 /*
 finds the corresponding program from list of programs
 */
-func getProgramm_IDfromAPIKey(APIKey string) (*Program, error) {
+func getprogrammIdfromapikey(APIKey string) (*Program, error) {
 	for i := 0; i < len(Programs); i++ {
 		if Programs[i].APIKey == APIKey {
 			util.Log("EXEC PR", "Program found:", APIKey, Programs[i].Program, Programs[i].Arguments)
@@ -50,7 +49,7 @@ func getProgramm_IDfromAPIKey(APIKey string) (*Program, error) {
 // Start
 func (pr *Program) Start() error {
 	if pr.cmd != nil {
-		return fmt.Errorf("program running")
+		return fmt.Errorf("program already running")
 	}
 	cmd := exec.Command(pr.Program, pr.Arguments...)
 	cmd.Dir = pr.Dir
@@ -65,7 +64,12 @@ func (pr *Program) Start() error {
 	cmd.Stdout = &pr.reader.outReader
 	cmd.Stderr = &pr.reader.errReader
 
-	err := cmd.Start()
+	err := SendStateChange(pr, true)
+	if err != nil {
+		util.Log("EXEC PR", "error sending start", err)
+	}
+
+	err = cmd.Start()
 	if err != nil {
 		util.Log("EXEC PR", "error Starting Program: ", pr.Name)
 		return err
@@ -74,20 +78,17 @@ func (pr *Program) Start() error {
 	}
 
 	go func() {
-		// Delay this Message, so it doesn't mix up with start response
-		time.Sleep(30 * time.Millisecond)
-		err = SendStateChange(pr, true)
-		if err != nil {
-			util.Log("EXEC PR", "error sending start", err)
-		}
-	}()
-
-	go func() {
-		cmd.Wait()
+		err := cmd.Wait()
 		pr.cmd = nil
-		util.Log("EXEC PR", "Program finished: ", pr.Name)
+		util.Log("EXEC PR", "Program finished: ", pr.Name, "Error:", err)
+		if err != nil {
+			err := SendLog(err.Error(), pr, Important)
+			if err != nil {
+				util.Log("EXEC PR", "err sending error Log", err)
+			}
+		}
 
-		err := SendStateChange(pr, false)
+		err = SendStateChange(pr, false)
 		if err != nil {
 			util.Log("EXEC PR", "err sending shutdown", err)
 		}
@@ -104,7 +105,7 @@ func (pr *Program) Stop() (err error) {
 			pr.cmd = nil
 		}
 	} else {
-		err = fmt.Errorf("program was not started")
+		err = fmt.Errorf("program not running")
 	}
 	return
 }
@@ -129,11 +130,11 @@ finds logtype of logmessage and returns message without prefix
 */
 func processLogLevel(message string) (string, Logtype) {
 	if strings.HasPrefix(message, "LOW|") {
-		return strings.Replace(message, "LOW|", "", 1), Logtype(Low)
+		return strings.Replace(message, "LOW|", "", 1), Low
 	} else if strings.HasPrefix(message, "NORMAL|") {
-		return strings.Replace(message, "NORMAL|", "", 1), Logtype(Normal)
+		return strings.Replace(message, "NORMAL|", "", 1), Normal
 	} else if strings.HasPrefix(message, "IMPORTANT|") {
-		return strings.Replace(message, "IMPORTANT|", "", 1), Logtype(Important)
+		return strings.Replace(message, "IMPORTANT|", "", 1), Important
 	} else {
 		return message, Logtype(Normal)
 	}
@@ -172,7 +173,6 @@ func (w *stdoutWriter) Write(p []byte) (int, error) {
 		return len(p), nil
 	}
 	if strings.Contains(str, "\n") {
-		util.Log("split")
 		for _, line := range strings.Split(str, "\n") {
 			str := strings.TrimSpace(line)
 			if len(str) == 0 {
@@ -193,24 +193,24 @@ func (w *stdoutWriter) processOutput(out string) {
 	util.Log("EXEC PR", w.programparent.Name, " out: ", ">>", out, "<<")
 	outtype := CheckLog(string(out))
 	if outtype == "Log" {
-		newout, logtype := processLogLevel(strings.TrimSpace(string(out)))
+		newout, logtype := processLogLevel(strings.TrimSpace(out))
 		err := SendLog(strings.TrimSpace(newout), w.programparent, logtype)
 		if err != nil {
 			util.Log("EXEC PR", "err sending out log", err)
 		}
 	} else if outtype == "Activity" {
-		activitytype := processActivityLevel(strings.TrimSpace(string(out)))
+		activitytype := processActivityLevel(strings.TrimSpace(out))
 		err := SendActivity(w.programparent, activitytype)
 		if err != nil {
 			util.Log("EXEC PR", "err sending out activity", err)
 		}
 	} else if outtype == "Activity Log" {
-		activitytype := processActivityLevel(strings.TrimSpace(string(out)))
+		activitytype := processActivityLevel(strings.TrimSpace(out))
 		err := SendActivity(w.programparent, activitytype)
 		if err != nil {
 			util.Log("EXEC PR", "err sending out activity", err)
 		}
-		removed := strings.TrimSpace(strings.Replace(string(out), strings.SplitN(string(out), "]", 2)[0]+"]", "", 1))
+		removed := strings.TrimSpace(strings.Replace(string(out), strings.SplitN(out, "]", 2)[0]+"]", "", 1))
 		newout, logtype := processLogLevel(strings.TrimSpace(removed))
 		err = SendLog(strings.TrimSpace(newout), w.programparent, logtype)
 		if err != nil {
@@ -232,8 +232,8 @@ func (w *stderrWriter) Write(p []byte) (int, error) {
 process stderr Info
 */
 func (w *stderrWriter) processError(err string) {
-	util.Log("EXEC PR", w.programparent.Name, "err:", string(err))
-	errr := SendLog(strings.TrimSpace(string(err)), w.programparent, Logtype(Error))
+	util.Log("EXEC PR", w.programparent.Name, "err:", err)
+	errr := SendLog(strings.TrimSpace(string(err)), w.programparent, Error)
 	if errr != nil {
 		util.Log("EXEC PR", "err sending err", errr)
 	}
