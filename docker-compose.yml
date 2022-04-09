@@ -17,6 +17,6 @@ services:
        - db
     restart: always
     ports:
-      - "8080:80"
+      - "80:80"
     volumes:
-      - ./Website:/var/www/http
+      - /srv/http:/var/www/http
