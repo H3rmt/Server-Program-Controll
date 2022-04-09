@@ -15,7 +15,6 @@ services:
 
   web:
     image: nginx:1.21.6-alpine
-    container_name: webserver
     depends_on:
       - db
       - php
