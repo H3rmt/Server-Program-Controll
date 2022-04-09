@@ -27,7 +27,7 @@ projectFolder=$(pwd)
 
 # Update repo
 printf "fetching from git\n"
-git fetch & git pull
+git fetch && git pull
 git log -1 --pretty=%B
 
 CopyFolder() {
