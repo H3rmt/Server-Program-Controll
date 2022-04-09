@@ -5,7 +5,7 @@ html="/srv/http"
 goRemote="/home/remote/Remote"
 goServer="/home/remote/Server"
 
-
+ 
 # copy/override config files
 read -p "initial deploy? [y/N] " r
 initial=False
@@ -26,10 +26,8 @@ remote="Remote"
 projectFolder=$(pwd)
 
 # Update repo
-fetch=$(git fetch)
-printf "fetching from git:%s\n" "$fetch"
-reset=$(git reset --hard)
-printf "reset git:%s\n\n" "$reset"
+git fetch & git pull
+printf "fetching from git\n"
 
 CopyFolder() {
 	if [ ! -d "$1" ]; then
