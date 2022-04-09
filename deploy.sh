@@ -26,8 +26,9 @@ remote="Remote"
 projectFolder=$(pwd)
 
 # Update repo
+echo "fetching from git\n"
 git fetch & git pull
-printf "fetching from git\n"
+echo git log -1 --pretty=%B
 
 CopyFolder() {
 	if [ ! -d "$1" ]; then
