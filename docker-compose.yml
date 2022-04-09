@@ -19,4 +19,4 @@ services:
     ports:
       - "80:80"
     volumes:
-      - /srv/http:/var/www/http
+      - /srv/http:/var/www/html
