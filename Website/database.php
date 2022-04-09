@@ -1,7 +1,6 @@
 <?php
 
 $db = new PDO('mysql:host=172.17.0.1; port=3308; dbname=Programs', 'Website', '/6uM8qlYUm*NFCef');
-//$db = new PDO('mysql:host=localhost', 'Website', '/6uM8qlYUm*NFCef');
 
 
 function getprogramms(): array {
