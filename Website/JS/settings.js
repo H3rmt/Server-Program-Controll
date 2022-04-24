@@ -51,7 +51,8 @@ function sleep(time) {
 				 element.style.padding = '0'
 				 await sleep(1000)
 				 element.remove()
-			 })()
+			 })().then(r => {
+			 })
 		 }
 	 }
 )()

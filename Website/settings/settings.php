@@ -99,22 +99,6 @@
 					</td>
 				</tr>
 				<tr>
-					<td class="seperator"></td>
-				</tr>
-				<tr>
-					<td class="setting">
-						<div>
-							<h2>
-								<label for="new_pepper">Pepper</label>
-							</h2>
-							<p>Pepper is added to the password bevore Hash to improve Security</p>
-							<p class="additional">also change the password while admin cookie is still valid, as no password validation will
-								succeed after a change to Pepper</p>
-						</div>
-						<input id="new_pepper" type="text" name="new-pepper" autocomplete="off" value=<?= $pepper ?? '' ?>>
-					</td>
-				</tr>
-				<tr>
 					<td class="setting">
 						<div>
 							<h2>
@@ -125,6 +109,9 @@
 						</div>
 						<input id="new_timeout" type="number" name="new-timeout" value=<?= $timeout ?? '' ?>>
 					</td>
+				</tr>
+				<tr>
+					<td class="seperator"></td>
 				</tr>
 			</table>
 

@@ -26,14 +26,6 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
 				<?php
 			}
 		}
-		if(!empty($_POST['new-pepper'])) {
-			if($_POST['new-pepper'] != getPepper()) {
-				setPepper($_POST['new-pepper']);  // update password, as the old one wouldn't function anymore
-				?>
-				<h2 class="feedback">New Pepper Set</h2>
-				<?php
-			}
-		}
 		if(!empty($_POST['new-timeout'])) {
 			if($_POST['new-timeout'] != getSetting('timeout')) {
 				updateSetting("timeout", $_POST['new-timeout']);

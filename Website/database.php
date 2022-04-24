@@ -66,10 +66,5 @@ function testAdminCookie(): bool {
 
 
 function getPepper(): string {
-	return file_get_contents("../../pepper");
-}
-
-function setPepper(string $new) {
-	chown("../../pepper", "http"); //www-data
-	file_put_contents("../../pepper", $new);
+	return "uwu";
 }
