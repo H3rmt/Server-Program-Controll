@@ -25,8 +25,8 @@ services:
       - ./Website:/srv/http
       - ./nginx:/etc/nginx/conf.d/
     ports:
-      - "80:80"
-      - "443:443"
+      - "808:80"
+      - "4438:443"  # restart server
 
   php:
     image: adhocore/phpfpm:8.0
