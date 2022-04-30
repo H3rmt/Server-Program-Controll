@@ -1,3 +1,10 @@
+<?php
+require_once "../session.php";
+
+if(!checkSession())
+	redirectToLogin();
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -25,7 +32,7 @@
 	<div class="top">
 		<h1 class="title">Settings</h1>
 		<div class="topbuttonbar">
-			<button class="authorise" onclick="openmodal()"><b>Authorise</b></button>
+			<button class="logout" onclick="logout()"><b>Logout</b></button>
 		</div>
 	</div>
 	<div class="responses">
@@ -47,7 +54,17 @@
 				</div>
 			</div>
 			<table class="settings">
-
+				<tr>
+					<td class="setting">
+						<div>
+							<h2>
+								<label for="new_password">Password</label>
+							</h2>
+							<p>New password to authorise and gain admin privileges</p>
+						</div>
+						<input id="new_password" type="password" name="password" autocomplete="new-password">
+					</td>
+				</tr>
 			</table>
 
 			<input style="display: none" id="Local settings_reset" type="checkbox" name="resetSettings" autocomplete="off">
@@ -91,28 +108,17 @@
 					<td class="setting">
 						<div>
 							<h2>
-								<label for="new_password">Password</label>
+								<label for="new_timeout">Session Timeout</label>
 							</h2>
-							<p>New password to authorise and gain admin privileges</p>
-						</div>
-						<input id="new_password" type="password" name="password" autocomplete="new-password">
-					</td>
-				</tr>
-				<tr>
-					<td class="setting">
-						<div>
-							<h2>
-								<label for="new_timeout">Login Timeout</label>
-							</h2>
-							<p>Time bevore the login cookie expires in sec</p>
-							<p class="additional">86400 seconds = 24 hours; 345600 seconds = 4 days</p>
+							<p>Time before the session cookie expires in days</p>
+							<p class="additional"></p>
 						</div>
 						<input id="new_timeout" type="number" name="new-timeout" value=<?= $timeout ?? '' ?>>
 					</td>
 				</tr>
-				<tr>
+				<!-- <tr>
 					<td class="seperator"></td>
-				</tr>
+				</tr> -->
 			</table>
 
 			<input style="display: none" id="Server settings_reset" type="checkbox" name="resetSettings" autocomplete="off">

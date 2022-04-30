@@ -1,11 +1,11 @@
 <?php
 
-$db = new PDO('mysql:host=172.17.0.1; port=3308; dbname=Auth', 'Website', '/6uM8qlYUm*NFCef');
+$authDB = new PDO('mysql:host=172.17.0.1; port=3308; dbname=Auth', 'Website', '/6uM8qlYUm*NFCef');
 
 
 function getMember(string $username): array|bool {
-	global $db;
-	$prep = $db->prepare("SELECT * FROM users WHERE name=:username");
+	global $authDB;
+	$prep = $authDB->prepare("SELECT * FROM users WHERE name=:username");
 	$prep->execute([
 			':username' => $username
 	]);
@@ -14,8 +14,8 @@ function getMember(string $username): array|bool {
 }
 
 function getSession(string $username, string $hash): array|bool {
-	global $db;
-	$prep = $db->prepare("SELECT ID, username, expire_date, hash FROM sessions WHERE username=:username AND hash=:hash");
+	global $authDB;
+	$prep = $authDB->prepare("SELECT ID, username, expire_date, hash FROM sessions WHERE username=:username AND hash=:hash");
 	$prep->execute([
 			':username' => $username,
 			':hash' => $hash
@@ -25,16 +25,16 @@ function getSession(string $username, string $hash): array|bool {
 }
 
 function dropSession(int $id): void {
-	global $db;
-	$prep = $db->prepare("DELETE FROM sessions WHERE ID=:id");
+	global $authDB;
+	$prep = $authDB->prepare("DELETE FROM sessions WHERE ID=:id");
 	$prep->execute([
 			':id' => $id,
 	]);
 }
 
 function createSession($username, $hash, $expiry_date): void {
-	global $db;
-	$prep = $db->prepare("INSERT INTO sessions (username, hash, expire_date) VALUES (:username, :hash, :expire_date)");
+	global $authDB;
+	$prep = $authDB->prepare("INSERT INTO sessions (username, hash, expire_date) VALUES (:username, :hash, :expire_date)");
 	$prep->execute([
 			':username' => $username,
 			':hash' => $hash,

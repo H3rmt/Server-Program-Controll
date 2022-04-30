@@ -1,3 +1,10 @@
+<?php
+require_once "../session.php";
+
+if(!checkSession())
+	redirectToLogin();
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <?php

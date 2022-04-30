@@ -7,7 +7,7 @@
 	</style>
 
 	<li>
-		<a id="Overview" href="../home/homepage.php">
+		<a id="Overview" href="../home">
 			<img class="icon" src="../Images/home.svg" alt="Homepage"/>
 			<h2>Overview</h2>
 		</a>

@@ -49,7 +49,7 @@ function getSetting(string $name) {
 	return $prep->fetchAll(PDO::FETCH_ASSOC)[0]['Value'];
 }
 
-function updateSetting(string $name, $value) {
+function updateSetting(string $name, $value): void {
 	global $db;
 	$prep = $db->prepare("UPDATE settings SET Value=:value WHERE Name=:name");
 	$prep->execute([':value' => $value, ':name' => $name]);
