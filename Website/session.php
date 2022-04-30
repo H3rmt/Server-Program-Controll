@@ -49,8 +49,7 @@ function checkLogin(): string {
 			// login success
 			$current_time = time();
 
-			// Set Cookie expiration for 1 month
-			$cookie_expiration_time = $current_time + getSetting('timeout');  // for 1 month
+			$cookie_expiration_time = $current_time + getSetting('timeout') * 24 * 60 * 60;
 
 			$hash = bin2hex(random_bytes(30));
 			setcookie("username", $username, $cookie_expiration_time);
