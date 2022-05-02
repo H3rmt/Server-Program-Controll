@@ -33,7 +33,7 @@
 	<li>
 		<a id="Settings" href="../settings/settings.php">
 			<img class="icon" src="../Images/settings.svg" alt="Settings"/>
-			<h2 style="padding: 0.5em;"><?= testAdminCookie() ? "Authorised" : "Unauthorised"; ?></h2>
+			<h2 style="padding: 0.5em;">Settings</h2>
 		</a>
 	</li>
 
