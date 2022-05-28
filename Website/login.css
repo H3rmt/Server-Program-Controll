@@ -1,0 +1,29 @@
+#login {
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	position: fixed;
+}
+
+#login label {
+	font-size: 1.5em;
+}
+
+#login form {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+
+#message {
+	margin-bottom: 20px;
+	align-self: flex-start;
+	color: #bd0808;
+}
+
+#bottom h3 {
+	position: absolute;
+	left: 0;
+	margin-top: 30px;
+	font-weight: bolder;
+}
