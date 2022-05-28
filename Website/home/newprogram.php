@@ -3,7 +3,7 @@
 if($_SERVER['REQUEST_METHOD'] == 'POST' && array_key_exists('name', $_POST) && array_key_exists('picturesrc', $_POST)) {
 	if(testAdminCookie()) {
 		if(!empty($_POST['name']) && !empty($_POST['description'])) {
-			$ret = addtoDatabase(htmlspecialchars(stripslashes(trim($_POST['name']))), htmlspecialchars(stripslashes(trim($_POST['description']))), htmlspecialchars(stripslashes(trim($_POST['picturesrc']))));
+			$ret = addToDatabase(htmlspecialchars(stripslashes(trim($_POST['name']))), htmlspecialchars(stripslashes(trim($_POST['description']))), htmlspecialchars(stripslashes(trim($_POST['picturesrc']))));
 			?>
 			<div class="modal" style="display: block">
 				<form class="Popup" action="homepage.php" method="POST" autocomplete="off">
@@ -42,7 +42,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST' && array_key_exists('name', $_POST) && a
 	<div class="modal" id="closable-modal" style="display: none">
 		<form class="Popup" action="homepage.php" method="POST" autocomplete="off">
 			<h1>Create a new Program</h1>
-			<p class="close" onclick="closemodal()">&times;</p>
+			<p class="close" onclick="closeModal()">&times;</p>
 			<table>
 				<tr>
 					<td>

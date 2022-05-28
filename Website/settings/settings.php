@@ -1,7 +1,9 @@
 <?php
 require_once "../session.php";
 
-if(!checkSession())
+$member = checkSession();
+
+if(!$member)
 	redirectToLogin();
 ?>
 
@@ -24,8 +26,10 @@ if(!checkSession())
 <?php include "authorise.php"; ?>
 
 <body>
-
-<?php include "../navbar/navbar.php"; ?>
+<?php
+include "../navbar/navbar.php";
+displayNavbar($member['ID']);
+?>
 
 
 <div id="main">
@@ -138,10 +142,8 @@ if(!checkSession())
 createmodal()
 ?>
 <script>
-	searchmodal()
-	protect()
-	disable()
-	replaceImages();
+	searchModal()
+	replaceImages()
 </script>
 </body>
 

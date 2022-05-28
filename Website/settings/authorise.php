@@ -5,11 +5,11 @@ include_once "../database.php";
 
 function createmodal() {
 	$isAdmin = testAdminCookie();
-
+	
 	// check if password is sent
 	if($_SERVER['REQUEST_METHOD'] == 'POST' && array_key_exists('hashed_password', $_POST)) {
 		$valid = testpassword($_POST['hashed_password']);
-
+		
 		if($valid) {
 			?>
 			<div class="modal" style="display: block">
@@ -34,18 +34,18 @@ function createmodal() {
 			<?php
 		}
 	}
-
+	
 	if($isAdmin) {
 		?>
 		<div class="modal" id="closable-modal" style="display: none">
 			<form class="Popup" id="authorise">
 				<h1>Authorise</h1>
-				<p class="close" onclick="closemodal()">&times;</p>
+				<p class="close" onclick="closeModal()">&times;</p>
 				<h3>Authorised</h3>
 				<button class="Reset danger" onclick="removeAuthorisationCookie();document.getElementById('authorise').submit()">
 					<b>Reset</b>
 				</button>
-				<button class="Close" onclick="event.preventDefault();closemodal()"><b>Close</b></button>
+				<button class="Close" onclick="event.preventDefault();closeModal()"><b>Close</b></button>
 			</form>
 		</div>
 		<?php
@@ -54,7 +54,7 @@ function createmodal() {
 		<div class="modal" id="closable-modal" style="display: none">
 			<form class="Popup" id="authorise" action="settings.php" method="POST">
 				<h1>Authorise</h1>
-				<p class="close" onclick="closemodal()">&times;</p>
+				<p class="close" onclick="closeModal()">&times;</p>
 				<input style="display: none" id="username" aria-label="username" type="text" name="username" autocomplete="username">
 				<table>
 					<tr>

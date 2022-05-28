@@ -10,7 +10,7 @@ if(!checkSession())
 <?php
 include_once "../database.php";
 
-$program = getprogramm(htmlspecialchars(stripslashes(trim($_GET['id']))));
+$program = getProgramm(htmlspecialchars(stripslashes(trim($_GET['id']))));
 ?>
 
 <head>
@@ -67,7 +67,7 @@ include "../navbar/navbar.php";
 	</div>
 </div>
 <script>
-	searchmodal()
+	searchModal()
 	protect()
 	disable()
 	replaceImages()

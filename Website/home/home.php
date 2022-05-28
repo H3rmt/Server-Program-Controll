@@ -1,7 +1,9 @@
 <?php
 require_once "../session.php";
 
-if(!checkSession())
+$member = checkSession();
+
+if(!$member)
 	redirectToLogin();
 ?>
 
@@ -22,18 +24,20 @@ if(!checkSession())
 <body>
 <?php
 include "../navbar/navbar.php";
+displayNavbar($member['ID']);
 ?>
 
 <div id="main">
 	<div class="top">
 		<h1 class="title">Overview</h1>
 		<div class="topbuttonbar">
-			<button class="disabled" onclick="openmodal()"><b>New Program</b></button>
+			<button class="<?= $member['admin'] ? '' : 'disabled' ?>" onclick="openModal()"><b>New Program</b></button>
 		</div>
 	</div>
 	<div id="boxes">
 		<?php
 		include "loadBoxes.php";
+		displayPrograms($member['ID'])
 		?>
 	</div>
 </div>
@@ -42,10 +46,8 @@ include "newprogram.php";
 ?>
 
 <script>
-	searchmodal();
+	searchModal();
 	replaceImages();
-	protect();
-	disable();
 </script>
 </body>
 

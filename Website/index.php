@@ -2,7 +2,7 @@
 require_once "session.php";
 
 if(checkSession())
-	header("Location: home");
+	header("Location: home/home.php");
 
 // check login try
 $message = checkLogin()

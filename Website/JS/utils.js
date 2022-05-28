@@ -2,11 +2,11 @@ let root = "Server-Program-Controll/Website"
 
 let modal
 
-function searchmodal() {
+function searchModal() {
 	modal = document.getElementById("closable-modal");
 }
 
-async function openmodal() {
+async function openModal() {
 	if (modal.style.display === "block")
 		return;
 	modal.style.display = "block";
@@ -16,7 +16,7 @@ async function openmodal() {
 	}
 }
 
-async function closemodal() {
+async function closeModal() {
 	if (modal.style.display === "none")
 		return;
 	for (let i = 1; i > 0; i -= 0.05) {
@@ -28,27 +28,13 @@ async function closemodal() {
 
 window.onclick = async function (event) {
 	if (event.target === modal) {
-		await closemodal();
+		await closeModal();
 	}
 };
 
 async function sleep(ms) {
 	return new Promise((resolve) => setTimeout(resolve, ms));
 }
-
-function protect() {
-	if (getAuthorisationCookie() !== "")
-		Array.from(document.body.getElementsByTagName('*')).forEach((element) => {
-			element.classList.remove('disabled')
-		})
-}
-
-function disable() {
-	Array.from(document.body.getElementsByTagName('*')).forEach((element) => {
-		element.disabled = element.classList.contains('disabled')
-	})
-}
-
 
 function replaceImages() {
 	Array.from(document.body.getElementsByTagName("img")).forEach((img) => {
@@ -63,22 +49,6 @@ function replaceImages() {
 				}
 			});
 	});
-}
-
-function getAuthorisationCookie() {
-	let name = "authorisation=";
-	let decodedCookie = decodeURIComponent(document.cookie);
-	let ca = decodedCookie.split(';');
-	for (let i = 0; i < ca.length; i++) {
-		let c = ca[i];
-		while (c.charAt(0) === ' ') {
-			c = c.substring(1);
-		}
-		if (c.indexOf(name) === 0) {
-			return c.substring(name.length, c.length);
-		}
-	}
-	return "";
 }
 
 function logout() {

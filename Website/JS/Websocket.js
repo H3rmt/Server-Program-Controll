@@ -1,8 +1,8 @@
 let websocket;
 
 function send(_action, _id, extra = null) {
-	websocket.send(JSON.stringify({...{action: _action, Program_id: _id, admin: getAuthorisationCookie()}, ...extra}));
-	console.log("Message send: " + JSON.stringify({...{action: _action, id: _id, code: getAuthorisationCookie()}, ...extra}));
+	websocket.send(JSON.stringify({...{action: _action, Program_id: _id, admin: isAdmin()}, ...extra}));
+	console.log("Message send: " + JSON.stringify({...{action: _action, id: _id, code: isAdmin()}, ...extra}));
 }
 
 const Action = {

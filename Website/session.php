@@ -1,8 +1,7 @@
 <?php
-require_once "authDatabase.php";
 require_once "database.php";
 
-function checkSession(): bool {
+function checkSession(): bool|array {
 	// check if user already has a session
 	if(!empty($_COOKIE["username"]) && !empty($_COOKIE["hash"])) {
 		$session = getSession($_COOKIE["username"], $_COOKIE["hash"]);
@@ -16,7 +15,7 @@ function checkSession(): bool {
 		
 		if($expire_date >= date("Y-m-d H:i:s", time())) {
 			// authorise user, because session is valid
-			return true;
+			return getMember($_COOKIE["username"]);
 		} else {
 			// drop expired session
 			dropSession($id);
@@ -45,7 +44,7 @@ function checkLogin(): string {
 			return "Invalid Login";
 		
 		
-		list('passwd' => $passwd) = $member;
+		list('passwd' => $passwd, 'ID' => $id) = $member;
 		if(password_verify($password, $passwd)) {
 			// login success
 			$current_time = time();
@@ -59,14 +58,14 @@ function checkLogin(): string {
 			$expiry_date = date("Y-m-d H:i:s", $cookie_expiration_time);
 			
 			// Start new Session
-			createSession($username, $hash, $expiry_date);
+			createSession($id, $hash, $expiry_date);
 			header("refresh: 0"); //refresh to let checkSession detect session
 		} else {
 //			return "Invalid Login {Password}"; // invalid password
 			return "Invalid Login"; // invalid password
 		}
 	}
-	// no login / site just opened
+	// no login (site just opened)
 	return "";
 }
 

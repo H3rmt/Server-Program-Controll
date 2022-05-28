@@ -1,6 +1,6 @@
 function rresetSettings(name, check, e) {
 	e.stopPropagation()
-	if (check && getAuthorisationCookie() === "") {
+	if (check && isAdmin() === "") {
 		alert(`Not allowed to reset ${name}`)
 		console.log(`Not allowed to reset ${name}`)
 		e.preventDefault()
@@ -17,7 +17,7 @@ function rresetSettings(name, check, e) {
 
 function saveSettings(name, check, ev) {
 	ev.stopPropagation()
-	if (check && getAuthorisationCookie() === "") {
+	if (check && isAdmin() === "") {
 		alert(`Not allowed to save ${name}`)
 		console.error(`Not allowed to save ${name}`)
 		ev.preventDefault()

@@ -1,40 +1,37 @@
-<ul id="navbar">
+<?php
 
-	<style>
-		<?php
-		include 'navbar.css';
-		?>
-	</style>
+include_once "../database.php";
 
-	<li>
-		<a id="Overview" href="../home">
-			<img class="icon" src="../Images/home.svg" alt="Homepage"/>
-			<h2>Overview</h2>
-		</a>
-	</li>
-
-	<?php
-	include_once "../database.php";
-
-
-	foreach(getprogramms() as $col) {
-		?>
+function displayNavbar(int $id): void { ?>
+	<ul id="navbar">
+		<style>
+			<?php
+			include 'navbar.css';
+			?>
+		</style>
 		<li>
-			<a href="../program/program.php?id=<?= $col["ID"] ?>">
-				<img class="icon" src="<?= $col["Imagesource"] ?>" alt="<?= $col["Name"] ?>"/>
-				<h2><?= $col["Name"] ?></h2>
+			<a id="Overview" href="../home/home.php">
+				<img class="icon" src="../Images/home.svg" alt="Homepage"/>
+				<h2>Overview</h2>
 			</a>
 		</li>
 		<?php
-	}
-
-	?>
-
-	<li>
-		<a id="Settings" href="../settings/settings.php">
-			<img class="icon" src="../Images/settings.svg" alt="Settings"/>
-			<h2 style="padding: 0.5em;">Settings</h2>
-		</a>
-	</li>
-
-</ul>
+		foreach(getProgramms($id) as $col) {
+			?>
+			<li>
+				<a href="../program/program.php?id=<?= $col["ID"] ?>">
+					<img class="icon" src="<?= $col["Imagesource"] ?>" alt="<?= $col["Name"] ?>"/>
+					<h2><?= $col["Name"] ?></h2>
+				</a>
+			</li>
+			<?php
+		} ?>
+		<li>
+			<a id="Settings" href="../settings/settings.php">
+				<img class="icon" src="../Images/settings.svg" alt="Settings"/>
+				<h2 style="padding: 0.5em;">Settings</h2>
+			</a>
+		</li>
+	</ul>
+	<?php
+}
