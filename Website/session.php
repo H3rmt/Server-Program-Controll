@@ -43,7 +43,6 @@ function checkLogin(): string {
 //			return "Invalid Login {Username}";
 			return "Invalid Login";
 		
-		
 		list('passwd' => $passwd, 'ID' => $id) = $member;
 		if(password_verify($password, $passwd)) {
 			// login success
@@ -59,7 +58,9 @@ function checkLogin(): string {
 			
 			// Start new Session
 			createSession($id, $hash, $expiry_date);
-			header("refresh: 0"); //refresh to let checkSession detect session
+			header("Location: home/home.php");
+			return "Success";
+			
 		} else {
 //			return "Invalid Login {Password}"; // invalid password
 			return "Invalid Login"; // invalid password
