@@ -1,4 +1,4 @@
-let root = "Server-Program-Controll/Website"
+let root = "Website"
 
 let modal
 
@@ -10,19 +10,21 @@ async function openModal() {
 	if (modal.style.display === "block")
 		return;
 	modal.style.display = "block";
-	for (let i = 0; i < 1; i += 0.05) {
+	for (let i = 0.0; i <= 1; i += 0.05) {
 		modal.style.opacity = i.toString();
-		await sleep(12);
+		await sleep(15);
 	}
+	modal.style.opacity = "1";
 }
 
 async function closeModal() {
 	if (modal.style.display === "none")
 		return;
-	for (let i = 1; i > 0; i -= 0.05) {
+	for (let i = 1.0; i >= 0; i -= 0.05) {
 		modal.style.opacity = i.toString();
-		await sleep(12);
+		await sleep(15);
 	}
+	modal.style.opacity = "0";
 	modal.style.display = "none";
 }
 
@@ -60,16 +62,3 @@ function logout() {
 function eraseCookie(name) {
 	document.cookie = `${name}=; path=/${root}; Max-Age=-99999999;`;
 }
-
-// function getCookie(name) {
-// 	return document.cookie.split(';').some(c => {
-// 		return c.trim().startsWith(name + '=');
-// 	});
-// }
-
-// function setCookie(name, value, days) {
-// 	let date = new Date();
-// 	date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
-// 	const expires = "expires=" + date.toUTCString();
-// 	document.cookie = name + "=" + value + "; " + expires + "; path=/;";
-// }

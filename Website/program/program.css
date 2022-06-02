@@ -21,7 +21,7 @@
 	border-color: rgb(20, 21, 22);
 }
 
-#topbar .boticon {
+#topbar .botIcon {
 	width: 128px;
 	height: 128px;
 	
@@ -38,7 +38,7 @@
 
 #activity {
 	grid-area: activity;
-
+	
 	border-style: solid;
 	border-radius: 40px;
 	border-width: 6px;

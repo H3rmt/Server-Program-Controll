@@ -5,13 +5,13 @@ include_once "../database.php";
 
 function displayPrograms(int $id): void {
 	foreach(getProgramms($id) as $col) { ?>
-		<div class="flipboxsensor">
-			<div class="flipbox">
+		<div class="flipBoxSensor">
+			<div class="flipBox">
 				<div class="back">
-					<div class="outerbox">
-						<h1 class="title"><?= $col["Name"] ?></h1>
-						<h2 class="ontime"><?= "ontime" ?></h2>
-						<h2 class="startdate"><?= $col["StatechangeTime"] ?></h2>
+					<div class="outerBox">
+						<h1 class="title"><?= htmlspecialchars($col["Name"]) ?></h1>
+						<h2 class="ontime"><?= htmlspecialchars("69 days") ?></h2>
+						<h2 class="startdate"><?= htmlspecialchars($col["StatechangeTime"]) ?></h2>
 						<div>
 							<button class="start disabled add"><b>Start</b></button>
 							<button class="stop disabled danger "><b>Stop</b></button>
@@ -22,13 +22,13 @@ function displayPrograms(int $id): void {
 					</div>
 				</div>
 				<div class="front">
-					<div class="outerbox">
+					<div class="outerBox">
 						<h1 class="title"><?= $col["Name"] ?></h1>
-						<img src="<?= $col["Imagesource"] ?>" class="boticon" alt=""/>
-						<p class="description"><?= $col["Description"] ?></p>
+						<img src="<?= htmlspecialchars($col["Imagesource"]) ?>" class="botIcon" alt=""/>
+						<p class="description"><?= htmlspecialchars($col["Description"]) ?></p>
 						<div class="active">
 							<rect></rect>
-							<h2><?= "active" ?></h2>
+							<h2><?= htmlspecialchars("active") ?></h2>
 						</div>
 					</div>
 				</div>

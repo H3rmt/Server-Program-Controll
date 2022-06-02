@@ -64,9 +64,17 @@ function getPepper(): string {
 }
 
 function getProgramsForUser(int $id): array {
-	global $authDB;
-	$prep = $authDB->prepare("SELECT program_id FROM user_programs_permissions WHERE user_id = :id");
+	global $authDB, $db;
+	$prep = $authDB->prepare("SELECT ID, admin FROM users WHERE ID = :id");
 	$prep->execute([':id' => $id]);
+	if($prep->fetchAll(PDO::FETCH_ASSOC)[0]['admin']) {
+		$prep = $db->prepare("SELECT ID AS program_id FROM programs");
+		$prep->execute();
+	} else {
+		$prep = $authDB->prepare("SELECT program_id FROM user_programs_permissions WHERE user_id = :id");
+		$prep->execute([':id' => $id]);
+	}
+	
 	return array_map(function ($a) {
 		return $a['program_id'];
 	}, $prep->fetchAll(PDO::FETCH_ASSOC));
@@ -77,7 +85,7 @@ function getProgramsForUser(int $id): array {
 function getProgramms(int $user_id): array {
 	global $db;
 	$ids = getProgramsForUser($user_id);
-	$ids[] = -1; // prevents SQL Syntax Error and is not available as ID for program
+	$ids[] = -1; // prevents SQL Syntax Error (if not programs) and is not available as ID for program
 	
 	$prep = $db->prepare('SELECT ID, Name, Description, Imagesource, StatechangeTime FROM programs WHERE ID in' .
 			'(' . implode(',', $ids) . ')');

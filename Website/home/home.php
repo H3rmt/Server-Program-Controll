@@ -43,6 +43,7 @@ displayNavbar($member['ID']);
 </div>
 <?php
 include "newprogram.php";
+displayModal($member['admin']);
 ?>
 
 <script>
