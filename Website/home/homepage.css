@@ -2,7 +2,7 @@
 	margin: 15px;
 	display: grid;
 	grid-gap: 20px;
-
+	
 	grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
 }
 
@@ -14,41 +14,41 @@
 
 
 @media only screen and (min-device-width: 650px) {
-	.flipboxsensor {
+	.flipBoxSensor {
 		height: calc(17rem + 150px);
 		margin-bottom: 5px;
 	}
 }
 
 @media only screen and (max-device-width: 650px) {
-	.flipboxsensor {
+	.flipBoxSensor {
 		height: calc(17rem + 120px);
 		margin-bottom: 5px;
 	}
 }
 
-.flipbox {
+.flipBox {
 	width: 100%;
 	height: 100%;
 }
 
 @media only screen and (max-device-width: 650px) {
-	.flipboxsensor .front {
+	.flipBoxSensor .front {
 		display: block;
 	}
-
-	.flipboxsensor .back {
+	
+	.flipBoxSensor .back {
 		display: none;
 	}
-
-	.flipboxsensor:hover .front {
+	
+	.flipBoxSensor:hover .front {
 		display: none;
 	}
-
-	.flipboxsensor:hover .back {
+	
+	.flipBoxSensor:hover .back {
 		display: block;
 	}
-
+	
 	.front, .back {
 		width: 100%;
 		height: 100%;
@@ -56,24 +56,24 @@
 }
 
 @media only screen and (min-device-width: 650px) {
-	.flipbox {
+	.flipBox {
 		transition: transform 0.5s;
 		transform-style: preserve-3d;
 	}
-
-	.flipboxsensor:hover .flipbox {
+	
+	.flipBoxSensor:hover .flipBox {
 		transform: rotateY(180deg);
 	}
-
+	
 	.front {
 		-webkit-backface-visibility: hidden;
 		backface-visibility: hidden;
 	}
-
+	
 	.back {
 		transform: rotateY(180deg);
 	}
-
+	
 	.front, .back {
 		position: absolute;
 		width: 100%;
@@ -82,61 +82,61 @@
 }
 
 
-:is(.front, .back) .outerbox {
+:is(.front, .back) .outerBox {
 	overflow: hidden;
 	height: 100%;
-
+	
 	border-style: solid;
 	border-radius: 25px;
 	border-width: 3px;
 	border-color: rgb(58, 58, 58);
-
+	
 	background: rgb(32, 29, 29);
 	background: linear-gradient(to bottom right, rgb(20, 21, 22), rgb(30, 30, 30));
-
+	
 	text-align: center;
 }
 
-.front .outerbox .description {
+.front .outerBox .description {
 	font-size: 1.2em;
-
+	
 	overflow: hidden;
-
+	
 	min-height: 3.6em;
 	max-height: 4.8em;
-
+	
 	margin-top: 1.5em;
 	margin-bottom: 1.5em;
 }
 
-.front .outerbox .title {
+.front .outerBox .title {
 	max-height: 1.2em;
-
+	
 	overflow: hidden;
-
+	
 	margin-left: 10px;
 	margin-right: 10px;
 }
 
-:is(.front, .back) .outerbox :is(h3, p) {
+:is(.front, .back) .outerBox :is(h3, p) {
 	margin-left: 5px;
 	margin-right: 5px;
 	overflow: hidden;
 }
 
-.front .outerbox .boticon {
+.front .outerBox .botIcon {
 	background-color: rgb(20, 21, 22);
-
+	
 	width: 9rem;
 	height: 9rem;
-
+	
 	border-style: solid;
 	border-radius: 40px;
 	border-width: 8px;
 	border-color: black;
 }
 
-.front .outerbox .active {
+.front .outerBox .active {
 	height: 1em;
 	display: flex;
 	align-items: center;
@@ -144,19 +144,19 @@
 	justify-content: center;
 }
 
-.front .outerbox .active rect {
+.front .outerBox .active rect {
 	height: 1em;
 	width: 1em;
 	background: radial-gradient(rgb(99, 99, 99), rgb(20, 20, 20));
 	border-radius: 50%;
 }
 
-.back .outerbox div {
+.back .outerBox div {
 	display: flex;
 	align-items: center;
 	grid-gap: 5px;
 	justify-content: center;
-
+	
 	margin-top: 20px;
 	margin-bottom: 20px;
 }

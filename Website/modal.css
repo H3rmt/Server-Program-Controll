@@ -16,6 +16,8 @@
 	
 	background: rgb(35, 38, 43);
 	background: linear-gradient(to bottom right, rgb(20, 21, 22), rgb(35, 38, 43));
+	box-shadow: 0 0 20px 20px #151414;
+	
 	
 	top: 50%;
 	left: 50%;

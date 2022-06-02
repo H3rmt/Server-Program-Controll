@@ -2,7 +2,7 @@
 	margin: 15px;
 	display: grid;
 	grid-gap: 20px;
-
+	
 	grid-template-columns: repeat(auto-fit, minmax(840px, 1fr));
 }
 
@@ -15,17 +15,17 @@
 	border-radius: 25px;
 	border-width: 3px;
 	border-color: rgb(58, 58, 58);
-
+	
 	background: rgb(32, 29, 29);
 	background: linear-gradient(to bottom right, rgb(20, 21, 22), rgb(30, 30, 30));
-
+	
 	overflow: hidden;
 }
 
 .settings {
 	margin-top: 0;
 	margin-bottom: 0;
-
+	
 	width: 100%;
 }
 
@@ -34,7 +34,7 @@
 	align-items: center;
 	justify-content: space-between;
 	gap: 20px;
-
+	
 	padding-left: 20px;
 	padding-right: 20px;
 }
@@ -48,9 +48,9 @@
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
-
+	
 	overflow: hidden;
-
+	
 	padding-left: 20px;
 }
 
@@ -63,7 +63,7 @@
 	padding-bottom: 7px;
 	height: 2.2em;
 	border-width: 4px;
-
+	
 	margin-bottom: 10px;
 }
 
@@ -83,13 +83,13 @@
 	font-weight: bold;
 	padding: 0.5em;
 	margin: 0;
-
+	
 	border-style: solid;
 	border-radius: 25px;
 	border-width: 3px;
 	border-color: rgb(255, 0, 0);
 	background: rgb(32, 29, 29);
 	background: linear-gradient(to bottom right, rgb(20, 21, 22), rgb(30, 30, 30));
-
+	
 	transition: opacity 1.5s, padding 1s, height 1s;
 }
