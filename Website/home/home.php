@@ -37,7 +37,7 @@ displayNavbar($member['ID']);
 	<div id="boxes">
 		<?php
 		include "loadBoxes.php";
-		displayPrograms($member['ID'])
+		displayPrograms($member['ID'], $member['admin'])
 		?>
 	</div>
 </div>

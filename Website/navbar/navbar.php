@@ -19,9 +19,9 @@ function displayNavbar(int $id): void { ?>
 		foreach(getProgramms($id) as $col) {
 			?>
 			<li>
-				<a href="../program/program.php?id=<?= $col["ID"] ?>">
-					<img class="icon" src="<?= $col["Imagesource"] ?>" alt="<?= $col["Name"] ?>"/>
-					<h2><?= $col["Name"] ?></h2>
+				<a href="../program/program.php?id=<?= $col['program']["ID"] ?>">
+					<img class="icon" src="<?= $col['program']["Imagesource"] ?>" alt="<?= $col['program']["Name"] ?>"/>
+					<h2><?= $col['program']["Name"] ?></h2>
 				</a>
 			</li>
 			<?php

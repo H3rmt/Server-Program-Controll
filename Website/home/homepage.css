@@ -124,7 +124,7 @@
 	overflow: hidden;
 }
 
-.front .outerBox .botIcon {
+.front .outerBox .PIcon {
 	background-color: rgb(20, 21, 22);
 	
 	width: 9rem;
@@ -142,13 +142,6 @@
 	align-items: center;
 	grid-gap: 5px;
 	justify-content: center;
-}
-
-.front .outerBox .active rect {
-	height: 1em;
-	width: 1em;
-	background: radial-gradient(rgb(99, 99, 99), rgb(20, 20, 20));
-	border-radius: 50%;
 }
 
 .back .outerBox div {
