@@ -43,35 +43,21 @@ function displayModal($isAdmin): void {
 	} else {
 		?>
 		<div class="modal" id="closable-modal" style="display: none">
-			<form class="Popup" action="home.php" method="POST" autocomplete="off">
+			<form id="new_program" class="Popup" action="home.php" method="POST" autocomplete="off">
 				<h1>Create a new Program</h1>
 				<p class="close" onclick="closeModal()">&times;</p>
-				<table>
-					<tr>
-						<td>
-							<label for="name">Program name:</label>
-						</td>
-						<td>
-							<input id="name" type="text" name="name" value="" autocomplete="off">
-						</td>
-					</tr>
-					<tr>
-						<td>
-							<label for="description">Program description:</label>
-						</td>
-						<td>
-							<input id="description" type="text" name="description" value="" autocomplete="off">
-						</td>
-					</tr>
-					<tr>
-						<td>
-							<label for="picturesrc">Picture Source:</label>
-						</td>
-						<td>
-							<input id="picturesrc" type="text" name="picturesrc" value="" autocomplete="off">
-						</td>
-					</tr>
-				</table>
+				<div>
+					<label for="name">Program name:</label>
+					<input id="name" type="text" name="name" value="" autocomplete="off">
+				</div>
+				<div>
+					<label for="description">Program description:</label>
+					<input id="description" type="text" name="description" value="" autocomplete="off">
+				</div>
+				<div>
+					<label for="picturesrc">Picture Source:</label>
+					<input id="picturesrc" type="text" name="picturesrc" value="" autocomplete="off">
+				</div>
 				<button class="add" type="submit"><b>Add</b></button>
 			</form>
 		</div>
