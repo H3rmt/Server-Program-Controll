@@ -2,7 +2,6 @@
 	margin: 15px;
 	display: grid;
 	grid-gap: 20px;
-	overflow: auto;
 	
 	grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
 }
