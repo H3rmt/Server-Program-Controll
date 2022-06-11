@@ -2,37 +2,37 @@
 
 include_once "../database.php";
 
-if($_SERVER['REQUEST_METHOD'] == 'POST') {
-
-	// Local Settings
-
-
-	$isAdmin = testAdminCookie();
-
-	// Client Settings
-	if($isAdmin) {
-
+function check(bool $admin): void {
+	if($_SERVER['REQUEST_METHOD'] == 'POST') {
+		
+		// Local Settings
+		localSettings();
+		
+		// Client Settings
+		if($admin)
+			clientSettings();
+		
+		// Server Settings
+		if($admin)
+			serverSettings();
 	}
+}
 
-	// testtesttest
+function localSettings(): void {
 
-	// Server Settings
-	if($isAdmin) {
-		if(!empty($_POST['hashed-new-password'])) {
-			if(hash('sha256', $_POST['hashed-new-password'] . getPepper()) != getSetting('password')) {
-				updateSetting("password", hash('sha256', $_POST['hashed-new-password'] . getPepper()));
-				?>
-				<h2 class="feedback">New Password Set</h2>
-				<?php
-			}
-		}
-		if(!empty($_POST['new-timeout'])) {
-			if($_POST['new-timeout'] != getSetting('timeout')) {
-				updateSetting("timeout", $_POST['new-timeout']);
-				?>
-				<h2 class="feedback">New Timeout Set</h2>
-				<?php
-			}
+}
+
+function clientSettings(): void {
+	if(!empty($_POST['new-timeout'])) {
+		if($_POST['new-timeout'] != getSetting('timeout')) {
+			updateSetting("timeout", $_POST['new-timeout']);
+			?>
+			<h2 class="feedback">New Timeout Set</h2>
+			<?php
 		}
 	}
+}
+
+function serverSettings(): void {
+
 }

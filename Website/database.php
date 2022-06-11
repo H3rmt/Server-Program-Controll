@@ -57,10 +57,6 @@ function updateSetting(string $name, $value): void {
 	$prep->execute([':value' => $value, ':name' => $name]);
 }
 
-function getPepper(): string {
-	return "uwu";
-}
-
 function logout(string $username, string $hash): void {
 	global $authDB;
 	$prep = $authDB->prepare("DELETE FROM sessions WHERE user_id=(SELECT ID FROM users WHERE name=:username) AND hash=:hash");

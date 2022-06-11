@@ -57,7 +57,7 @@ displayNavbar($member['ID']);
 							<h2>
 								<label for="new_password">Password</label>
 							</h2>
-							<p>New password to authorise and gain admin privileges</p>
+							<p>New password for current user</p>
 						</div>
 						<input id="new_password" type="password" name="password" autocomplete="new-password">
 					</td>
@@ -117,9 +117,6 @@ displayNavbar($member['ID']);
 		</form>
 	</div>
 </div>
-<?php
-createmodal()
-?>
 <script>
 	searchModal()
 	replaceImages()
