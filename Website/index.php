@@ -1,28 +1,27 @@
 <?php
 require_once "session.php";
 
-// check if user already logged in or just logged in
+// check if user already logged in
 $check = checkSession(true);
 
 // redirect if logged in
 if($check === true)
 	header("Location: home/home.php");
 
-//
+// performs special actions like logout etc.
 $actions = checkActions();
 
+// checks if user tried to log in
 $login = checkLogin();
 
-// check login try
-if($login !== '')           // message like "Invalid Login"  (never get triggered after redirekt or on first visit)
+// log message
+if($login !== '')           // message like "Invalid Login"  (never get triggered after redirect or on first visit)
 	$message = $login;
 else if($actions !== '')    // message like "logged out" / "cleared sessions"
 	$message = $actions;
 else                        // message like "Session expired"
 	$message = $check;
 
-
-// psw: aILwxKROgvVHXmYdcqhSHugRGQxjqvcoYNFaMpAkEQXyxIAtOxjumfprrJKwqHdIkvgeh
 // db:  $2y$10$a9QQCHHEJ7bZ//D1My0oAOMRQXtRZIGV0YK5emhasFR9xusyBvyha
 
 # password_hash('test', null);
