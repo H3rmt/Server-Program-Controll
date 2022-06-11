@@ -1,6 +1,6 @@
-function rresetSettings(name, check, e) {
+function rresetSettings(name, allowed, e) {
 	e.stopPropagation()
-	if (check && isAdmin() === "") {
+	if (!allowed) {
 		alert(`Not allowed to reset ${name}`)
 		console.log(`Not allowed to reset ${name}`)
 		e.preventDefault()
@@ -13,25 +13,33 @@ function rresetSettings(name, check, e) {
 		return
 	}
 	document.getElementById(`${name}_reset`).checked = true
+	// allow form submit
 }
 
-function saveSettings(name, check, ev) {
-	ev.stopPropagation()
-	if (check && isAdmin() === "") {
+function saveSettings(name, allowed, e) {
+	e.stopPropagation()
+	if (!allowed) {
 		alert(`Not allowed to save ${name}`)
 		console.error(`Not allowed to save ${name}`)
-		ev.preventDefault()
+		e.preventDefault()
 		return
 	}
-	if (name === "Server settings") {
-		let passwd = document.getElementById("new_password").value
-		if (passwd.length !== 0 && passwd.length < 8) {
-			alert(`Not allowed to use password < 8  (${passwd.length})`)
-			console.error(`Not allowed to use password < 8  (${passwd.length})`)
-			ev.preventDefault()
-			return
+	let reset = confirm(`Save ${name} Settings?`)
+	if (!reset)
+		if (name === "Server settings") {
+			let passwd = document.getElementById("new_password").value
+			if (passwd.length !== 0 && passwd.length < 8) {
+				alert(`Not allowed to use password < 8  (${passwd.length})`)
+				console.error(`Not allowed to use password < 8  (${passwd.length})`)
+				e.preventDefault()
+				return
+			}
 		}
-	}
+	// allow form submit
+}
+
+function isAdmin() {
+	return eraseCookie()
 }
 
 
@@ -42,7 +50,7 @@ function sleep(time) {
 }
 
 (async () => {
-		 await sleep(1500)
+		 await sleep(2500)
 		 for (let element of document.getElementsByClassName("feedback")) {
 			 (async () => {
 				 console.log(element)

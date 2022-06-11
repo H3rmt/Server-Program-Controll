@@ -42,6 +42,7 @@
 .setting .additional {
 	font-size: 75%;
 	color: darkgrey;
+	line-height: 140%;
 }
 
 .topsetting {
@@ -54,8 +55,10 @@
 	padding-left: 20px;
 }
 
-.topsetting div {
+.topsetting .buttons {
 	line-break: strict;
+	flex-direction: row-reverse;
+	display: flex;
 }
 
 .reset, .save {

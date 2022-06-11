@@ -12,7 +12,6 @@ function checkSession(): bool|array {
 		
 		list('ID' => $id, 'expire_date' => $expire_date) = $session;
 		
-		
 		if($expire_date >= date("Y-m-d H:i:s", time())) {
 			// authorise user, because session is valid
 			return getMember($_COOKIE["username"]);
@@ -48,7 +47,7 @@ function checkLogin(): string {
 			// login success
 			$current_time = time();
 			
-			$cookie_expiration_time = $current_time + getSetting('timeout') * 24 * 60 * 60;
+			$cookie_expiration_time = $current_time + getSetting('timeout') * 60 * 60 * 24;
 			
 			$hash = bin2hex(random_bytes(30));
 			setcookie("username", $username, $cookie_expiration_time);

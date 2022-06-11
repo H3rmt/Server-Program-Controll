@@ -5,11 +5,13 @@ if(checkSession())
 	header("Location: home/home.php");
 
 // check login try
-$message = checkLogin()
+$message = checkLogin();
 
 
 // psw: aILwxKROgvVHXmYdcqhSHugRGQxjqvcoYNFaMpAkEQXyxIAtOxjumfprrJKwqHdIkvgeh
 // db:  $2y$10$a9QQCHHEJ7bZ//D1My0oAOMRQXtRZIGV0YK5emhasFR9xusyBvyha
+
+# password_hash('test', null);
 ?>
 
 <!DOCTYPE html>
