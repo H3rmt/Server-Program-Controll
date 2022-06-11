@@ -1,9 +1,9 @@
 <?php
 require_once "database.php";
 
-function checkSession(): bool|array {
-	// check if user already has a session
-	if(!empty($_COOKIE["username"]) && !empty($_COOKIE["hash"])) {
+function checkSession(bool $dropExpired = false): bool|array|string {
+	// check if user already has a session and no message is sent (liste logout)
+	if(!empty($_COOKIE["username"]) && !empty($_COOKIE["hash"]) && empty($_GET['message'])) {
 		$session = getSession($_COOKIE["username"], $_COOKIE["hash"]);
 		
 		// no session found
@@ -16,12 +16,15 @@ function checkSession(): bool|array {
 			// authorise user, because session is valid
 			return getMember($_COOKIE["username"]);
 		} else {
-			// drop expired session
-			dropSession($id);
-			
-			// drop invalid cookies for invalid session
-			setcookie("username", "");
-			setcookie("hash", "");
+			// only drop if index site to display expired info
+			if($dropExpired) {
+				// drop expired session
+				dropSession($id);
+				
+				// drop invalid cookies for invalid session
+				setcookie("hash", "");
+				return "Session expired";
+			}
 			return false;
 		}
 		
@@ -31,7 +34,7 @@ function checkSession(): bool|array {
 
 
 function checkLogin(): string {
-	if(!empty($_POST["login"])) {
+	if(!empty($_POST["username"])) {
 		$username = $_POST["username"];
 		$password = $_POST["password"];
 		
@@ -69,7 +72,25 @@ function checkLogin(): string {
 	return "";
 }
 
+function checkActions(): string {
+	if($_GET['message'])
+		switch($_GET['message']) {
+			case 'logout':
+				if(empty($_COOKIE["username"]) || empty($_COOKIE["hash"]))
+					return "error logging out";
+				logout($_COOKIE["username"], $_COOKIE["hash"]);
+				return "logged out";
+			case 'clearsessions':
+				if(empty($_COOKIE["username"]))
+					return "error clearing sessions";
+				clearSessions($_COOKIE["username"]);
+				return "cleared sessions";
+			default:
+				return 'unknown action';
+		}
+	return '';
+}
 
 function redirectToLogin(): void {
-	header("Location: ..");
+	header("Location: ../index.php");
 }

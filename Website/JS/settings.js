@@ -38,10 +38,6 @@ function saveSettings(name, allowed, e) {
 	// allow form submit
 }
 
-function isAdmin() {
-	return eraseCookie()
-}
-
 
 function sleep(time) {
 	return new Promise(async (resolve) => {

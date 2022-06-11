@@ -5,8 +5,6 @@ $authDB = new PDO('mysql:host=172.17.0.1; port=3308; dbname=Auth', 'Website', '/
 $db = new PDO('mysql:host=172.17.0.1; port=3308; dbname=Programs', 'Website', '/6uM8qlYUm*NFCef');
 
 
-// ------------------------------------ auth ------------------------------------
-
 function getMember(string $username): array|bool {
 	global $authDB;
 	$prep = $authDB->prepare("SELECT passwd, ID, admin FROM users WHERE name=:username");
@@ -63,6 +61,23 @@ function getPepper(): string {
 	return "uwu";
 }
 
+function logout(string $username, string $hash): void {
+	global $authDB;
+	$prep = $authDB->prepare("DELETE FROM sessions WHERE user_id=(SELECT ID FROM users WHERE name=:username) AND hash=:hash");
+	$prep->execute([
+			':username' => $username,
+			':hash' => $hash
+	]);
+}
+
+function clearSessions(string $username): void {
+	global $authDB;
+	$prep = $authDB->prepare("DELETE FROM sessions WHERE user_id=(SELECT ID FROM users WHERE name=:username)");
+	$prep->execute([
+			':username' => $username,
+	]);
+}
+
 function getProgramsForUser(int $id): array {
 	global $authDB, $db;
 	$prep = $authDB->prepare("SELECT ID, admin FROM users WHERE ID = :id");
@@ -77,8 +92,6 @@ function getProgramsForUser(int $id): array {
 	
 	return $prep->fetchAll(PDO::FETCH_ASSOC);
 }
-
-// ------------------------------------ programs ------------------------------------
 
 function getProgramms(int $user_id): array {
 	global $db;

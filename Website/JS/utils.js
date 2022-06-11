@@ -54,11 +54,9 @@ function replaceImages() {
 }
 
 function logout() {
-	eraseCookie("username")
-	eraseCookie("hash")
-	window.location.replace(`${window.location.origin}/${root}`);
+	window.location.replace(`${window.location.origin}/${root}?message=logout`);
 }
 
-function eraseCookie(name) {
-	document.cookie = `${name}=; path=/${root}; Max-Age=-99999999;`;
+function logoutAllSessions() {
+	window.location.replace(`${window.location.origin}/${root}?message=clearsessions`);
 }

@@ -34,7 +34,7 @@ displayNavbar($member['ID']);
 	<div class="top">
 		<h1 class="title">Settings</h1>
 		<div class="topbuttonbar">
-			<button class="logout" onclick="logout()"><b>Logout</b></button>
+			<button class="logout" onclick="logoutAllSessions()"><b>Logout all Sessions</b></button>
 			<button class="logout" onclick="logout()"><b>Logout</b></button>
 		</div>
 	</div>
@@ -78,7 +78,19 @@ displayNavbar($member['ID']);
 				</div>
 			</div>
 			<table class="settings">
-
+				<tr>
+					<td class="setting">
+						<div>
+							<h2>
+								<label for="new_timeout">Session Timeout</label>
+							</h2>
+							<p>Time before the session cookie expires in days</p>
+							<p class="additional">Time in s before user sessions expire and new login is required<br>Updating this setting does not
+								affect already created sessions</p>
+						</div>
+						<input id="new_timeout" type="number" name="new-timeout">
+					</td>
+				</tr>
 			</table>
 
 			<input style="display: none" id="Client settings_reset" type="checkbox" name="resetSettings" autocomplete="off">
@@ -95,19 +107,7 @@ displayNavbar($member['ID']);
 				</div>
 			</div>
 			<table class="settings">
-				<tr>
-					<td class="setting">
-						<div>
-							<h2>
-								<label for="new_timeout">Session Timeout</label>
-							</h2>
-							<p>Time before the session cookie expires in days</p>
-							<p class="additional">Time in s before user sessions expire and new login is required<br>Updating this setting does not
-								affect already created sessions</p>
-						</div>
-						<input id="new_timeout" type="number" name="new-timeout">
-					</td>
-				</tr>
+
 				<!--				<tr>-->
 				<!--					<td class="seperator"></td>-->
 				<!--				</tr>-->

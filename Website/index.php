@@ -1,11 +1,25 @@
 <?php
 require_once "session.php";
 
-if(checkSession())
+// check if user already logged in or just logged in
+$check = checkSession(true);
+
+// redirect if logged in
+if($check === true)
 	header("Location: home/home.php");
 
+//
+$actions = checkActions();
+
+$login = checkLogin();
+
 // check login try
-$message = checkLogin();
+if($login !== '')           // message like "Invalid Login"  (never get triggered after redirekt or on first visit)
+	$message = $login;
+else if($actions !== '')    // message like "logged out" / "cleared sessions"
+	$message = $actions;
+else                        // message like "Session expired"
+	$message = $check;
 
 
 // psw: aILwxKROgvVHXmYdcqhSHugRGQxjqvcoYNFaMpAkEQXyxIAtOxjumfprrJKwqHdIkvgeh
@@ -23,23 +37,33 @@ $message = checkLogin();
 	<title>Login</title>
 	<link rel="stylesheet" href="login.css"/>
 	<link rel="stylesheet" href="mainstyle.css"/>
+	<link rel="stylesheet" href="modal.css"/>
 </head>
 
 <body>
-
-<div id="login">
-	<form method="post">
-		<div>
-			<label for="username">Username</label>
-			<input id="username" name="username" type="text">
-		</div>
-		<div>
-			<label for="password">Password</label>
-			<input id="password" name="password" type="password">
-		</div>
+<div class="modal" id="closable-modal">
+	<form id="login" class="Popup" method="post" action="index.php">
+		<table>
+			<tr>
+				<td>
+					<label for="username">Username</label>
+				</td>
+				<td>
+					<input id="username" name="username" type="text" value="<?= $_COOKIE['username'] ?? '' ?>">
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<label for="password">Password</label>
+				</td>
+				<td>
+					<input id="password" name="password" type="password">
+				</td>
+			</tr>
+		</table>
 		<div id="bottom">
 			<h3 id="message"><?= $message ?></h3>
-			<input type="submit" name="login" value="Login">
+			<button type="submit" class="save"><b>Login</b>
 		</div>
 	</form>
 </div>
