@@ -6,7 +6,7 @@ function rresetSettings(name, allowed, e) {
 		e.preventDefault()
 		return
 	}
-	let reset = confirm(`Reset ${name} Settings to default?`)
+	let reset = confirm(`Reset ${name} to default?`)
 	if (!reset) {
 		console.error(`Stopped reset ${name}`)
 		e.preventDefault()
@@ -24,17 +24,21 @@ function saveSettings(name, allowed, e) {
 		e.preventDefault()
 		return
 	}
-	let reset = confirm(`Save ${name} Settings?`)
-	if (!reset)
-		if (name === "Server settings") {
-			let passwd = document.getElementById("new_password").value
-			if (passwd.length !== 0 && passwd.length < 8) {
-				alert(`Not allowed to use password < 8  (${passwd.length})`)
-				console.error(`Not allowed to use password < 8  (${passwd.length})`)
-				e.preventDefault()
-				return
-			}
+	let reset = confirm(`Save ${name}?`)
+	if (!reset) {
+		console.error(`Stopped save ${name}`)
+		e.preventDefault()
+		return
+	}
+	if (name === "Local settings") {
+		let passwd = document.getElementById("new_password").value
+		if (passwd.length !== 0 && passwd.length < 8) {
+			alert(`Not allowed to use password with length < 8  length: (${passwd.length})`)
+			console.error(`Not allowed to use password with length < 8  length: (${passwd.length})`)
+			e.preventDefault()
+			return;
 		}
+	}
 	// allow form submit
 }
 
@@ -55,7 +59,7 @@ function sleep(time) {
 				 element.style.padding = '0'
 				 await sleep(1000)
 				 element.remove()
-			 })().then(r => {
+			 })().then(_ => {
 			 })
 		 }
 	 }

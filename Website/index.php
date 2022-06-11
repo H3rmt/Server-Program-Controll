@@ -42,24 +42,14 @@ else                        // message like "Session expired"
 <body>
 <div class="modal" id="closable-modal">
 	<form id="login" class="Popup" method="post" action="index.php">
-		<table>
-			<tr>
-				<td>
-					<label for="username">Username</label>
-				</td>
-				<td>
-					<input id="username" name="username" type="text" value="<?= $_COOKIE['username'] ?? '' ?>">
-				</td>
-			</tr>
-			<tr>
-				<td>
-					<label for="password">Password</label>
-				</td>
-				<td>
-					<input id="password" name="password" type="password">
-				</td>
-			</tr>
-		</table>
+		<div>
+			<label for="username">Username</label>
+			<input id="username" name="username" type="text" value="<?= $_COOKIE['username'] ?? '' ?>">
+		</div>
+		<div>
+			<label for="password">Password</label>
+			<input id="password" name="password" type="password">
+		</div>
 		<div id="bottom">
 			<h3 id="message"><?= $message ?></h3>
 			<button type="submit" class="save"><b>Login</b>

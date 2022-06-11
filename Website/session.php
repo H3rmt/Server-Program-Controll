@@ -73,7 +73,7 @@ function checkLogin(): string {
 }
 
 function checkActions(): string {
-	if($_GET['message'])
+	if(!empty($_GET['message']))
 		switch($_GET['message']) {
 			case 'logout':
 				if(empty($_COOKIE["username"]) || empty($_COOKIE["hash"]))
@@ -91,6 +91,6 @@ function checkActions(): string {
 	return '';
 }
 
-function redirectToLogin(): void {
-	header("Location: ../index.php");
+function redirectToLogin(int $seconds = 0): void {
+	header("refresh:$seconds;url=../index.php");
 }

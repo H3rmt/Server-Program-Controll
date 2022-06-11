@@ -64,6 +64,19 @@ body {
 	color: var(--white);
 }
 
+
+@media only screen and (max-device-width: 800px) {
+	:root {
+		font-size: 12px;
+	}
+}
+
+@media only screen and (min-device-width: 800px) {
+	:root {
+		font-size: 16px;
+	}
+}
+
 #main {
 	height: 100%;
 	margin-left: 5rem;
@@ -71,7 +84,7 @@ body {
 }
 
 #main .top {
-	height: 5.5rem;
+	height: 5rem;
 	padding-right: 10px;
 	padding-left: 20px;
 	
@@ -84,11 +97,7 @@ body {
 	background: var(--background-darkest);
 }
 
-#main .top .title {
-	font-size: 3rem;
-}
-
-#main .top .topbuttonbar {
+#main .top .topButtonBar {
 	white-space: nowrap;
 }
 
@@ -128,22 +137,22 @@ button {
 	white-space: nowrap;
 }
 
-@media only screen and (min-device-width: 650px) {
+@media only screen and (min-device-width: 800px) {
 	button {
 		border-radius: 25px;
 		border-width: 6px;
 		
-		padding: 13px 25px;
+		padding: 8px 15px;
 		margin-left: 10px;
 		margin-right: 10px;
 		
-		transition-duration: 0.25s;
-		font-size: 1.5rem;
+		transition-duration: 0.15s;
+		font-size: 1.3rem;
 		color: var(--black);
 	}
 }
 
-@media only screen and (max-device-width: 650px) {
+@media only screen and (max-device-width: 800px) {
 	button {
 		border-radius: 20px;
 		border-width: 4px;

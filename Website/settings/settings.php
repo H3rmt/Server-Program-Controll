@@ -22,8 +22,6 @@ if(!$member)
 	<script src="../JS/settings.js"></script>
 </head>
 
-<?php include "authorise.php"; ?>
-
 <body>
 <?php
 include "../navbar/navbar.php";
@@ -33,17 +31,18 @@ displayNavbar($member['ID']);
 <div id="main">
 	<div class="top">
 		<h1 class="title">Settings</h1>
-		<div class="topbuttonbar">
-			<button class="logout" onclick="logoutAllSessions()"><b>Logout all Sessions</b></button>
+		<div class="topButtonBar">
+			<button class="logout danger" onclick="logoutAllSessions()"><b>Logout all Sessions</b></button>
 			<button class="logout" onclick="logout()"><b>Logout</b></button>
 		</div>
 	</div>
-	<div class="responses">
-		<?php include "check.php"; ?>
-	</div>
+	<?php
+	include "check.php";
+	check($member['admin'], $member['ID']);
+	?>
 	<div id="boxes">
-		<form id="LocalSettings" class="settingsbox" method="POST">
-			<div class="topsetting">
+		<form id="LocalSettings" class="settingsBox" method="POST">
+			<div class="topSetting">
 				<h1>Local settings</h1>
 				<div class="buttons">
 					<button type="submit" class="save" onclick="saveSettings('Local settings',true,event)"><b>Save</b></button>
@@ -55,20 +54,32 @@ displayNavbar($member['ID']);
 					<td class="setting">
 						<div>
 							<h2>
-								<label for="new_password">Password</label>
+								<label for="new_password">New Password</label>
 							</h2>
-							<p>New password for current user</p>
+							<p class="additional">New password for current user</p>
+							<p class="additional">Changing a user-password logs out all current active sessions</p>
+							<p class="additional">Default: password</p>
 						</div>
 						<input id="new_password" type="password" name="password" autocomplete="new-password">
 					</td>
 				</tr>
+				<tr>
+					<td class="setting">
+						<div>
+							<h2>
+								<label for="new_password_2">Repeat New Password</label>
+							</h2>
+						</div>
+						<input id="new_password_2" type="password" name="password_2" autocomplete="new-password">
+					</td>
+				</tr>
 			</table>
 
-			<input style="display: none" id="Local settings_reset" type="checkbox" name="resetSettings" autocomplete="off">
+			<input style="display: none" id="Local settings_reset" type="checkbox" name="resetSettingsLocal" autocomplete="off" value="false">
 		</form>
 
-		<form id="ClientSettings" class="settingsbox disabled" method="POST">
-			<div class="topsetting">
+		<form id="ClientSettings" class="settingsBox <?= $member['admin'] ? '' : 'disabled' ?>" method="POST">
+			<div class="topSetting">
 				<h1>Client settings</h1>
 				<div class="buttons">
 					<button type="submit" class="save" onclick="saveSettings('Client settings',<?= $member['admin'] ?>,event);"><b>Save</b>
@@ -84,20 +95,22 @@ displayNavbar($member['ID']);
 							<h2>
 								<label for="new_timeout">Session Timeout</label>
 							</h2>
-							<p>Time before the session cookie expires in days</p>
-							<p class="additional">Time in s before user sessions expire and new login is required<br>Updating this setting does not
+							<p class="additional">Time in days before user session expires and new
+								login is required<br>Updating this setting does not
 								affect already created sessions</p>
+							<p class="additional">Default: 30</p>
 						</div>
-						<input id="new_timeout" type="number" name="new-timeout">
+						<input id="new_timeout" type="number" name="timeout">
 					</td>
 				</tr>
 			</table>
 
-			<input style="display: none" id="Client settings_reset" type="checkbox" name="resetSettings" autocomplete="off">
+			<input style="display: none" id="Client settings_reset" type="checkbox" name="resetSettingsClient" autocomplete="off"
+					 value="false">
 		</form>
 
-		<form id="ServerSettings" class="settingsbox disabled" method="POST">
-			<div class="topsetting">
+		<form id="ServerSettings" class="settingsBox <?= $member['admin'] ? '' : 'disabled' ?>" method="POST">
+			<div class="topSetting">
 				<h1>Server settings</h1>
 				<div class="buttons">
 					<button type="submit" class="save" onclick="saveSettings('Server settings',<?= $member['admin'] ?>,event)"><b>Save</b>
@@ -113,7 +126,8 @@ displayNavbar($member['ID']);
 				<!--				</tr>-->
 			</table>
 
-			<input style="display: none" id="Server settings_reset" type="checkbox" name="resetSettings" autocomplete="off">
+			<input style="display: none" id="Server settings_reset" type="checkbox" name="resetSettingsServer" autocomplete="off"
+					 value="false">
 		</form>
 	</div>
 </div>

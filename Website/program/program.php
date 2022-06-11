@@ -38,7 +38,7 @@ include "../navbar/navbar.php";
 <div id="main">
 	<div class="top">
 		<h1 class="title"><?= $program["Name"]; ?></h1>
-		<div class="topbuttonbar">
+		<div class="topButtonBar">
 			<button class="start disabled add"><b>Start</b></button>
 			<button class="stop disabled danger"><b>Stop</b></button>
 			<button class="delete disabled danger"><b>Delete</b></button>

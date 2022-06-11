@@ -66,6 +66,16 @@ function logout(string $username, string $hash): void {
 	]);
 }
 
+function setPassword(int $id, string $password): void {
+	
+	global $authDB;
+	$prep = $authDB->prepare("UPDATE users SET passwd = :password WHERE ID = :id");
+	$prep->execute([
+			':id' => $id,
+			':password' => password_hash($password, null)
+	]);
+}
+
 function clearSessions(string $username): void {
 	global $authDB;
 	$prep = $authDB->prepare("DELETE FROM sessions WHERE user_id=(SELECT ID FROM users WHERE name=:username)");
