@@ -3,7 +3,7 @@ require_once "database.php";
 
 function checkSession(bool $dropExpired = false): bool|array|string {
 	// check if user already has a session and no message is sent (liste logout)
-	if(!empty($_COOKIE["username"]) && !empty($_COOKIE["hash"]) && empty($_GET['message'])) {
+	if(array_key_exists("username", $_COOKIE) && array_key_exists("hash", $_COOKIE) && !array_key_exists("message", $_GET)) {
 		$session = getSession($_COOKIE["username"], $_COOKIE["hash"]);
 		
 		// no session found
@@ -34,7 +34,7 @@ function checkSession(bool $dropExpired = false): bool|array|string {
 
 
 function checkLogin(): string {
-	if(!empty($_POST["username"])) {
+	if(array_key_exists("username", $_COOKIE)) {
 		$username = $_POST["username"];
 		$password = $_POST["password"];
 		
@@ -73,15 +73,15 @@ function checkLogin(): string {
 }
 
 function checkActions(): string {
-	if(!empty($_GET['message']))
+	if(array_key_exists("message", $_GET))
 		switch($_GET['message']) {
 			case 'logout':
-				if(empty($_COOKIE["username"]) || empty($_COOKIE["hash"]))
+				if(!array_key_exists("username", $_COOKIE) || !array_key_exists("hash", $_COOKIE))
 					return "error logging out";
 				logout($_COOKIE["username"], $_COOKIE["hash"]);
 				return "logged out";
 			case 'clearsessions':
-				if(empty($_COOKIE["username"]))
+				if(!array_key_exists("username", $_COOKIE))
 					return "error clearing sessions";
 				clearSessions($_COOKIE["username"]);
 				return "cleared sessions";

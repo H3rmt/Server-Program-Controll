@@ -23,7 +23,7 @@ function check(bool $admin, int $userId): void {
 
 
 function localSettings(int $userId): void {
-	if(!empty($_POST['resetSettingsLocal'])) {
+	if(array_key_exists('resetSettingsLocal', $_POST)) {
 		setPassword($userId, 'password');
 		clearSessions($_COOKIE["username"]);
 		redirectToLogin(2);
@@ -32,7 +32,7 @@ function localSettings(int $userId): void {
 		<?php
 		return;
 	}
-	if(!empty($_POST['password']) && !empty($_POST['password_2'])) {
+	if(array_key_exists('password', $_POST) && array_key_exists('password_2', $_POST)) {
 		if($_POST['password'] != $_POST['password_2']) {
 			?>
 			<h2 class="feedback feedbackError">Failed to set new Password</h2>
@@ -49,14 +49,14 @@ function localSettings(int $userId): void {
 }
 
 function clientSettings(int $userId): void {
-	if(!empty($_POST['resetSettingsClient'])) {
+	if(array_key_exists('resetSettingsClient', $_POST)) {
 		updateSetting("timeout", 30);
 		?>
 		<h2 class="feedback">Reset Local Settings</h2>
 		<?php
 		return;
 	}
-	if(!empty($_POST['timeout'])) {
+	if(array_key_exists('timeout', $_POST)) {
 		if($_POST['timeout'] != getSetting('timeout')) {
 			updateSetting("timeout", $_POST['timeout']);
 			?>

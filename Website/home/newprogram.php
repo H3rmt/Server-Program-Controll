@@ -26,15 +26,15 @@ function error(string $error): void {
 }
 
 function displayModal($isAdmin): void {
-	if($_SERVER['REQUEST_METHOD'] == 'POST' && array_key_exists('name', $_POST) && array_key_exists('picturesrc', $_POST)) {
+	if($_SERVER['REQUEST_METHOD'] == 'POST') {
 		if($isAdmin) {
-			if(!empty($_POST['name']) && !empty($_POST['description'])) {
+			if(array_key_exists('name', $_POST) && array_key_exists('description', $_POST)) {
 				$ret = addToDatabase($_POST['name'], $_POST['description'], $_POST['picturesrc']);
 				success($_POST['name'], $ret[0], $ret[1]);
 			} else {
-				if(empty($_POST['name']))
+				if(!array_key_exists('name', $_POST))
 					error("Name missing");
-				else if(empty($_POST['description']))
+				else if(!array_key_exists('description', $_POST))
 					error("Description missing");;
 			}
 		} else {
