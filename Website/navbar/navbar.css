@@ -1,16 +1,37 @@
 #navbar {
-	list-style: none;
-	
 	position: fixed;
 	z-index: 1000;
-	margin: 0;
-	padding: 0;
 	
 	background: var(--background-darkest);
 	display: flex;
 	flex-direction: column;
 	
 	transition: width 200ms ease-out;
+}
+
+#navbar #navbar_list {
+	flex-shrink: 1;
+	flex-grow: 1;
+}
+
+#navbar #navbar_list a {
+	flex-shrink: 0;
+}
+
+@media only screen and (min-device-width: 800px) {
+	#navbar #navbar_list {
+		overflow: auto;
+		display: flex;
+		flex-direction: column;
+	}
+}
+
+@media only screen and (max-device-width: 800px) {
+	#navbar #navbar_list {
+		overflow: auto;
+		display: flex;
+		flex-direction: row;
+	}
 }
 
 #navbar a {
@@ -42,6 +63,7 @@
 
 #navbar #Overview {
 	background-color: rgb(24, 49, 122);
+	flex-shrink: 0;
 }
 
 #navbar #Overview:hover {
@@ -50,6 +72,7 @@
 
 #navbar #Settings {
 	background-color: var(--background-dark);
+	flex-shrink: 0;
 }
 
 #navbar #Settings:hover {

@@ -17,6 +17,7 @@ if(!$member)
 	<link rel="stylesheet" href="homepage.css"/>
 	<link rel="stylesheet" href="../mainstyle.css"/>
 	<link rel="stylesheet" href="../modal.css"/>
+	<link rel="stylesheet" href="../navbar/navbar.css"/>
 
 	<script src="../JS/utils.js"></script>
 </head>
