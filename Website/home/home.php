@@ -32,7 +32,7 @@ displayNavbar($member['ID']);
 	<div class="top">
 		<h1 class="title">Overview</h1>
 		<div class="topButtonBar">
-			<button class="<?= $member['admin'] ? '' : 'disabled' ?>" onclick="openModal()"><b>New Program</b></button>
+			<button class="<?= $member['admin'] ? '' : 'disabled' ?>" onclick="<?= $member['admin'] ? 'openModal()' : '' ?>"><b>New Program</b></button>
 		</div>
 	</div>
 	<div id="boxes">
