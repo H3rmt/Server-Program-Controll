@@ -6,6 +6,11 @@
 	grid-template: "top top" "activity logs";
 }
 
+@media only screen and (max-device-width: 800px) {
+	#boxes {
+		grid-template: "top" "activity" "logs";
+	}
+}
 
 #topbar {
 	grid-area: top;
@@ -22,14 +27,26 @@
 }
 
 #topbar .PIcon {
-	width: 128px;
-	height: 128px;
-	
 	border-style: solid;
 	border-radius: 40px;
 	border-width: 6px;
 	border-color: transparent;
 }
+
+@media only screen and (min-device-width: 800px) {
+	#topbar .PIcon {
+		min-width: 8rem;
+		max-width: 8rem;
+	}
+}
+
+@media only screen and (max-device-width: 800px) {
+	#topbar .PIcon {
+		min-width: 5rem;
+		max-width: 5rem;
+	}
+}
+
 
 #topbar .description {
 	max-width: 30%;

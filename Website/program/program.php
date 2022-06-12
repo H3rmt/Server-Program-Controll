@@ -50,7 +50,7 @@ displayNavbar($member['ID']);
 	</div>
 	<div id="boxes">
 		<div id="topbar">
-			<img src="<?= $program["Imagesource"] ?>" class="boticon" alt=""/>
+			<img src="<?= $program["Imagesource"] ?>" class="PIcon" alt=""/>
 			<h2 class="description"><?= $program["Description"]; ?></h2>
 		</div>
 		<div id="activity">
