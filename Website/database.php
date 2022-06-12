@@ -99,6 +99,17 @@ function getProgramsForUser(int $id): array {
 	return $prep->fetchAll(PDO::FETCH_ASSOC);
 }
 
+function getPermissionsForUserForProgram(int $userId, int $programId): int {
+	global $authDB;
+	$prep = $authDB->prepare("SELECT permission FROM user_programs_permissions WHERE user_id = :userId AND program_id = :programId");
+	$prep->execute([
+			':userId' => $userId,
+			':programId' => $programId,
+	]);
+	$ret = $prep->fetchAll(PDO::FETCH_ASSOC);
+	return $ret ? $ret[0]['permission'] : -1;
+}
+
 function getProgramms(int $user_id): array {
 	global $db;
 	$prs = getProgramsForUser($user_id);
