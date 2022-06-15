@@ -34,7 +34,7 @@ function checkSession(bool $dropExpired = false): bool|array|string {
 
 
 function checkLogin(): string {
-	if(array_key_exists("username", $_COOKIE)) {
+	if(array_key_exists("username", $_POST)) {
 		$username = $_POST["username"];
 		$password = $_POST["password"];
 		

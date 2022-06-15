@@ -98,3 +98,12 @@ create table logs
     constraint logs_programs_fk
         foreign key (program_ID) references programs (ID)
 );
+
+create user Website
+    identified by '/6uM8qlYUm*NFCef';
+grant create, insert, select, update on Programs.* to Website;
+grant create, delete, insert, select, update on Auth.* to Website;
+
+create user go
+    identified by 'e73EG6dP2f8F2dAx';
+grant create, insert, select, update on Programs.* to go;

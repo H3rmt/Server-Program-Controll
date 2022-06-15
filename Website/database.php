@@ -67,7 +67,6 @@ function logout(string $username, string $hash): void {
 }
 
 function setPassword(int $id, string $password): void {
-	
 	global $authDB;
 	$prep = $authDB->prepare("UPDATE users SET passwd = :password WHERE ID = :id");
 	$prep->execute([
