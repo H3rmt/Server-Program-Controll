@@ -7,4 +7,4 @@ git log -1 --pretty=%B
 
 # Update repo
 printf "starting deploy\n"
-.deploy.sh
+./.deploy.sh
