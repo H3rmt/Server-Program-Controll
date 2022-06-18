@@ -1,11 +1,10 @@
 #!/bin/bash
 
 # dirs for the output
-html="/srv/http"
 goRemote="/home/remote/Remote"
 goServer="/home/remote/Server"
 
- 
+
 # copy/override config files
 read -p "initial deploy? [y/N] " r
 initial=False
@@ -18,41 +17,21 @@ fi
 echo
 
 # dirs inside the $projectFolder dir
-website="Website"
 server="Server"
 remote="Remote"
 
 # gitHome
 projectFolder=$(pwd)
 
+
 # Update repo
 printf "fetching from git\n"
 git fetch && git pull
 git log -1 --pretty=%B
 
-CopyFolder() {
-	if [ ! -d "$1" ]; then
-		echo "source $projectFolder/$1 not existing"
-		return
-	fi
-
-	if [ ! -d "$2" ]; then
-		mkdir -p "$2"
-		echo "created $2 dir"
-	else
-		if [ "$(ls -A "$2")" ]; then
-			rm -r "$2/"*
-			echo "removed files from $2"
-		else
-			echo "$2 empty"
-		fi
-	fi
-
-	echo "coping files from $projectFolder/$1 to $2"
-	cp -r "$projectFolder/$1/"* "$2"
-
-	echo ""
-}
+# Update docker-compose
+printf "updating docker-compose\n"
+docker-compose up
 
 BuildGo() {
 	if [ ! -d "$1/" ]; then
@@ -88,8 +67,6 @@ CopyFiles() {
 	done
 	echo ""
 }
-
-CopyFolder $website $html
 
 BuildGo $server $goServer
 serverFiles=("config.json")
