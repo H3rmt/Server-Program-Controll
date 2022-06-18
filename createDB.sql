@@ -62,11 +62,11 @@ create table programs
 
 create table activity
 (
-    ID         int                                                     not null
+    ID         int auto_increment
         primary key,
-    program_ID int                                                     not null,
-    Type       enum ('Backgroundprocess', 'Process', 'Recive', 'Send') not null,
-    Date       timestamp default CURRENT_TIMESTAMP                     not null on update CURRENT_TIMESTAMP,
+    program_ID int                                              not null,
+    Type       enum ('Background','Process', 'Receive', 'Send') not null,
+    Date       timestamp default CURRENT_TIMESTAMP              not null on update CURRENT_TIMESTAMP,
     constraint activity_ID_uindex
         unique (ID),
     constraint activity_programs_fk
@@ -116,6 +116,7 @@ grant create, delete, insert, select, update on Auth.* to Website;
 create user go
     identified by 'e73EG6dP2f8F2dAx';
 grant create, insert, select, update on Programs.* to go;
+grant select on Auth.* to go;
 
 
 # -------------------------------- Defaults --------------------------------

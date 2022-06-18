@@ -15,18 +15,31 @@ import (
 Create and open SQL Connection
 */
 func SQLInit() {
-	DB, err := sqlx.Open("mysql", fmt.Sprintf("%s:%s@tcp(localhost:%d)/%s", util.GetConfig().User, util.GetConfig().Password, util.GetConfig().DbPort, util.GetConfig().Database))
+	PDB, err := sqlx.Open("mysql", fmt.Sprintf("%s:%s@tcp(localhost:%d)/%s", util.GetConfig().User, util.GetConfig().Password, util.GetConfig().DbPort, util.GetConfig().Database))
 	if err != nil {
 		util.Err("SQL", err, true, "Error creating connection")
 		panic(err)
 	}
-	err = DB.Ping()
+	ADB, err := sqlx.Open("mysql", fmt.Sprintf("%s:%s@tcp(localhost:%d)/%s", util.GetConfig().User, util.GetConfig().Password, util.GetConfig().DbPort, util.GetConfig().Database2))
 	if err != nil {
 		util.Err("SQL", err, true, "Error creating connection")
+		panic(err)
+	}
+
+	err = PDB.Ping()
+	if err != nil {
+		util.Err("SQL", err, true, "Error creating PDB connection")
+		panic(err)
+	}
+
+	err = ADB.Ping()
+	if err != nil {
+		util.Err("SQL", err, true, "Error creating ADB connection")
 		panic(err)
 	}
 	util.Log("SQL", "Connected!")
 
-	websocket.SetDB(DB)
-	api.SetDB(DB)
+	websocket.SetPDB(PDB)
+	websocket.SetADB(ADB)
+	api.SetPDB(PDB)
 }

@@ -12,7 +12,7 @@ var ProgramConnections = make(map[string]string) // Program_ID = [IP:port]
 
 var DB *sqlx.DB
 
-func SetDB(db *sqlx.DB) {
+func SetPDB(db *sqlx.DB) {
 	DB = db
 }
 

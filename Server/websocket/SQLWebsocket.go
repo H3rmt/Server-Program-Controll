@@ -6,10 +6,15 @@ import (
 	"Server/util"
 )
 
-var DB *sqlx.DB
+var PDB *sqlx.DB
+var ADB *sqlx.DB
 
-func SetDB(db *sqlx.DB) {
-	DB = db
+func SetPDB(db *sqlx.DB) {
+	PDB = db
+}
+
+func SetADB(db *sqlx.DB) {
+	ADB = db
 }
 
 /*
@@ -22,29 +27,58 @@ func (m *SQLerror) Error() string {
 }
 
 /*
-check if send shacode exists or equals stored sha code
+CheckPermission checks if user is allowed to do action on program
 */
-func Checkadmin(js *map[string]any) error {
-	code, code_exists := (*js)["admin"]
-	if code_exists {
-		sql := "SELECT Value FROM settings WHERE Name='adminCookie'"
+func CheckPermission(json *map[string]any) error {
+	username, exists := (*json)["username"]
+	hash, exists2 := (*json)["hash"]
+	action, exists3 := (*json)["action"]
+	id, exists4 := (*json)["id"]
+	if exists && exists2 && exists3 && exists4 {
+		sql := "SELECT admin, ID FROM users WHERE ID = (SELECT user_id FROM sessions WHERE user_id = (SELECT ID FROM users WHERE name = ?) AND hash = ?)"
 
-		setting := struct {
-			Value string `db:"Value"`
-		}{""}
-		err := DB.Get(&setting, sql)
+		user := struct {
+			Admin  bool `db:"admin"`
+			UserId int  `db:"ID"`
+		}{}
+		err := ADB.Get(&user, sql, username.(string), hash.(string))
 		if err != nil {
-			util.Log("SQL WS", err)
-			return &SQLerror{}
-		}
+			util.Log("SQL WS", err, "Non-existing session")
+			return &Permissionerror{}
+		} // if no error happens session exists
 
-		if setting.Value == code {
+		// admin has permission to do everything
+		if user.Admin {
 			return nil
 		}
-		return &Permissionerror{}
 
+		// user is no admin => check program permissions
+		sql = "SELECT permission FROM user_programs_permissions WHERE user_id = ? AND program_id = ?"
+		permission := struct {
+			Permission int `db:"permission"`
+		}{}
+		err = ADB.Get(&permission, sql, user.UserId, id.(float64))
+		if err != nil {
+			util.Log("SQL WS", err)
+			return &Permissionerror{}
+		}
+		switch action {
+		case "Logs":
+			return nil // user is registered in user_programs_permissions => at least read access
+		case "Activity":
+			return nil // user is registered in user_programs_permissions => at least read access
+		case "Start":
+			if permission.Permission >= 1 {
+				return nil
+			}
+		case "Stop":
+			if permission.Permission >= 2 {
+				return nil // user is registered in user_programs_permissions => at least read access
+			}
+		}
+		return &Permissionerror{}
 	}
-	return &Permissionerror{}
+	return &SQLerror{}
 }
 
 /*
@@ -56,7 +90,7 @@ func getAPIKeyfromProgram_ID(Program_ID string) (string, error) {
 	setting := struct {
 		APIKey string `db:"APIKey"`
 	}{}
-	err := DB.Get(&setting, sql, Program_ID)
+	err := PDB.Get(&setting, sql, Program_ID)
 	if err != nil {
 		util.Log("SQL WS", err)
 		return "", &SQLerror{}
@@ -86,7 +120,7 @@ func Getlogs(Program_id string) ([]Log, error) {
 
 	// []Log{} so it sends empty array instead of null
 	var logs = []Log{}
-	err := DB.Select(&logs, sql, Program_id)
+	err := PDB.Select(&logs, sql, Program_id)
 	if err != nil {
 		util.Log("SQL WS", err)
 		return nil, &SQLerror{}
@@ -120,7 +154,7 @@ func Getactivity(Program_id string) ([]Activity, error) {
 
 	// []Activity{} so it sends empty array instead of null
 	var activities = []Activity{}
-	err := DB.Select(&activities, sql, Program_id)
+	err := PDB.Select(&activities, sql, Program_id)
 	if err != nil {
 		util.Log("SQL WS", err)
 		return nil, &SQLerror{}
