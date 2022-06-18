@@ -116,3 +116,11 @@ grant create, delete, insert, select, update on Auth.* to Website;
 create user go
     identified by 'e73EG6dP2f8F2dAx';
 grant create, insert, select, update on Programs.* to go;
+
+
+# -------------------------------- Defaults --------------------------------
+
+use Auth;
+
+insert into settings (name, value) values ('timeout', '15');
+
