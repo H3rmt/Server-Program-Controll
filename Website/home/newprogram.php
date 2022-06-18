@@ -3,7 +3,7 @@
 function success(string $name, int $id, string $key): void {
 	?>
 	<div class="modal">
-		<form class="Popup" action="home.php" method="POST" autocomplete="off">
+		<form class="Popup" action="home.php" method="GET" autocomplete="off">
 			<h1><?= htmlspecialchars($name) ?> created</h1>
 			<h2>ID: <?= htmlspecialchars($id) ?></h2>
 			<h2>APIKey: <?= htmlspecialchars($key) ?></h2>
@@ -16,7 +16,7 @@ function success(string $name, int $id, string $key): void {
 function error(string $error): void {
 	?>
 	<div class="modal">
-		<form class="Popup" action="home.php" method="POST" autocomplete="off">
+		<form class="Popup" action="home.php" method="GET" autocomplete="off">
 			<h1>Error creating Program</h1>
 			<h2><?= htmlspecialchars($error) ?></h2>
 			<button class="Close" type="submit"><b>Close</b></button>
