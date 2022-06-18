@@ -29,10 +29,6 @@ printf "fetching from git\n"
 git fetch && git pull
 git log -1 --pretty=%B
 
-# Update docker-compose
-printf "updating docker-compose\n"
-docker-compose up
-
 BuildGo() {
 	if [ ! -d "$1/" ]; then
 		echo "source $projectFolder/$1 not existing"
