@@ -55,6 +55,11 @@ else                        // message like "Session expired"
 			<button type="submit" class="save"><b>Login</b>
 		</div>
 	</form>
+	<script>
+		document.getElementById('login').onsubmit = () => {
+			document.cookie = "username=" + document.getElementById('username').value
+		}
+	</script>
 </div>
 
 </body>

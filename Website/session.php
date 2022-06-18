@@ -79,11 +79,13 @@ function checkActions(): string {
 				if(!array_key_exists("username", $_COOKIE) || !array_key_exists("hash", $_COOKIE))
 					return "error logging out";
 				logout($_COOKIE["username"], $_COOKIE["hash"]);
+				setcookie("hash", "");
 				return "logged out";
 			case 'clearsessions':
 				if(!array_key_exists("username", $_COOKIE))
 					return "error clearing sessions";
 				clearSessions($_COOKIE["username"]);
+				setcookie("hash", "");
 				return "cleared sessions";
 			default:
 				return 'unknown action';
