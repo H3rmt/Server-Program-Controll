@@ -60,3 +60,11 @@ function logout() {
 function logoutAllSessions() {
 	window.location.replace(`${window.location.origin}/${root}?message=clearsessions`);
 }
+
+function getCookie(name) {
+	for (let cookie of document.cookie.split(';')) {
+		if (cookie.trim().split('=')[0] === name) {
+			return cookie.trim().split('=')[1]
+		}
+	}
+}
