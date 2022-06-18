@@ -38,17 +38,6 @@ create table sessions
         foreign key (user_id) references users (ID)
 );
 
-create table user_programs_permissions
-(
-    user_id    int           null,
-    program_id int           null,
-    permission int default 0 not null,
-    constraint user_programs_permissions_programs_fk
-        foreign key (program_id) references Programs.programs (ID),
-    constraint user_programs_permissions_users_fk
-        foreign key (user_id) references users (ID)
-);
-# 0 = read, 1 = start, 2 = stop
 
 # -------------------------------- Programs --------------------------------
 
@@ -98,6 +87,26 @@ create table logs
     constraint logs_programs_fk
         foreign key (program_ID) references programs (ID)
 );
+
+
+# -------------------------------- Auth 2 --------------------------------
+
+use Auth;
+
+create table user_programs_permissions
+(
+    user_id    int           null,
+    program_id int           null,
+    permission int default 0 not null,
+    constraint user_programs_permissions_programs_fk
+        foreign key (program_id) references Programs.programs (ID),
+    constraint user_programs_permissions_users_fk
+        foreign key (user_id) references users (ID)
+);
+# 0 = read, 1 = start, 2 = stop
+
+
+# -------------------------------- Users --------------------------------
 
 create user Website
     identified by '/6uM8qlYUm*NFCef';

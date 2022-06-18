@@ -3,8 +3,10 @@ require_once "../session.php";
 
 $member = checkSession();
 
-if(!$member)
+if(!$member) {
 	redirectToLogin();
+	exit();
+}
 
 $program = getProgramm($_GET['id']);
 $permissions = getPermissionsForUserForProgram($member['ID'], $_GET['id']);
