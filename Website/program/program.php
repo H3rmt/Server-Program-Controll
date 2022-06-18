@@ -11,7 +11,7 @@ if(!$member) {
 $program = getProgramm($_GET['id']);
 $permissions = getPermissionsForUserForProgram($member['ID'], $_GET['id']);
 
-if($permissions == -1) // read not allowed  // TODO add missing permissions page
+if(!$member['admin'] && $permissions == -1) // read not allowed  // TODO add missing permissions page
 	header("Location: ../home/home.php")
 ?>
 
