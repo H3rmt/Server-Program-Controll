@@ -38,6 +38,12 @@ function saveSettings(name, allowed, e) {
 			e.preventDefault()
 			return;
 		}
+		if (passwd !== document.getElementById("new_password_2").value) {
+			alert(`Passwords do not match`)
+			console.error(`Passwords do not match`)
+			e.preventDefault()
+			return;
+		}
 	}
 	// allow form submit
 }

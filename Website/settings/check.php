@@ -52,7 +52,7 @@ function clientSettings(int $userId): void {
 	if(array_key_exists('resetSettingsClient', $_POST)) {
 		updateSetting("timeout", 30);
 		?>
-		<h2 class="feedback">Reset Local Settings</h2>
+		<h2 class="feedback">Reset Client Settings</h2>
 		<?php
 		return;
 	}
