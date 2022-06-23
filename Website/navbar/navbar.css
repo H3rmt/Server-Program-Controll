@@ -57,6 +57,7 @@
 
 #navbar a h2 {
 	opacity: 0;
+	white-space: nowrap;
 	color: var(--white);
 }
 
