@@ -79,7 +79,6 @@ create table logs
         primary key,
     program_ID int                                          not null,
     Date       timestamp default CURRENT_TIMESTAMP          not null on update CURRENT_TIMESTAMP,
-    Number     int                                          not null,
     Message    text                                         not null,
     Type       enum ('Low', 'Normal', 'Important', 'Error') not null,
     constraint logs_ID_uindex
