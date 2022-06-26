@@ -58,7 +58,7 @@ function processreceived(evt) {
 function builtWebSocket() {
 	let loading = true;
 	try {
-		websocket = new WebSocket("ws://" + window.location.host + ":18769/ws");
+		websocket = new WebSocket("ws://" + location.hostname + ":18769/ws");
 		// websocket = new WebSocket("ws://192.168.187.11:18769/ws");
 		console.log("Connection built");
 	} catch (err) {
