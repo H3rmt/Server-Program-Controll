@@ -1,10 +1,11 @@
 {
-    "Port": 18769,
-    "LogPrefix": true,
-    "prefixstretch": 9,
-    "locationstretch": 20,
-    "user":"go",
-    "password":"e73EG6dP2f8F2dAx",
-    "database":"Programs",
-    "DbPort": 3308
+	"Port": 18769,
+	"LogPrefix": true,
+	"prefixstretch": 9,
+	"locationstretch": 20,
+	"user": "go",
+	"password": "e73EG6dP2f8F2dAx",
+	"database": "Programs",
+	"database2": "Auth",
+	"DbPort": 3308
 }

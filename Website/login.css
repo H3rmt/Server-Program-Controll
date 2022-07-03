@@ -1,0 +1,44 @@
+@media only screen and (min-device-width: 800px) {
+	#login {
+		padding-top: 30px;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		gap: 1.7em;
+	}
+	
+	#login div {
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		gap: 1em;
+	}
+	
+	#message {
+		position: absolute;
+		left: 0;
+		margin-top: 23px;
+		margin-bottom: 20px;
+		margin-left: 50px;
+		align-self: flex-start;
+		
+		color: #810000;
+		font-weight: bolder;
+	}
+}
+
+
+@media only screen and (max-device-width: 800px) {
+	#login {
+		padding-top: 30px;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		gap: 1em;
+	}
+	
+	#message {
+		color: #810000;
+		font-weight: bolder;
+	}
+}

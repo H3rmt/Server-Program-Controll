@@ -111,7 +111,7 @@ func reciveAPI(raw *[]byte) []byte {
 called to register a program with an APIKey to remote server
 */
 func Register(program *Program) error {
-	util.Log("API", "Registering Program:", program.Name, " on", util.GetConfig().RemoteIP)
+	util.Log("API", "Registering Program:", program.Name, "on", util.GetConfig().RemoteIP)
 	req := map[string]any{"APIKey": program.APIKey, "Register": true, "Port": util.GetConfig().Port}
 	jsonReq, err := json.Marshal(req)
 	if err != nil {

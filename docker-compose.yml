@@ -3,10 +3,36 @@ version: '3.1'
 services:
 
   db:
-    image: mysql
+    image: mysql:8.0.28
     command: --default-authentication-plugin=mysql_native_password
     restart: always
     ports:
       - "3308:3306"
     environment:
       MYSQL_ROOT_PASSWORD: "root"
+    volumes:
+      - dbdata:/var/lib/mysql
+
+  web:
+    image: nginx:1.21.6-alpine
+    depends_on:
+      - db
+      - php
+    links:
+      - db
+      - php
+    volumes:
+      - ./Website:/srv/http
+      - ./nginx:/etc/nginx/conf.d/
+    ports:
+      - "808:80"
+      - "4438:443"  # restart server
+
+  php:
+    image: adhocore/phpfpm:8.0
+    volumes:
+      - ./Website:/srv/http
+      - ./php.ini:/usr/local/etc/php/php.ini
+
+volumes:
+  dbdata:

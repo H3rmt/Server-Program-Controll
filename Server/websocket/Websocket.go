@@ -22,23 +22,23 @@ var up = websocket.Upgrader{
 checks if recived JSON has action as key
 */
 func validateWSJSON(js *map[string]any) (string, string) {
-	Program_id, Program_id_key_exists := (*js)["Program_id"]
-	if Program_id_key_exists {
+	id, ProgramIdKeyExists := (*js)["id"]
+	if ProgramIdKeyExists {
 		action := fmt.Sprintf("%v", (*js)["action"])
 		if action == "Activity" || action == "Logs" || action == "Stop" || action == "Start" {
-			return fmt.Sprintf("%v", Program_id), action
+			return fmt.Sprintf("%v", id), action
 		}
 	}
 	return "", ""
 }
 
 /*
-Error thrown/returned when no admin priv are present
+Permissionerror thrown/returned when insufficient or no permissions are present
 */
 type Permissionerror struct{}
 
 func (m *Permissionerror) Error() string {
-	return "no admin permissions"
+	return "missing permissions"
 }
 
 /*
@@ -68,7 +68,7 @@ func reciveWS(c *websocket.Conn) {
 			util.Log("WS", "empty JSON")
 			continue
 		}
-		Program_id, action := validateWSJSON(&recive)
+		id, action := validateWSJSON(&recive)
 		if action == "" {
 			util.Log("WS", "invalid JSON WS request", recive)
 			continue
@@ -76,31 +76,24 @@ func reciveWS(c *websocket.Conn) {
 		util.Log("WS", "recived:", recive)
 
 		var data any
-		var actionerr error
-
-		switch action {
-		case "Logs":
-			actionerr = Checkadmin(&recive)
-			if actionerr == nil {
-				data, actionerr = Getlogs(Program_id)
-			}
-		case "Activity":
-			data, actionerr = Getactivity(Program_id)
-		case "Start":
-			actionerr = Checkadmin(&recive)
-			if actionerr == nil {
-				data, actionerr = Start(Program_id)
-			}
-		case "Stop":
-			actionerr = Checkadmin(&recive)
-			if actionerr == nil {
-				data, actionerr = Stop(Program_id)
+		var actionErr error
+		actionErr = CheckPermission(&recive)
+		if actionErr == nil {
+			switch action {
+			case "Logs":
+				data, actionErr = Getlogs(id)
+			case "Activity":
+				data, actionErr = Getactivity(id)
+			case "Start":
+				data, actionErr = Start(id)
+			case "Stop":
+				data, actionErr = Stop(id)
 			}
 		}
 
-		if actionerr != nil {
-			util.Log("WS", "send err:", actionerr)
-			msg, _ := json.Marshal(map[string]any{"action": action, "error": actionerr.Error()})
+		if actionErr != nil {
+			util.Log("WS", "send err:", actionErr)
+			msg, _ := json.Marshal(map[string]any{"action": action, "error": actionErr.Error()})
 			c.WriteMessage(1, msg)
 		} else {
 			msg, err := json.Marshal(map[string]any{"action": action, "data": data})

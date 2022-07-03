@@ -171,7 +171,6 @@ func (w *stdoutWriter) Write(p []byte) (int, error) {
 		return len(p), nil
 	}
 	if strings.Contains(str, "\n") {
-		util.Log("split")
 		for _, line := range strings.Split(str, "\n") {
 			str := strings.TrimSpace(line)
 			if len(str) == 0 {

@@ -1,76 +1,137 @@
 <?php
 
+$authDB = new PDO('mysql:host=172.17.0.1; port=3308; dbname=Auth', 'Website', '/6uM8qlYUm*NFCef');
+
 $db = new PDO('mysql:host=172.17.0.1; port=3308; dbname=Programs', 'Website', '/6uM8qlYUm*NFCef');
-//$db = new PDO('mysql:host=localhost', 'Website', '/6uM8qlYUm*NFCef');
 
 
-function getprogramms(): array {
-	global $db;
-	$prep = $db->prepare("SELECT ID, Name, Description, Imagesource, StatechangeTime FROM programs");
-	$prep->execute();
+function getMember(string $username): array|bool {
+	global $authDB;
+	$prep = $authDB->prepare("SELECT passwd, ID, admin FROM users WHERE name=:username");
+	$prep->execute([
+			':username' => $username
+	]);
+	$ret = $prep->fetchAll(PDO::FETCH_ASSOC);
+	return $ret ? $ret[0] : false;
+}
+
+function getSession(string $username, string $hash): array|bool {
+	global $authDB;
+	$prep = $authDB->prepare("SELECT ID, expire_date, hash, user_id FROM sessions WHERE user_id=(SELECT ID FROM users WHERE name=:username) AND hash=:hash");
+	$prep->execute([
+			':username' => $username,
+			':hash' => $hash
+	]);
+	$ret = $prep->fetchAll(PDO::FETCH_ASSOC);
+	return $ret ? $ret[0] : false;
+}
+
+function dropSession(int $id): void {
+	global $authDB;
+	$prep = $authDB->prepare("DELETE FROM sessions WHERE ID=:id");
+	$prep->execute([
+			':id' => $id,
+	]);
+}
+
+function createSession(int $id, string $hash, string $expiry_date): void {
+	global $authDB;
+	$prep = $authDB->prepare("INSERT INTO sessions (user_id, hash, expire_date) VALUES (:id, :hash, :expire_date)");
+	$prep->execute([
+			':id' => $id,
+			':hash' => $hash,
+			':expire_date' => $expiry_date
+	]);
+}
+
+function getSetting(string $name) {
+	global $authDB;
+	$prep = $authDB->prepare("SELECT Value FROM settings WHERE Name=:name");
+	$prep->execute([':name' => $name]);
+	return $prep->fetchAll(PDO::FETCH_ASSOC)[0]['Value'];
+}
+
+function updateSetting(string $name, $value): void {
+	global $authDB;
+	$prep = $authDB->prepare("UPDATE settings SET Value=:value WHERE Name=:name");
+	$prep->execute([':value' => $value, ':name' => $name]);
+}
+
+function logout(string $username, string $hash): void {
+	global $authDB;
+	$prep = $authDB->prepare("DELETE FROM sessions WHERE user_id=(SELECT ID FROM users WHERE name=:username) AND hash=:hash");
+	$prep->execute([
+			':username' => $username,
+			':hash' => $hash
+	]);
+}
+
+function setPassword(int $id, string $password): void {
+	global $authDB;
+	$prep = $authDB->prepare("UPDATE users SET passwd = :password WHERE ID = :id");
+	$prep->execute([
+			':id' => $id,
+			':password' => password_hash($password, null)
+	]);
+}
+
+function clearSessions(string $username): void {
+	global $authDB;
+	$prep = $authDB->prepare("DELETE FROM sessions WHERE user_id=(SELECT ID FROM users WHERE name=:username)");
+	$prep->execute([
+			':username' => $username,
+	]);
+}
+
+function getProgramsForUser(int $id): array {
+	global $authDB, $db;
+	$prep = $authDB->prepare("SELECT ID, admin FROM users WHERE ID = :id");
+	$prep->execute([':id' => $id]);
+	if($prep->fetchAll(PDO::FETCH_ASSOC)[0]['admin']) {
+		$prep = $db->prepare("SELECT ID AS program_id, 'all' as permission FROM programs");
+		$prep->execute();
+	} else {
+		$prep = $authDB->prepare("SELECT program_id, permission FROM user_programs_permissions WHERE user_id = :id");
+		$prep->execute([':id' => $id]);
+	}
+	
 	return $prep->fetchAll(PDO::FETCH_ASSOC);
 }
 
-function getprogramm(int $id) {
+function getPermissionsForUserForProgram(int $userId, int $programId): int {
+	global $authDB;
+	$prep = $authDB->prepare("SELECT permission FROM user_programs_permissions WHERE user_id = :userId AND program_id = :programId");
+	$prep->execute([
+			':userId' => $userId,
+			':programId' => $programId,
+	]);
+	$ret = $prep->fetchAll(PDO::FETCH_ASSOC);
+	return $ret ? $ret[0]['permission'] : -1;
+}
+
+function getProgramms(int $user_id): array {
+	global $db;
+	$prs = getProgramsForUser($user_id);
+	$programs = [];
+	foreach($prs as $pr) {
+		$prep = $db->prepare('SELECT ID, Name, Description, Imagesource, StatechangeTime FROM programs WHERE ID = :id');
+		$prep->execute([":id" => $pr['program_id']]);
+		$programs[] = ['program' => $prep->fetchAll(PDO::FETCH_ASSOC)[0], 'permission' => $pr['permission']];
+	}
+	return $programs;
+}
+
+function getProgramm(int $id) {
 	global $db;
 	$prep = $db->prepare("SELECT ID, Name, Description, Imagesource, StatechangeTime FROM programs WHERE ID=:id");
 	$prep->execute([':id' => $id]);
 	return $prep->fetchAll(PDO::FETCH_ASSOC)[0];
 }
 
-function addtoDatabase(string $Name, string $Description, string $imgsrc): array {
+function addToDatabase(string $Name, string $Description, string $imgsrc): array {
 	global $db;
 	$key = uniqid();
-	$ID = getnewID("SELECT ID FROM programs ORDER BY ID");
-	$prep = $db->prepare("INSERT INTO programs (ID,Name,Description,Imagesource,APIKey) VALUES (:ID,:Name,:Desc,:Imagesource,:APIKey)");
-	$prep->execute([':ID' => $ID, ':Name' => $Name, ':Desc' => $Description, ':Imagesource' => $imgsrc, ':APIKey' => $key]);
-	return [$ID, $key];
-}
-
-function getnewID(string $SQL): int {
-	global $db;
-	$id = 0;
-	$prep = $db->prepare($SQL);
-	$prep->execute();
-	$IdList = $prep->fetchAll(PDO::FETCH_ASSOC);
-	foreach($IdList as $nid) {
-		if($nid['ID'] == $id)
-			$id++;
-		else
-			return $id;
-	}
-	return $id;
-}
-
-
-function getSetting(string $name) {
-	global $db;
-	$prep = $db->prepare("SELECT Value FROM settings WHERE Name=:name");
-	$prep->execute([':name' => $name]);
-	return $prep->fetchAll(PDO::FETCH_ASSOC)[0]['Value'];
-}
-
-function updateSetting(string $name, $value) {
-	global $db;
-	$prep = $db->prepare("UPDATE settings SET Value=:value WHERE Name=:name");
-	$prep->execute([':value' => $value, ':name' => $name]);
-}
-
-
-function testAdminCookie(): bool {
-	if(isset($_COOKIE['authorisation'])) {
-		return getSetting('adminCookie') === $_COOKIE['authorisation'];
-	} else {
-		return false;
-	}
-}
-
-
-function getPepper(): string {
-	return file_get_contents("../../pepper");
-}
-
-function setPepper(string $new) {
-	chown("../../pepper", "http"); //www-data
-	file_put_contents("../../pepper", $new);
+	$prep = $db->prepare("INSERT INTO programs (Name,Description,Imagesource,APIKey) VALUES (:Name,:Desc,:Imagesource,:APIKey)");
+	$prep->execute([':Name' => $Name, ':Desc' => $Description, ':Imagesource' => $imgsrc, ':APIKey' => $key]);
+	return [$db->lastInsertId(), $key];
 }

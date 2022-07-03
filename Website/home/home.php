@@ -1,3 +1,14 @@
+<?php
+require_once "../session.php";
+
+$member = checkSession();
+
+if(!$member) {
+	redirectToLogin();
+	exit();
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -8,6 +19,7 @@
 	<link rel="stylesheet" href="homepage.css"/>
 	<link rel="stylesheet" href="../mainstyle.css"/>
 	<link rel="stylesheet" href="../modal.css"/>
+	<link rel="stylesheet" href="../navbar/navbar.css"/>
 
 	<script src="../JS/utils.js"></script>
 </head>
@@ -15,30 +27,32 @@
 <body>
 <?php
 include "../navbar/navbar.php";
+displayNavbar($member['ID']);
 ?>
 
 <div id="main">
 	<div class="top">
 		<h1 class="title">Overview</h1>
-		<div class="topbuttonbar">
-			<button class="disabled" onclick="openmodal()"><b>New Program</b></button>
+		<div class="topButtonBar">
+			<button class="<?= $member['admin'] ? '' : 'disabled' ?>" onclick="<?= $member['admin'] ? 'openModal()' : '' ?>"><b>New Program</b>
+			</button>
 		</div>
 	</div>
 	<div id="boxes">
 		<?php
 		include "loadBoxes.php";
+		displayPrograms($member['ID'], $member['admin'])
 		?>
 	</div>
 </div>
 <?php
 include "newprogram.php";
+displayModal($member['admin']);
 ?>
 
 <script>
-	searchmodal();
+	searchModal();
 	replaceImages();
-	protect();
-	disable();
 </script>
 </body>
 

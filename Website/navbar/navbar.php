@@ -1,40 +1,28 @@
-<ul id="navbar">
+<?php
 
-	<style>
-		<?php
-		include 'navbar.css';
-		?>
-	</style>
+include_once "../database.php";
 
-	<li>
-		<a id="Overview" href="../home/homepage.php">
+function displayNavbar(int $id): void { ?>
+	<div id="navbar">
+		<a id="Overview" href="../home/home.php">
 			<img class="icon" src="../Images/home.svg" alt="Homepage"/>
 			<h2>Overview</h2>
 		</a>
-	</li>
-
-	<?php
-	include_once "../database.php";
-
-
-	foreach(getprogramms() as $col) {
-		?>
-		<li>
-			<a href="../program/program.php?id=<?= $col["ID"] ?>">
-				<img class="icon" src="<?= $col["Imagesource"] ?>" alt="<?= $col["Name"] ?>"/>
-				<h2><?= $col["Name"] ?></h2>
-			</a>
-		</li>
-		<?php
-	}
-
-	?>
-
-	<li>
+		<div id="navbar_list">
+			<?php
+			foreach(getProgramms($id) as $col) {
+				?>
+				<a href="../program/program.php?id=<?= $col['program']["ID"] ?>">
+					<img class="icon" src="<?= $col['program']["Imagesource"] ?>" alt="<?= $col['program']["Name"] ?>"/>
+					<h2><?= $col['program']["Name"] ?></h2>
+				</a>
+				<?php
+			} ?>
+		</div>
 		<a id="Settings" href="../settings/settings.php">
 			<img class="icon" src="../Images/settings.svg" alt="Settings"/>
-			<h2 style="padding: 0.5em;"><?= testAdminCookie() ? "Authorised" : "Unauthorised"; ?></h2>
+			<h2>Settings</h2>
 		</a>
-	</li>
-
-</ul>
+	</div>
+	<?php
+}
