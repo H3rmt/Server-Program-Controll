@@ -1,4 +1,4 @@
-# -------------------------------- Auth --------------------------------
+-- ------------------------------ Auth --------------------------------
 
 create schema Auth;
 use Auth;
@@ -39,7 +39,7 @@ create table sessions
 );
 
 
-# -------------------------------- Programs --------------------------------
+-- ------------------------------ Programs --------------------------------
 
 create schema Programs;
 use Programs;
@@ -88,7 +88,7 @@ create table logs
 );
 
 
-# -------------------------------- Auth 2 --------------------------------
+-- ------------------------------ Auth 2 --------------------------------
 
 use Auth;
 
@@ -102,10 +102,10 @@ create table user_programs_permissions
     constraint user_programs_permissions_users_fk
         foreign key (user_id) references users (ID)
 );
-# 0 = read, 1 = start, 2 = stop
+-- 0 = read, 1 = start, 2 = stop
 
 
-# -------------------------------- Users --------------------------------
+-- ------------------------------ Users --------------------------------
 
 create user Website
     identified by '/6uM8qlYUm*NFCef';
@@ -118,9 +118,13 @@ grant create, insert, select, update on Programs.* to go;
 grant select on Auth.* to go;
 
 
-# -------------------------------- Defaults --------------------------------
+-- ------------------------------ Defaults --------------------------------
 
 use Auth;
 
 insert into settings (name, value) values ('timeout', '15');
 
+insert into users (name, passwd, admin) values ('test','$2y$10$ysQqYeBXff8whujHBFcO9.kjhRb9Jblaz33QFaaqvJNHXE/z4jGAi',1);
+
+insert into Programs.programs (ID, APIKey, Name, Description, Imagesource, Active, StatechangeTime) values (1, '62ae447bd8e8d', 'Vertretungsplan Bot', 'Discord bot um Vertretungen für die Schule anzuzeigen', 'https://cdn.discordapp.com/avatars/937432970065756190/1520488765dd4bff0b6e1bd5da464977.webp?size=256', 1, '2022-07-29 12:06:25');
+insert into Programs.programs (ID, APIKey, Name, Description, Imagesource, Active, StatechangeTime) values (2, '62b4dff47b797', 'Voice Channel Bot', 'Bot to create and manage voice Channels', 'https://cdn.discordapp.com/avatars/839511426061434881/1f5d348784c9c0f1c593e72df941129c.webp?size=256', 1, '2022-07-29 12:06:27');
