@@ -30,6 +30,7 @@ type Program struct {
 	Dir       string
 	reader    Reader
 	cmd       *exec.Cmd
+	running   bool
 	// LogasActivity bool
 }
 
@@ -48,28 +49,27 @@ func getprogrammIdfromapikey(APIKey string) (*Program, error) {
 
 // Start
 func (pr *Program) Start() error {
-	if pr.cmd != nil {
+	if pr.running {
 		return fmt.Errorf("program already running")
 	}
-	cmd := exec.Command(pr.Program, pr.Arguments...)
-	cmd.Dir = pr.Dir
-
-	pr.cmd = cmd
+	pr.cmd = exec.Command(pr.Program, pr.Arguments...)
+	pr.cmd.Dir = pr.Dir
 
 	pr.reader = Reader{}
 
 	pr.reader.outReader.programparent = pr
 	pr.reader.errReader.programparent = pr
 
-	cmd.Stdout = &pr.reader.outReader
-	cmd.Stderr = &pr.reader.errReader
+	pr.cmd.Stdout = &pr.reader.outReader
+	pr.cmd.Stderr = &pr.reader.errReader
 
 	err := SendStateChange(pr, true)
 	if err != nil {
 		util.Log("EXEC PR", "error sending start", err)
 	}
+	pr.running = false
 
-	err = cmd.Start()
+	err = pr.cmd.Start()
 	if err != nil {
 		util.Log("EXEC PR", "error Starting Program: ", pr.Name)
 		return err
@@ -78,8 +78,8 @@ func (pr *Program) Start() error {
 	}
 
 	go func() {
-		err := cmd.Wait()
-		pr.cmd = nil
+		err := pr.cmd.Wait()
+		pr.running = false
 		util.Log("EXEC PR", "Program finished: ", pr.Name, "Error:", err)
 		if err != nil {
 			err := SendLog(err.Error(), pr, Important)
@@ -99,11 +99,9 @@ func (pr *Program) Start() error {
 
 // Stop /*
 func (pr *Program) Stop() (err error) {
-	if pr.cmd != nil {
+	if pr.running {
 		err = pr.cmd.Process.Kill()
-		if err != nil {
-			pr.cmd = nil
-		}
+		pr.running = false
 	} else {
 		err = fmt.Errorf("program not running")
 	}
@@ -114,7 +112,7 @@ func (pr *Program) Stop() (err error) {
 func CheckLog(message string) string {
 	if strings.HasPrefix(message, "LOW|") || strings.HasPrefix(message, "NORMAL|") || strings.HasPrefix(message, "IMPORTANT|") {
 		return "Log"
-	} else if strings.HasPrefix(message, "[Send]") || strings.HasPrefix(message, "[Recive]") || strings.HasPrefix(message, "[Process]") || strings.HasPrefix(message, "[Backgroundprocess]") {
+	} else if strings.HasPrefix(message, "[Send]") || strings.HasPrefix(message, "[Receive]") || strings.HasPrefix(message, "[Process]") || strings.HasPrefix(message, "[Backgroundprocess]") {
 		remove := strings.TrimSpace(strings.Replace(message, strings.SplitN(message, "]", 2)[0]+"]", "", 1))
 		if strings.HasPrefix(remove, "LOW|") || strings.HasPrefix(remove, "NORMAL|") || strings.HasPrefix(remove, "IMPORTANT|") {
 			return "Activity Log"
@@ -148,7 +146,7 @@ func processActivityLevel(message string) Activitytype {
 		return Backgroundprocess
 	} else if strings.HasPrefix(message, "[Process]") {
 		return Process
-	} else if strings.HasPrefix(message, "[Recive]") {
+	} else if strings.HasPrefix(message, "[Receive]") {
 		return Recive
 	} else if strings.HasPrefix(message, "[Send]") {
 		return Send
@@ -233,7 +231,7 @@ process stderr Info
 */
 func (w *stderrWriter) processError(err string) {
 	util.Log("EXEC PR", w.programparent.Name, "err:", err)
-	errr := SendLog(strings.TrimSpace(string(err)), w.programparent, Error)
+	errr := SendLog(strings.TrimSpace(err), w.programparent, Error)
 	if errr != nil {
 		util.Log("EXEC PR", "err sending err", errr)
 	}
