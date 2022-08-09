@@ -15,11 +15,11 @@ services:
 
   web:
     image: nginx:1.21.6-alpine
+    restart: always
     depends_on:
       - db
       - php
     links:
-      - db
       - php
     volumes:
       - ./Website:/srv/http
@@ -29,7 +29,11 @@ services:
       - "4438:443"  # restart server
 
   php:
-    image: mailcow/phpfpm:1.79
+    build:
+      dockerfile: Dockerfile
+    restart: always
+    links:
+      - db
     volumes:
       - ./Website:/srv/http
       - ./php.ini:/usr/local/etc/php/php.ini
