@@ -29,9 +29,9 @@ services:
       - "4438:443"  # restart server
 
   php:
-    build:
-      context: ./php-fpm
-      dockerfile: Dockerfile
+    image: php:fpm
+    command:
+      - apt-get update && apt-get install -y --no-install-recommends pdo_mysql
     restart: always
     links:
       - db
