@@ -29,9 +29,7 @@ services:
 
   php:
     image: php:fpm
-    command:
-      - apt-get update && apt-get install -y --no-install-recommends pdo_mysql
-      - php-fpm
+    command: bash -c "apt-get update && apt-get install -y --no-install-recommends pdo_mysql &&php-fpm"
     restart: always
     links:
       - db
