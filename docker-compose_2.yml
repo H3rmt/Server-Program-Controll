@@ -30,7 +30,7 @@ services:
 
   php:
     image: php:fpm
-    command: bash -c "apt-get update && apt-get install -y --no-install-recommends php-pdo-mysql && php-fpm"
+    command: bash -c "php-fpm"
     restart: always
     links:
       - db
