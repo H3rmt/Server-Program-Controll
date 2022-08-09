@@ -4,7 +4,6 @@ services:
 
   db:
     image: hypriot/rpi-mysql:5.5
-    command: --default-authentication-plugin=mysql_native_password
     restart: always
     ports:
       - "3308:3306"
