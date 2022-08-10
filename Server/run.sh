@@ -1,1 +1,1 @@
-./Server > log.txt 2> err.txt
+./Server > log.txt 2> err.txt &
