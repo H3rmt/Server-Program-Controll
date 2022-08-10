@@ -64,13 +64,13 @@ CopyFiles() {
 }
 
 BuildGo $server $goServer
-serverFiles=("config.json")
+serverFiles=("config.json" "run.sh")
 if [ $initial = True ]; then
 	CopyFiles $server $goServer "${serverFiles[@]}"
 fi
 
 BuildGo $remote $goRemote
-remoteFiles=("programs.json" "config.json")
+remoteFiles=("programs.json" "config.json" "run.sh")
 if [ $initial = True ]; then
 	CopyFiles $remote $goRemote "${remoteFiles[@]}"
 fi
