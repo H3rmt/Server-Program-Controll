@@ -4,6 +4,7 @@ services:
 
   db:
     image: jsurf/rpi-mariadb:latest
+    command: --default-authentication-plugin=mysql_native_password
     restart: always
     ports:
       - "3306:3306"
