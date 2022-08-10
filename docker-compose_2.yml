@@ -30,7 +30,7 @@ services:
 
   php:
     image: php:fpm
-    command: bash -c "php-fpm"
+    command: bash -c "apt update && apt install mariadb-client && php-fpm"
     restart: always
     links:
       - db
