@@ -44,14 +44,14 @@ else                        // message like "Session expired"
 	<form id="login" class="Popup" method="post" action="index.php">
 		<div>
 			<label for="username">Username</label>
-			<input id="username" name="username" type="text" value="<?= $_COOKIE['username'] ?? '' ?>">
+			<input id="username" name="username" type="text" value="<?= htmlspecialchars($_COOKIE['username']) ?? '' ?>">
 		</div>
 		<div>
 			<label for="password">Password</label>
 			<input id="password" name="password" type="password">
 		</div>
 		<div id="bottom">
-			<h3 id="message"><?= $message ?></h3>
+			<h3 id="message"><?= htmlspecialchars($message) ?></h3>
 			<button type="submit" class="save"><b>Login</b>
 		</div>
 	</form>

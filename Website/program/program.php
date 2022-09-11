@@ -21,7 +21,7 @@ if(!$member['admin'] && $permissions == -1) // read not allowed  // TODO add mis
 <head>
 	<meta charset="utf-8"/>
 	<meta name="viewport" content="width=device-width">
-	<title><?= $program["Name"]; ?></title>
+	<title><?= htmlspecialchars($program["Name"]); ?></title>
 	<link rel="stylesheet" href="program.css"/>
 	<link rel="stylesheet" href="../mainstyle.css"/>
 	<link rel="stylesheet" href="../modal.css"/>
@@ -43,7 +43,7 @@ displayNavbar($member['ID']);
 
 <div id="main">
 	<div class="top">
-		<h1 class="title"><?= $program["Name"]; ?></h1>
+		<h1 class="title"><?= htmlspecialchars($program["Name"]); ?></h1>
 		<div class="topButtonBar">
 			<button class="start <?= $member['admin'] || $permissions >= 1 ? '' : 'disabled' ?>  add"><b>Start</b></button>
 			<button class="stop <?= $member['admin'] || $permissions >= 2 ? '' : 'disabled' ?>  danger"><b>Stop</b></button>
@@ -52,8 +52,8 @@ displayNavbar($member['ID']);
 	</div>
 	<div id="boxes">
 		<div id="topbar">
-			<img src="<?= $program["Imagesource"] ?>" class="PIcon" alt=""/>
-			<h2 class="description"><?= $program["Description"]; ?></h2>
+			<img src="<?= htmlspecialchars($program["Imagesource"]); ?>" class="PIcon" alt=""/>
+			<h2 class="description"><?= htmlspecialchars($program["Description"]); ?></h2>
 		</div>
 		<div id="activity">
 			<div id="activity-chart" style="padding-top: 0.7em;"></div>

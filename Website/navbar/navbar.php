@@ -12,9 +12,9 @@ function displayNavbar(int $id): void { ?>
 			<?php
 			foreach(getProgramms($id) as $col) {
 				?>
-				<a href="../program/program.php?id=<?= $col['program']["ID"] ?>">
-					<img class="icon" src="<?= $col['program']["Imagesource"] ?>" alt="<?= $col['program']["Name"] ?>"/>
-					<h2><?= $col['program']["Name"] ?></h2>
+				<a href="../program/program.php?id=<?= htmlspecialchars($col['program']["ID"]); ?>">
+					<img class="icon" src="<?= htmlspecialchars($col['program']["Imagesource"]); ?>" alt="<?= htmlspecialchars($col['program']["Name"]); ?>"/>
+					<h2><?= htmlspecialchars($col['program']["Name"]); ?></h2>
 				</a>
 				<?php
 			} ?>
